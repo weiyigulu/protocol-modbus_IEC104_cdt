@@ -12,21 +12,29 @@
 
 104依赖引入
 
+```java
 <dependency>
   <groupId>wei.yigulu</groupId>
   <artifactId>protocol-iec104</artifactId>
   <version>1.4.7</version>
 </dependency>
+```
+
+
 
 
 
 modbus依赖引入
 
+```java
 <dependency>
   <groupId>wei.yigulu</groupId>
   <artifactId>protocol-modbus</artifactId>
   <version>1.2.0</version>
 </dependency>
+```
+
+
 
 
 
@@ -34,8 +42,10 @@ modbus依赖引入
 
 CDT依赖引入
 
+```java
 <dependency>
   <groupId>wei.yigulu</groupId>
   <artifactId>protocol-cdt</artifactId>
   <version>1.0.0</version>
 </dependency>
+```
