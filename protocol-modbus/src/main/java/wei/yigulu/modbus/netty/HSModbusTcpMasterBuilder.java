@@ -10,7 +10,7 @@ import wei.yigulu.netty.ProtocolChannelInitializer;
 
 
 /**
- * 104的主站  向子站发送总召唤 获取子站的数据
+ * modbus的主站  向子站发送总召唤 获取子站的数据
  * <p>
  * 主备模式的 主站 可以切换主备机
  *
@@ -21,7 +21,7 @@ import wei.yigulu.netty.ProtocolChannelInitializer;
 @Accessors(chain = true)
 public class HSModbusTcpMasterBuilder extends AbstractHSTcpMasterBuilder implements ModbusMasterBuilderInterface {
 
-	private SynchronousWaitingRoom synchronousWaitingRoom;
+	protected SynchronousWaitingRoom synchronousWaitingRoom;
 
 	public HSModbusTcpMasterBuilder(String ip, Integer port) {
 		super(ip, port);

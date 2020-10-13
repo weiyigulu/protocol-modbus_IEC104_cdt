@@ -11,7 +11,7 @@ import wei.yigulu.netty.ProtocolChannelInitializer;
 
 
 /**
- * 104的主站  向子站发送总召唤 获取子站的数据
+ * modbus的主站  向子站发送总召唤 获取子站的数据
  * <p>
  * 简单的主站  相对于主备机主站    仅有主机 不支持切换
  *
@@ -23,7 +23,7 @@ import wei.yigulu.netty.ProtocolChannelInitializer;
 public class ModbusTcpMasterBuilder extends AbstractTcpMasterBuilder implements ModbusMasterBuilderInterface {
 
 
-	private SynchronousWaitingRoom synchronousWaitingRoom;
+	protected SynchronousWaitingRoom synchronousWaitingRoom;
 
 	/**
 	 * 构造方法

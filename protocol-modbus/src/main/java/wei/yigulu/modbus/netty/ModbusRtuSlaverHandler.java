@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import wei.yigulu.modbus.domain.request.RtuModbusRequest;
 import wei.yigulu.modbus.domain.response.RtuModbusResponse;
+import wei.yigulu.modbus.exceptiom.ModbusException;
 import wei.yigulu.modbus.utils.ModbusResponseDataUtils;
 import wei.yigulu.utils.DataConvertor;
 
@@ -74,9 +75,13 @@ public class ModbusRtuSlaverHandler extends SimpleChannelInboundHandler<ByteBuf>
 		if (msg.readableBytes() > MINLEN) {
 			RtuModbusRequest request = new RtuModbusRequest().decode(msg.nioBuffer());
 			RtuModbusResponse response = new RtuModbusResponse();
-			byte[] bbs = ModbusResponseDataUtils.buildResponse(this.modbusSlaver.getModbusSlaveDataContainer(), request, response);
-			ctx.writeAndFlush(Unpooled.copiedBuffer(bbs));
-			modbusSlaver.getLog().debug("se =>" + DataConvertor.Byte2String(bbs));
+			try {
+				byte[] bbs = ModbusResponseDataUtils.buildResponse(this.modbusSlaver.getModbusSlaveDataContainer(), request, response);
+				ctx.writeAndFlush(Unpooled.copiedBuffer(bbs));
+				modbusSlaver.getLog().debug("se =>" + DataConvertor.Byte2String(bbs));
+			}catch (ModbusException e){
+				log.error(e.getMsg());
+			}
 		}
 	}
 }

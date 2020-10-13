@@ -2,6 +2,11 @@ package wei.yigulu.modbus.domain;
 
 
 import com.google.common.primitives.Bytes;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import wei.yigulu.modbus.domain.datatype.BooleanModbusDataInCoil;
 import wei.yigulu.modbus.domain.datatype.CoilValue;
 import wei.yigulu.modbus.domain.datatype.Register;
@@ -24,6 +29,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @version:
  */
 public class ModbusSlaveDataContainer {
+
+	@Setter
+	@Getter
+	@Accessors(chain = true)
+	private Logger log = LoggerFactory.getLogger(this.getClass());
+
 
 	Map<Integer, DataDrawer> slaveDataDrawer = new ConcurrentHashMap<>();
 

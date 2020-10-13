@@ -22,7 +22,7 @@ import wei.yigulu.purejavacomm.PureJavaCommChannel;
 public class ModbusRtuSlaverBuilder extends AbstractRtuModeBuilder {
 
 	@Getter
-	private ModbusSlaveDataContainer modbusSlaveDataContainer = new ModbusSlaveDataContainer();
+	private ModbusSlaveDataContainer modbusSlaveDataContainer = new ModbusSlaveDataContainer().setLog(getLog());
 
 
 	public ModbusRtuSlaverBuilder(String commPortId) {

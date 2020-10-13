@@ -22,7 +22,7 @@ public class ModbusTcpSlaverBuilder extends AbstractTcpSlaverBuilder {
 
 
 	@Getter
-	private ModbusSlaveDataContainer modbusSlaveDataContainer = new ModbusSlaveDataContainer();
+	private ModbusSlaveDataContainer modbusSlaveDataContainer = new ModbusSlaveDataContainer().setLog(getLog());
 
 	public ModbusTcpSlaverBuilder(int port) {
 		super(port);

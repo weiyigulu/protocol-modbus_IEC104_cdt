@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import wei.yigulu.modbus.domain.request.TcpModbusRequest;
 import wei.yigulu.modbus.domain.response.TcpModbusResponse;
+import wei.yigulu.modbus.exceptiom.ModbusException;
 import wei.yigulu.modbus.utils.ModbusResponseDataUtils;
 import wei.yigulu.utils.DataConvertor;
 
@@ -46,9 +47,13 @@ public class ModbusTcpSlaverHandle extends ChannelInboundHandlerAdapter {
 		TcpModbusRequest request = new TcpModbusRequest().decode(byteBuf.nioBuffer());
 		TcpModbusResponse response = new TcpModbusResponse();
 		response.setTcpExtraCode(request.getTcpExtraCode());
-		byte[] bbs = ModbusResponseDataUtils.buildResponse(this.slaverBuilder.getModbusSlaveDataContainer(), request, response);
-		ctx.writeAndFlush(Unpooled.copiedBuffer(bbs));
-		log.debug("se =>" + DataConvertor.Byte2String(bbs));
+		try {
+			byte[] bbs = ModbusResponseDataUtils.buildResponse(this.slaverBuilder.getModbusSlaveDataContainer(), request, response);
+			ctx.writeAndFlush(Unpooled.copiedBuffer(bbs));
+			log.debug("se =>" + DataConvertor.Byte2String(bbs));
+		}catch (ModbusException e){
+			log.error(e.getMsg());
+		}
 	}
 
 

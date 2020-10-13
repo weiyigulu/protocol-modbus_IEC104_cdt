@@ -1,7 +1,6 @@
 package wei.yigulu.connectfilterofslave;
 
 import io.netty.channel.Channel;
-
 import java.util.ArrayList;
 import java.util.List;
 
