@@ -1,7 +1,5 @@
-import wei.yigulu.modbus.domain.datatype.numeric.ABCD;
 import wei.yigulu.modbus.netty.ModbusTcpSlaverBuilder;
 
-import java.math.BigDecimal;
 import java.util.Random;
 
 /**
@@ -10,15 +8,19 @@ import java.util.Random;
  */
 public class TestSlaver {
 	public static void main(String[] args) throws InterruptedException {
-		ModbusTcpSlaverBuilder slaverBuilder = new ModbusTcpSlaverBuilder(2409);
+		ModbusTcpSlaverBuilder slaverBuilder = new ModbusTcpSlaverBuilder(502);
 		slaverBuilder.createByUnBlock();
 
 		Random random = new Random();
+		boolean f;
 		for (; ; ) {
 			for (int i = 0; i < 10; i++) {
-				slaverBuilder.getModbusSlaveDataContainer().setRegister(1, i, new ABCD(BigDecimal.valueOf((0.5 - random.nextDouble()) * 100)));
+				//slaverBuilder.getModbusSlaveDataContainer().setRegister(1, i, new ABCD(BigDecimal.valueOf((0.5 - random.nextDouble()) * 100)));
+				f = random.nextBoolean();
+				System.out.println(i + ":" + f);
+				slaverBuilder.getModbusSlaveDataContainer().setCoil(1, i, f);
 			}
-			Thread.sleep(200L);
+			Thread.sleep(2000L);
 		}
 	}
 }

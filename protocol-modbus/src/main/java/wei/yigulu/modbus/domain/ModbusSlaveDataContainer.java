@@ -14,6 +14,7 @@ import wei.yigulu.modbus.domain.datatype.RegisterValue;
 import wei.yigulu.modbus.domain.datatype.numeric.P_AB;
 import wei.yigulu.modbus.domain.request.AbstractModbusRequest;
 import wei.yigulu.modbus.exceptiom.ModbusException;
+import wei.yigulu.utils.PCON;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -44,8 +45,8 @@ public class ModbusSlaveDataContainer {
 		if (byteNum == null || byteNum == 0) {
 			throw new ModbusException(3001, "请求体缺少数据个数 ");
 		}
-		Integer functionCode = abstractModbusRequest.getFunctionCode();
-		if (functionCode == null || functionCode > 4 || functionCode < 0) {
+		FunctionCode functionCode = abstractModbusRequest.getFunctionCode();
+		if (functionCode == null || functionCode.getCode() > 4 || functionCode.getCode() < 0) {
 			throw new ModbusException(3002, "不支持请求体的功能码 " + functionCode);
 		}
 		Integer position = abstractModbusRequest.getStartAddress();
@@ -57,7 +58,7 @@ public class ModbusSlaveDataContainer {
 			throw new ModbusException(3004, "请求体请求设备地址不合法 " + position);
 		}
 		if (this.slaveDataDrawer.containsKey(slaveId)) {
-			if (functionCode == 1 || functionCode == 2) {
+			if (functionCode == FunctionCode.READ_COILS || functionCode == FunctionCode.READ_DISCRETE_INPUTS) {
 				return this.slaveDataDrawer.get(slaveId).getCoilDataBytes(position, byteNum);
 			} else {
 				return this.slaveDataDrawer.get(slaveId).getRegisterDataBytes(position, byteNum);
@@ -79,6 +80,10 @@ public class ModbusSlaveDataContainer {
 		getOrCreate(slaveId).setRegister(value);
 	}
 
+	public void setCoil(int slaveId,int position,boolean value) {
+		getOrCreate(slaveId).setCoil(position,value);
+	}
+
 	private DataDrawer getOrCreate(int slave) {
 		if (!this.slaveDataDrawer.containsKey(slave)) {
 			this.slaveDataDrawer.put(slave, new DataDrawer());
@@ -91,7 +96,7 @@ public class ModbusSlaveDataContainer {
 	 */
 	private class DataDrawer {
 
-		List<CoilValue> coils = new CopyOnWriteArrayList<>();
+		List<Boolean> coils = new CopyOnWriteArrayList<>();
 
 		List<Register> registers = new CopyOnWriteArrayList<>();
 
@@ -120,21 +125,28 @@ public class ModbusSlaveDataContainer {
 			setRegister(0, value);
 		}
 
-		public void setCoil(int position, CoilValue value) {
-			if (coils.size() <= position) {
-				int num = position + 1 - coils.size();
-				for (int i = 0; i < num; i++) {
-					this.coils.add(new BooleanModbusDataInCoil());
+
+		/**
+		 * 设置线圈值
+		 *
+		 * @param position 线圈的位置  第几个线圈 从0开始
+		 * @param value    值
+		 */
+		public void setCoil(int position, boolean value) {
+			int coilsSize=this.coils.size();
+			if(coilsSize<=position){
+				for(int i=0;i<coilsSize-position+1;i++){
+					coils.add(false);
 				}
 			}
-			this.coils.set(position, value);
+			this.coils.set(position,value);
 		}
 
 
-		public byte[] getRegisterDataBytes(int position, int bitNum) {
-			List<Byte> bytes = new ArrayList<>(bitNum * 2);
+		public byte[] getRegisterDataBytes(int position, int registerNum) {
+			List<Byte> bytes = new ArrayList<>(registerNum * 2);
 			int registersSize = this.registers.size();
-			for (int i = position; i < position + bitNum; i++) {
+			for (int i = position; i < position + registerNum; i++) {
 				if (registersSize > i) {
 					bytes.add(this.registers.get(i).getB1());
 					bytes.add(this.registers.get(i).getB2());
@@ -147,8 +159,24 @@ public class ModbusSlaveDataContainer {
 		}
 
 		public byte[] getCoilDataBytes(int position, int bitNum) {
-
-			return null;
+			int coilsSize=coils.size();
+			List<Byte> bytes=new ArrayList<>();
+			byte b=0;
+			int  siftNum=0;
+			for(int i=position;i<bitNum+position;i++){
+				if(coilsSize>i && coils.get(i)){
+					b |= (0x01 <<siftNum);
+				}
+				if(++siftNum==8){
+					siftNum=0;
+					bytes.add(b);
+					b=0;
+				}
+			}
+			if(siftNum!=0){
+				bytes.add(b);
+			}
+			return Bytes.toArray(bytes);
 		}
 	}
 }

@@ -13,14 +13,14 @@ import java.util.List;
 public class BooleanModbusDataInCoil extends CoilValue {
 
 	/**
-	 * 八个布尔 对应一字节 八比特 从
+	 * 八个布尔 对应一字节 八比特
 	 */
 	boolean[] values = new boolean[8];
 
 
 	@Override
 	public IModbusDataType decode(byte[] bytes, int offset) {
-		return getValFormByte(bytes[2 * offset]);
+		return getValFormByte(bytes[offset]);
 	}
 
 	@Override
@@ -36,15 +36,22 @@ public class BooleanModbusDataInCoil extends CoilValue {
 		return this;
 	}
 
-	@Override
-	public IModbusDataType encode(List<Byte> bytes) {
-		byte b = 0;
-		for (int i = 0; i < values.length; i++) {
-			if (this.values[i]) {
-				b |= (0x01 << i);
-			}
+
+	public void setValue(int index,boolean value){
+		if(index<values.length){
+			this.values[index]=value;
+		}else{
+			throw new IllegalArgumentException();
 		}
-		bytes.add(b);
-		return this;
 	}
+
+	public boolean getValue(int index){
+		if(index<values.length){
+			return this.values[index];
+		}else{
+			throw new IllegalArgumentException();
+		}
+	}
+
+
 }

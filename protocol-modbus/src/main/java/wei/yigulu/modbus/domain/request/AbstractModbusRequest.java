@@ -3,6 +3,7 @@ package wei.yigulu.modbus.domain.request;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import wei.yigulu.modbus.domain.FunctionCode;
 import wei.yigulu.modbus.domain.datatype.numeric.P_AB;
 import wei.yigulu.modbus.exceptiom.ModbusException;
 
@@ -29,7 +30,7 @@ public class AbstractModbusRequest {
 	/**
 	 * 功能码  一字节
 	 */
-	protected Integer functionCode = 03;
+	protected FunctionCode functionCode = FunctionCode.READ_HOLDING_REGISTERS;
 
 	/**
 	 * 请求数据的起始地址位  两字节
@@ -48,7 +49,7 @@ public class AbstractModbusRequest {
 	 */
 	public void encode(List<Byte> bytes) {
 		bytes.add((byte) (slaveId & 0xff));
-		bytes.add((byte) (functionCode & 0xff));
+		bytes.add((byte) (functionCode.getCode() & 0xff));
 		new P_AB(BigDecimal.valueOf(startAddress)).encode(bytes);
 		new P_AB(BigDecimal.valueOf(quantity)).encode(bytes);
 	}
@@ -60,7 +61,7 @@ public class AbstractModbusRequest {
 	 */
 	public AbstractModbusRequest decode(ByteBuffer byteBuf) throws ModbusException {
 		this.setSlaveId(byteBuf.get() & 0xff);
-		this.setFunctionCode(byteBuf.get() & 0xff);
+		this.setFunctionCode(FunctionCode.valueOf(byteBuf.get() & 0xff));
 		this.setStartAddress(new P_AB().decode(byteBuf).getValue().intValue());
 		this.setQuantity(new P_AB().decode(byteBuf).getValue().intValue());
 		return this;

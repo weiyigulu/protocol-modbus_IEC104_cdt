@@ -1,5 +1,6 @@
 import lombok.extern.slf4j.Slf4j;
 import wei.yigulu.modbus.domain.FunctionCode;
+import wei.yigulu.modbus.domain.Obj4RequestCoil;
 import wei.yigulu.modbus.domain.Obj4RequestRegister;
 import wei.yigulu.modbus.domain.datatype.IModbusDataType;
 import wei.yigulu.modbus.domain.datatype.ModbusDataTypeEnum;
@@ -8,33 +9,33 @@ import wei.yigulu.modbus.exceptiom.ModbusException;
 import wei.yigulu.modbus.netty.ModbusTcpMasterBuilder;
 import wei.yigulu.modbus.utils.ModbusRequestDataUtils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author: xiuwei
  * @version:
  */
 @Slf4j
-public class TestMaster {
+public class TestMasterCoil {
 	public static void main(String[] args) throws InterruptedException, ModbusException {
 
 
-		ModbusTcpMasterBuilder master = new ModbusTcpMasterBuilder("127.0.0.1", 5025);
+		ModbusTcpMasterBuilder master = new ModbusTcpMasterBuilder("127.0.0.1", 502);
 		master.createByUnBlock();
 		Thread.sleep(3000L);
-		Map<Integer, ModbusDataTypeEnum> map = new HashMap<>();
-		for (int i = 0; i <= 7; i++) {
-			map.put(i * 2, ModbusDataTypeEnum.P_CDAB);
+		List<Integer> list=new ArrayList<>();
+		for (int i = 0; i <=19; i++) {
+			list.add(i*2 );
 		}
-		List<Obj4RequestRegister> ll = ModbusRequestDataUtils.splitModbusRequest(map, 1, FunctionCode.READ_HOLDING_REGISTERS);
+		List<Obj4RequestCoil> ll = ModbusRequestDataUtils.splitModbusRequest(list, 1, FunctionCode.READ_COILS);
 
 		for (; ; ) {
 			try {
-				Map<Integer, IModbusDataType> map1 = ModbusRequestDataUtils.getRegisterData(master, ll);
-				for (Integer i : map1.keySet()) {
-					System.out.println(i + " ============ " + ((NumericModbusData) map1.get(i)).getValue());
+				Map<Integer, Boolean> map1 = ModbusRequestDataUtils.getCoilData(master, ll);
+				ArrayList<Integer> lll = new ArrayList<Integer>(map1.keySet());
+				Collections.sort(lll);
+				for (Integer i : lll) {
+					System.out.println(i + " ============ " + map1.get(i));
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

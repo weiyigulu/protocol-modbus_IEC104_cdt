@@ -1,6 +1,7 @@
 package wei.yigulu.modbus.utils;
 
 import com.google.common.primitives.Bytes;
+import wei.yigulu.modbus.domain.FunctionCode;
 import wei.yigulu.modbus.domain.ModbusSlaveDataContainer;
 import wei.yigulu.modbus.domain.request.AbstractModbusRequest;
 import wei.yigulu.modbus.domain.response.AbstractModbusResponse;
@@ -26,7 +27,7 @@ public class ModbusResponseDataUtils {
 			if (e.getCode() != null) {
 				if (e.getCode() == 3004) {
 					response.setSlaveId(request.getSlaveId());
-					response.setFunctionCode(request.getFunctionCode() + 0x80);
+					response.setFunctionCode(FunctionCode.valueOf(request.getFunctionCode().getCode()+ 0x80));
 					response.setDataBitNum(0x01);
 				}
 			}

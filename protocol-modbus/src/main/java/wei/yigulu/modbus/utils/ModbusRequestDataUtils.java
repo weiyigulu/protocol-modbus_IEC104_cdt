@@ -1,12 +1,14 @@
 package wei.yigulu.modbus.utils;
 
 import com.google.common.primitives.Bytes;
-import lombok.Getter;
 import lombok.NonNull;
+import wei.yigulu.modbus.domain.FunctionCode;
+import wei.yigulu.modbus.domain.Obj4RequestCoil;
+import wei.yigulu.modbus.domain.Obj4RequestRegister;
+import wei.yigulu.modbus.domain.datatype.BooleanModbusDataInCoil;
 import wei.yigulu.modbus.domain.datatype.IModbusDataType;
 import wei.yigulu.modbus.domain.datatype.ModbusDataTypeEnum;
 import wei.yigulu.modbus.domain.request.AbstractModbusRequest;
-import wei.yigulu.modbus.domain.request.RtuModbusRequest;
 import wei.yigulu.modbus.domain.request.TcpModbusRequest;
 import wei.yigulu.modbus.domain.response.AbstractModbusResponse;
 import wei.yigulu.modbus.domain.response.RtuModbusResponse;
@@ -16,6 +18,7 @@ import wei.yigulu.modbus.exceptiom.ModbusException;
 import wei.yigulu.modbus.netty.ModbusMasterBuilderInterface;
 import wei.yigulu.netty.AbstractMasterBuilder;
 import wei.yigulu.netty.AbstractTcpMasterBuilder;
+import wei.yigulu.utils.PCON;
 
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -32,7 +35,7 @@ public class ModbusRequestDataUtils {
 
 
 	/**
-	 * 拆分map 由于modbus 每帧只能请求255个字节  125个寄存区
+	 * 拆分map 由于modbus 每帧只能请求255个字节  125个寄存区  寄存器
 	 * 所以请求数据较多时需要拆成n帧 依次请求
 	 *
 	 * @param modbusDataTypeEnumMap modbus寄存器地址 ----- modbus 对应该地址的数据类型枚举
@@ -41,15 +44,15 @@ public class ModbusRequestDataUtils {
 	 * @return Obj4RequestData     组装好的用于请求的对象
 	 * @throws ModbusException
 	 */
-	public static List<Obj4RequestData> splitModbusRequest(Map<Integer, ModbusDataTypeEnum> modbusDataTypeEnumMap, int slave, int functionCode) throws ModbusException {
-		List<Obj4RequestData> list = new ArrayList<>();
+	public static List<Obj4RequestRegister> splitModbusRequest(Map<Integer, ModbusDataTypeEnum> modbusDataTypeEnumMap, int slave, FunctionCode functionCode) throws ModbusException {
+		List<Obj4RequestRegister> list = new ArrayList<>();
 		Set<Integer> set = new TreeSet(modbusDataTypeEnumMap.keySet());
 		Integer max = Collections.max(set);
 		Integer min = Collections.min(set);
 		Map<Integer, ModbusDataTypeEnum> map = new HashMap<>();
 		int i = 1;
 		if (max + modbusDataTypeEnumMap.get(max).getOccupiedRegister() - min < MAXLENGTH) {
-			list.add(new Obj4RequestData(slave, functionCode, modbusDataTypeEnumMap));
+			list.add(new Obj4RequestRegister(slave, functionCode, modbusDataTypeEnumMap));
 			return list;
 		} else {
 			for (Integer e : set) {
@@ -57,7 +60,7 @@ public class ModbusRequestDataUtils {
 					map.put(e, modbusDataTypeEnumMap.get(e));
 				} else {
 					if (map.size() != 0) {
-						list.add(new Obj4RequestData(slave, functionCode, map));
+						list.add(new Obj4RequestRegister(slave, functionCode, map));
 						map = new HashMap<>();
 						map.put(e, modbusDataTypeEnumMap.get(e));
 					}
@@ -65,7 +68,7 @@ public class ModbusRequestDataUtils {
 				}
 			}
 			if (map.size() > 0) {
-				list.add(new Obj4RequestData(slave, functionCode, map));
+				list.add(new Obj4RequestRegister(slave, functionCode, map));
 			}
 			return list;
 		}
@@ -73,7 +76,44 @@ public class ModbusRequestDataUtils {
 
 
 	/**
-	 * 验证并创建请求对象
+	 * 拆分map 由于modbus 每帧只能请求255个字节(线圈)
+	 * 所以请求数据较多时需要拆成n帧 依次请求
+	 *
+	 * @param locator      modbus寄存器地址
+	 * @param slave        从站地址
+	 * @param functionCode 功能码
+	 * @return Obj4RequestData     组装好的用于请求的对象
+	 * @throws ModbusException
+	 */
+	public static List<Obj4RequestCoil> splitModbusRequest(List<Integer> locator, int slave, FunctionCode functionCode) throws ModbusException {
+		List<Obj4RequestCoil> list = new ArrayList<>();
+		Collections.sort(locator);
+		Integer max = locator.get(0);
+		Integer min = locator.get(locator.size() - 1);
+		List<Integer> ls = new ArrayList<>();
+		if (max - min < MAXLENGTH) {
+			list.add(new Obj4RequestCoil(slave, functionCode, locator));
+			return list;
+		} else {
+			for (Integer l : locator) {
+				if ((l - min) < 255) {
+					ls.add(l);
+				} else {
+					list.add(new Obj4RequestCoil(slave, functionCode, ls));
+					ls = new ArrayList<>();
+					ls.add(l);
+					min = l;
+				}
+			}
+			if (ls.size() > 0) {
+				list.add(new Obj4RequestCoil(slave, functionCode, ls));
+			}
+			return list;
+		}
+	}
+
+	/**
+	 * 验证并创建请求对象 寄存器数据
 	 * 验证map中的数据类型和地址位的关系是否正确
 	 * 如果验证后 关系不对将抛出异常
 	 *
@@ -81,7 +121,10 @@ public class ModbusRequestDataUtils {
 	 * @return
 	 * @throws ModbusException
 	 */
-	private static <T extends AbstractModbusRequest> T verifyAndCreateRequest(T requestType, int slaveId, int functionCode, @NonNull Map<Integer, ModbusDataTypeEnum> locator) throws ModbusException {
+	public static <T extends AbstractModbusRequest> T verifyAndCreateRequest(T requestType, int slaveId, FunctionCode functionCode, @NonNull Map<Integer, ModbusDataTypeEnum> locator) throws ModbusException {
+		if (FunctionCode.READ_HOLDING_REGISTERS != functionCode && FunctionCode.READ_INPUT_REGISTERS != functionCode) {
+			throw new ModbusException("功能码与查询类型不符");
+		}
 		Set<Integer> ketSet = new TreeSet(locator.keySet());
 		if (locator.size() == 0) {
 			return null;
@@ -105,6 +148,28 @@ public class ModbusRequestDataUtils {
 		return requestType;
 	}
 
+
+	/**
+	 * 验证并创建请求对象  线圈数据类型
+	 * 验证map中的数据类型和地址位的关系是否正确
+	 * 如果验证后 关系不对将抛出异常
+	 *
+	 * @param locator
+	 * @return
+	 * @throws ModbusException
+	 */
+	public static <T extends AbstractModbusRequest> T verifyAndCreateRequest(T requestType, int slaveId, FunctionCode functionCode, @NonNull List<Integer> locator) throws ModbusException {
+		if (FunctionCode.READ_COILS != functionCode && FunctionCode.READ_DISCRETE_INPUTS != functionCode) {
+			throw new ModbusException("功能码与查询类型不符");
+		}
+		int min = Collections.min(locator);
+		int max = Collections.max(locator);
+		if (max - min > 255) {
+			throw new ModbusException("请求的modbus数据量过多,超出长度的表达范围");
+		}
+		requestType.setStartAddress(min).setQuantity(max - min+1).setSlaveId(slaveId).setFunctionCode(functionCode);
+		return requestType;
+	}
 
 	/**
 	 * 请求数据 将请求传入后   返回modbus的响应
@@ -143,7 +208,7 @@ public class ModbusRequestDataUtils {
 
 
 	/**
-	 * 不了解该工具的可直接使用该方法
+	 * 不了解该工具的可直接使用该方法  寄存器
 	 * 在请求数据的发送和接收报文的基础上进行 编码和解码  编码请求报文  解码接收到的报文
 	 * 传入想要的  点位--数据类型  得到数据的map  对外暴露 逻辑上最简单的方法
 	 *
@@ -154,26 +219,44 @@ public class ModbusRequestDataUtils {
 	 * @return
 	 * @throws ModbusException
 	 */
-	public static Map<Integer, IModbusDataType> getData(AbstractMasterBuilder masterBuilder, Map<Integer, ModbusDataTypeEnum> locator, Integer slaveId, Integer functionCode) throws ModbusException {
-		List<Obj4RequestData> list = splitModbusRequest(locator, slaveId, functionCode);
-		return getData(masterBuilder, list);
+	public static Map<Integer, IModbusDataType> getData(AbstractMasterBuilder masterBuilder, Map<Integer, ModbusDataTypeEnum> locator, Integer slaveId, FunctionCode functionCode) throws ModbusException {
+		List<Obj4RequestRegister> list = splitModbusRequest(locator, slaveId, functionCode);
+		return getRegisterData(masterBuilder, list);
 	}
 
 
 	/**
-	 * 相较于上一个重载方法  这个方法适用于重复请求  如重复请求前100个数据  使用该方法
+	 * 不了解该工具的可直接使用该方法  线圈
+	 * 在请求数据的发送和接收报文的基础上进行 编码和解码  编码请求报文  解码接收到的报文
+	 * 传入想要的  点位--数据类型  得到数据的map  对外暴露 逻辑上最简单的方法
+	 *
+	 * @param masterBuilder
+	 * @param locator
+	 * @param slaveId
+	 * @param functionCode
+	 * @return
+	 * @throws ModbusException
+	 */
+	public static Map<Integer, Boolean> getData(AbstractMasterBuilder masterBuilder, List<Integer> locator, Integer slaveId, FunctionCode functionCode) throws ModbusException {
+		List<Obj4RequestCoil> list = splitModbusRequest(locator, slaveId, functionCode);
+		return getCoilData(masterBuilder, list);
+	}
+
+
+	/**
+	 * 这个方法适用于重复请求 寄存器 如重复请求前100个数据  使用该方法
 	 * 将省去系统编码的过程
 	 *
 	 * @param masterBuilder
 	 * @param locators
 	 * @return
 	 */
-	public static Map<Integer, IModbusDataType> getData(AbstractMasterBuilder masterBuilder, List<Obj4RequestData> locators) throws ModbusException {
+	public static Map<Integer, IModbusDataType> getRegisterData(AbstractMasterBuilder masterBuilder, List<Obj4RequestRegister> locators) throws ModbusException {
 		Map<Integer, IModbusDataType> map = new HashMap<>();
 		Map<Integer, IModbusDataType> map1 = null;
-		for (Obj4RequestData m : locators) {
+		AbstractModbusResponse requestData;
+		for (Obj4RequestRegister m : locators) {
 			try {
-				AbstractModbusResponse requestData;
 				if (masterBuilder instanceof AbstractTcpMasterBuilder) {
 					requestData = requestData(masterBuilder, m.getTcpModbusRequest().setTransactionIdentifier(TransactionIdentifier.getInstance((AbstractTcpMasterBuilder) masterBuilder)), new TcpModbusResponse());
 				} else {
@@ -206,40 +289,57 @@ public class ModbusRequestDataUtils {
 
 
 	/**
-	 * 方便请求和解析数据所构建的对象
+	 * 这个方法适用于重复请求 线圈 如重复请求前100个数据  使用该方法
+	 * 将省去系统编码的过程
+	 *
+	 * @param masterBuilder
+	 * @param locators
+	 * @return
 	 */
-	public static class Obj4RequestData {
-
-
-		int slaveId;
-
-		int functionCode;
-		TcpModbusRequest tcpModbusRequest = null;
-		RtuModbusRequest rtuModbusRequest = null;
-		@Getter
-		private Map<Integer, ModbusDataTypeEnum> locator;
-
-		public Obj4RequestData(int slaveId, int functionCode, Map<Integer, ModbusDataTypeEnum> locator) {
-			this.slaveId = slaveId;
-			this.functionCode = functionCode;
-			this.locator = locator;
-		}
-
-		public TcpModbusRequest getTcpModbusRequest() throws ModbusException {
-			if (this.tcpModbusRequest == null) {
-				this.tcpModbusRequest = verifyAndCreateRequest(new TcpModbusRequest(), slaveId, functionCode, locator);
+	public static Map<Integer, Boolean> getCoilData(AbstractMasterBuilder masterBuilder, List<Obj4RequestCoil> locators) throws ModbusException {
+		Map<Integer, Boolean> map = new HashMap<>();
+		Map<Integer, Boolean> map1 = null;
+		AbstractModbusResponse requestData;
+		BooleanModbusDataInCoil booleanModbusDataInCoil = new BooleanModbusDataInCoil();
+		for (Obj4RequestCoil m : locators) {
+			try {
+				if (masterBuilder instanceof AbstractTcpMasterBuilder) {
+					requestData = requestData(masterBuilder, m.getTcpModbusRequest().setTransactionIdentifier(TransactionIdentifier.getInstance((AbstractTcpMasterBuilder) masterBuilder)), new TcpModbusResponse());
+				} else {
+					requestData = requestData(masterBuilder, m.getRtuModbusRequest(), new RtuModbusResponse());
+				}
+				byte[] bytes = requestData.getDataBytes();
+				if (bytes != null && bytes.length > 0) {
+					map1 = new HashMap<>();
+					int min = Collections.min(m.getLocator());
+					int whichByteFlag = -1;
+					int index;
+					for (Integer i : m.getLocator()) {
+						index = (i - min) / PCON.BYTEBITS;
+						if (whichByteFlag != index) {
+							whichByteFlag = index;
+							booleanModbusDataInCoil = new BooleanModbusDataInCoil();
+							booleanModbusDataInCoil.decode(bytes, index);
+						}
+						map1.put(i, booleanModbusDataInCoil.getValue((i - min) % PCON.BYTEBITS));
+					}
+				}
+				if (map1 != null) {
+					map.putAll(map1);
+				}
+			} catch (ModbusException e) {
+				if ("当前并Master未链接到Salve端".equals(e.getMsg())) {
+					throw e;
+				}
+				masterBuilder.getLog().error(e.getMsg());
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			return this.tcpModbusRequest;
 		}
-
-		public RtuModbusRequest getRtuModbusRequest() throws ModbusException {
-			if (this.rtuModbusRequest == null) {
-				this.rtuModbusRequest = verifyAndCreateRequest(new RtuModbusRequest(), slaveId, functionCode, locator);
-			}
-			return this.rtuModbusRequest;
-		}
-
+		return map;
 	}
+
+
 }
 
 

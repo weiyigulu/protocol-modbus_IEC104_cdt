@@ -29,12 +29,6 @@ public interface IModbusDataType {
 	IModbusDataType decode(ByteBuffer byteBuf);
 
 
-	/**
-	 * 编码
-	 *
-	 * @param bytes 字节
-	 */
-	IModbusDataType encode(List<Byte> bytes);
 
 
 }

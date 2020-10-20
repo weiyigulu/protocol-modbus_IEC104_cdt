@@ -1,4 +1,6 @@
 import lombok.extern.slf4j.Slf4j;
+import wei.yigulu.modbus.domain.FunctionCode;
+import wei.yigulu.modbus.domain.Obj4RequestRegister;
 import wei.yigulu.modbus.domain.datatype.IModbusDataType;
 import wei.yigulu.modbus.domain.datatype.ModbusDataTypeEnum;
 import wei.yigulu.modbus.domain.datatype.NumericModbusData;
@@ -31,11 +33,11 @@ public class TestRtuMaster {
 		for (int i = 0; i <= 30; i++) {
 			map.put(i * 2, ModbusDataTypeEnum.ABCD);
 		}
-		List<ModbusRequestDataUtils.Obj4RequestData> ll = ModbusRequestDataUtils.splitModbusRequest(map, 1, 3);
+		List<Obj4RequestRegister> ll = ModbusRequestDataUtils.splitModbusRequest(map, 1, FunctionCode.READ_HOLDING_REGISTERS);
 
 		for (; ; ) {
 			try {
-				Map<Integer, IModbusDataType> map1 = ModbusRequestDataUtils.getData(master, ll);
+				Map<Integer, IModbusDataType> map1 = ModbusRequestDataUtils.getRegisterData(master, ll);
 				for (Integer i : map1.keySet()) {
 					System.out.println(i + " ============ " + ((NumericModbusData) map1.get(i)).getValue());
 				}

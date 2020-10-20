@@ -12,9 +12,10 @@ import java.util.List;
  */
 public abstract class RegisterValue implements IModbusDataType {
 
+	protected static final int BYTEINREGISTER = 2;
+
 	@Getter
 	protected ModbusDataTypeEnum modbusDataTypeEnum = ModbusDataTypeEnum.P_AB;
-
 
 	/**
 	 * 转化成register字串
@@ -22,6 +23,5 @@ public abstract class RegisterValue implements IModbusDataType {
 	 * @return {@link List<Register>}
 	 */
 	public abstract List<Register> getRegisters();
-
 
 }
