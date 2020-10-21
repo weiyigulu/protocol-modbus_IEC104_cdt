@@ -27,7 +27,7 @@ public class ModbusResponseDataUtils {
 			if (e.getCode() != null) {
 				if (e.getCode() == 3004) {
 					response.setSlaveId(request.getSlaveId());
-					response.setFunctionCode(FunctionCode.valueOf(request.getFunctionCode().getCode()+ 0x80));
+					response.setFunctionCode(FunctionCode.valueOf(request.getFunctionCode().getCode() + 0x80));
 					response.setDataBitNum(0x01);
 				}
 			}

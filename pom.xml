@@ -34,7 +34,7 @@
         <java.version>1.8</java.version>
         <protocol.version>1.0</protocol.version>
         <iec104.version>1.4.7</iec104.version>
-        <modbus.version>1.2.0</modbus.version>
+        <modbus.version>1.2.1</modbus.version>
         <cdt.version>1.0.0</cdt.version>
     </properties>
     <distributionManagement>

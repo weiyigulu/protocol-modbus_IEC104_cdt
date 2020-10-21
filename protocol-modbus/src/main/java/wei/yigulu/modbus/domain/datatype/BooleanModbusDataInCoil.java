@@ -1,7 +1,6 @@
 package wei.yigulu.modbus.domain.datatype;
 
 import java.nio.ByteBuffer;
-import java.util.List;
 
 /**
  * 8个布尔值组成的数据类型
@@ -37,18 +36,18 @@ public class BooleanModbusDataInCoil extends CoilValue {
 	}
 
 
-	public void setValue(int index,boolean value){
-		if(index<values.length){
-			this.values[index]=value;
-		}else{
+	public void setValue(int index, boolean value) {
+		if (index < values.length) {
+			this.values[index] = value;
+		} else {
 			throw new IllegalArgumentException();
 		}
 	}
 
-	public boolean getValue(int index){
-		if(index<values.length){
+	public boolean getValue(int index) {
+		if (index < values.length) {
 			return this.values[index];
-		}else{
+		} else {
 			throw new IllegalArgumentException();
 		}
 	}

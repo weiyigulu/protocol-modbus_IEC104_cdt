@@ -167,7 +167,7 @@ public class ModbusRequestDataUtils {
 		if (max - min > 255) {
 			throw new ModbusException("请求的modbus数据量过多,超出长度的表达范围");
 		}
-		requestType.setStartAddress(min).setQuantity(max - min+1).setSlaveId(slaveId).setFunctionCode(functionCode);
+		requestType.setStartAddress(min).setQuantity(max - min + 1).setSlaveId(slaveId).setFunctionCode(functionCode);
 		return requestType;
 	}
 

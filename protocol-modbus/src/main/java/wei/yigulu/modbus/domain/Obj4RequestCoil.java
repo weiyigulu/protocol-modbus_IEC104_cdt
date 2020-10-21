@@ -14,17 +14,17 @@ import java.util.List;
  * @author: xiuwei
  * @version:
  */
-public class Obj4RequestCoil extends  Obj4RequestData {
+public class Obj4RequestCoil extends Obj4RequestData {
 
 	@Getter
 	List<Integer> locator;
 
 	public Obj4RequestCoil(int slaveId, FunctionCode functionCode, List<Integer> locator) throws ModbusException {
 		super(slaveId, functionCode);
-		if(FunctionCode.READ_COILS!=functionCode && FunctionCode.READ_DISCRETE_INPUTS !=functionCode){
-			throw new ModbusException("该实体仅能接受1，2功能码，请求寄存器数据");
+		if (FunctionCode.READ_COILS != functionCode && FunctionCode.READ_DISCRETE_INPUTS != functionCode) {
+			throw new ModbusException("该实体仅能接受1，2功能码，请求线圈数据");
 		}
-		this.locator=locator;
+		this.locator = locator;
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class Obj4RequestCoil extends  Obj4RequestData {
 
 	@Override
 	public RtuModbusRequest getRtuModbusRequest() throws ModbusException {
-		if(this.rtuModbusRequest ==null){
+		if (this.rtuModbusRequest == null) {
 			this.rtuModbusRequest = ModbusRequestDataUtils.verifyAndCreateRequest(new RtuModbusRequest(), slaveId, functionCode, locator);
 		}
 		return this.rtuModbusRequest;

@@ -75,6 +75,8 @@ public enum ModbusDataTypeEnum {
 				return new CDAB();
 			case DCBA:
 				return new DCBA();
+			case A16:
+				return new BooleanModbusDataInRegister();
 			default:
 				return new P_AB();
 		}

@@ -15,17 +15,17 @@ import java.util.Map;
  * @author: xiuwei
  * @version:
  */
-public class Obj4RequestRegister extends  Obj4RequestData {
+public class Obj4RequestRegister extends Obj4RequestData {
 
 	@Getter
 	Map<Integer, ModbusDataTypeEnum> locator;
 
-	public Obj4RequestRegister(int slaveId, FunctionCode functionCode,Map<Integer, ModbusDataTypeEnum> locator) throws ModbusException {
+	public Obj4RequestRegister(int slaveId, FunctionCode functionCode, Map<Integer, ModbusDataTypeEnum> locator) throws ModbusException {
 		super(slaveId, functionCode);
-		if(functionCode!=FunctionCode.READ_HOLDING_REGISTERS && functionCode !=FunctionCode.READ_INPUT_REGISTERS){
+		if (functionCode != FunctionCode.READ_HOLDING_REGISTERS && functionCode != FunctionCode.READ_INPUT_REGISTERS) {
 			throw new ModbusException("该实体仅能接受3，4功能码，请求寄存器数据");
 		}
-		this.locator=locator;
+		this.locator = locator;
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class Obj4RequestRegister extends  Obj4RequestData {
 
 	@Override
 	public RtuModbusRequest getRtuModbusRequest() throws ModbusException {
-		if(this.rtuModbusRequest ==null){
+		if (this.rtuModbusRequest == null) {
 			this.rtuModbusRequest = ModbusRequestDataUtils.verifyAndCreateRequest(new RtuModbusRequest(), slaveId, functionCode, locator);
 		}
 		return this.rtuModbusRequest;

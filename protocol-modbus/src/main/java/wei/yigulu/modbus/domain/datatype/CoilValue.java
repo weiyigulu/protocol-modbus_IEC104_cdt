@@ -1,9 +1,5 @@
 package wei.yigulu.modbus.domain.datatype;
 
-import wei.yigulu.utils.PCON;
-
-import java.util.List;
-
 /**
  * @program: modbus
  * @description: 线圈值
@@ -11,11 +7,6 @@ import java.util.List;
  * @create: 2020-08-17 16:07
  */
 public abstract class CoilValue implements IModbusDataType {
-
-
-
-
-
 
 
 }

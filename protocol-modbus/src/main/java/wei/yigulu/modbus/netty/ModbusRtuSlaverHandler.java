@@ -79,7 +79,7 @@ public class ModbusRtuSlaverHandler extends SimpleChannelInboundHandler<ByteBuf>
 				byte[] bbs = ModbusResponseDataUtils.buildResponse(this.modbusSlaver.getModbusSlaveDataContainer(), request, response);
 				ctx.writeAndFlush(Unpooled.copiedBuffer(bbs));
 				modbusSlaver.getLog().debug("se =>" + DataConvertor.Byte2String(bbs));
-			}catch (ModbusException e){
+			} catch (ModbusException e) {
 				log.error(e.getMsg());
 			}
 		}

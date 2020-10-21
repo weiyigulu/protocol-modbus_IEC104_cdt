@@ -1,15 +1,14 @@
 import lombok.extern.slf4j.Slf4j;
 import wei.yigulu.modbus.domain.FunctionCode;
 import wei.yigulu.modbus.domain.Obj4RequestCoil;
-import wei.yigulu.modbus.domain.Obj4RequestRegister;
-import wei.yigulu.modbus.domain.datatype.IModbusDataType;
-import wei.yigulu.modbus.domain.datatype.ModbusDataTypeEnum;
-import wei.yigulu.modbus.domain.datatype.NumericModbusData;
 import wei.yigulu.modbus.exceptiom.ModbusException;
 import wei.yigulu.modbus.netty.ModbusTcpMasterBuilder;
 import wei.yigulu.modbus.utils.ModbusRequestDataUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author: xiuwei
@@ -23,10 +22,11 @@ public class TestMasterCoil {
 		ModbusTcpMasterBuilder master = new ModbusTcpMasterBuilder("127.0.0.1", 502);
 		master.createByUnBlock();
 		Thread.sleep(3000L);
-		List<Integer> list=new ArrayList<>();
-		for (int i = 0; i <=19; i++) {
-			list.add(i*2 );
+		List<Integer> list = new ArrayList<>();
+		for (int i = 0; i <= 7; i++) {
+			list.add(i );
 		}
+		list.add(30);
 		List<Obj4RequestCoil> ll = ModbusRequestDataUtils.splitModbusRequest(list, 1, FunctionCode.READ_COILS);
 
 		for (; ; ) {

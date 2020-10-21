@@ -7,14 +7,11 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import wei.yigulu.modbus.domain.datatype.BooleanModbusDataInCoil;
-import wei.yigulu.modbus.domain.datatype.CoilValue;
 import wei.yigulu.modbus.domain.datatype.Register;
 import wei.yigulu.modbus.domain.datatype.RegisterValue;
 import wei.yigulu.modbus.domain.datatype.numeric.P_AB;
 import wei.yigulu.modbus.domain.request.AbstractModbusRequest;
 import wei.yigulu.modbus.exceptiom.ModbusException;
-import wei.yigulu.utils.PCON;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -80,8 +77,8 @@ public class ModbusSlaveDataContainer {
 		getOrCreate(slaveId).setRegister(value);
 	}
 
-	public void setCoil(int slaveId,int position,boolean value) {
-		getOrCreate(slaveId).setCoil(position,value);
+	public void setCoil(int slaveId, int position, boolean value) {
+		getOrCreate(slaveId).setCoil(position, value);
 	}
 
 	private DataDrawer getOrCreate(int slave) {
@@ -133,13 +130,13 @@ public class ModbusSlaveDataContainer {
 		 * @param value    值
 		 */
 		public void setCoil(int position, boolean value) {
-			int coilsSize=this.coils.size();
-			if(coilsSize<=position){
-				for(int i=0;i<coilsSize-position+1;i++){
+			int coilsSize = this.coils.size();
+			if (coilsSize <= position) {
+				for (int i = 0; i < coilsSize - position + 1; i++) {
 					coils.add(false);
 				}
 			}
-			this.coils.set(position,value);
+			this.coils.set(position, value);
 		}
 
 
@@ -159,21 +156,21 @@ public class ModbusSlaveDataContainer {
 		}
 
 		public byte[] getCoilDataBytes(int position, int bitNum) {
-			int coilsSize=coils.size();
-			List<Byte> bytes=new ArrayList<>();
-			byte b=0;
-			int  siftNum=0;
-			for(int i=position;i<bitNum+position;i++){
-				if(coilsSize>i && coils.get(i)){
-					b |= (0x01 <<siftNum);
+			int coilsSize = coils.size();
+			List<Byte> bytes = new ArrayList<>();
+			byte b = 0;
+			int siftNum = 0;
+			for (int i = position; i < bitNum + position; i++) {
+				if (coilsSize > i && coils.get(i)) {
+					b |= (0x01 << siftNum);
 				}
-				if(++siftNum==8){
-					siftNum=0;
+				if (++siftNum == 8) {
+					siftNum = 0;
 					bytes.add(b);
-					b=0;
+					b = 0;
 				}
 			}
-			if(siftNum!=0){
+			if (siftNum != 0) {
 				bytes.add(b);
 			}
 			return Bytes.toArray(bytes);

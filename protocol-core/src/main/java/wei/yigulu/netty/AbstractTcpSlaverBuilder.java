@@ -77,7 +77,7 @@ public abstract class AbstractTcpSlaverBuilder extends BaseProtocolBuilder {
 	public void create() throws Exception {
 		// 服务器异步创建绑定
 		ChannelFuture cf = getOrCrateServerBootstrap().bind().sync();
-		this.fatherChannel=cf.channel();
+		this.fatherChannel = cf.channel();
 		log.info("Slaver端启动成功；端口" + port);
 		// 关闭服务器通道
 		cf.channel().closeFuture().sync();

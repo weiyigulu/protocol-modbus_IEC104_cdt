@@ -51,7 +51,7 @@ public class ModbusTcpSlaverHandle extends ChannelInboundHandlerAdapter {
 			byte[] bbs = ModbusResponseDataUtils.buildResponse(this.slaverBuilder.getModbusSlaveDataContainer(), request, response);
 			ctx.writeAndFlush(Unpooled.copiedBuffer(bbs));
 			log.debug("se =>" + DataConvertor.Byte2String(bbs));
-		}catch (ModbusException e){
+		} catch (ModbusException e) {
 			log.error(e.getMsg());
 		}
 	}

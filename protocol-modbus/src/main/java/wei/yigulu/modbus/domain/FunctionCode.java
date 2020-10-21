@@ -2,8 +2,6 @@ package wei.yigulu.modbus.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * 功能码 copy from modbus4j
@@ -67,24 +65,40 @@ public enum FunctionCode {
 	private Integer code;
 
 
-	public static FunctionCode valueOf(int code){
-		switch (code){
-			case 1:return READ_COILS;
-			case 2:return READ_DISCRETE_INPUTS;
-			case 3:return READ_HOLDING_REGISTERS;
-			case 4:return READ_INPUT_REGISTERS;
-			case 0x81:return READ_COILS_ERROR;
-			case 0x82:return READ_DISCRETE_INPUTS_ERROR;
-			case 0x83:return READ_HOLDING_REGISTERS_ERROR;
-			case 0x84:return READ_INPUT_REGISTERS_ERROR;
-			case 5:return WRITE_COIL;
-			case 6:return WRITE_REGISTER;
-			case 7:return READ_EXCEPTION_STATUS;
-			case 15:return WRITE_COILS;
-			case 16:return WRITE_REGISTERS;
-			case 17:return REPORT_SLAVE_ID;
-			case 22:return WRITE_MASK_REGISTER;
-			default:throw  new IllegalArgumentException();
+	public static FunctionCode valueOf(int code) {
+		switch (code) {
+			case 1:
+				return READ_COILS;
+			case 2:
+				return READ_DISCRETE_INPUTS;
+			case 3:
+				return READ_HOLDING_REGISTERS;
+			case 4:
+				return READ_INPUT_REGISTERS;
+			case 0x81:
+				return READ_COILS_ERROR;
+			case 0x82:
+				return READ_DISCRETE_INPUTS_ERROR;
+			case 0x83:
+				return READ_HOLDING_REGISTERS_ERROR;
+			case 0x84:
+				return READ_INPUT_REGISTERS_ERROR;
+			case 5:
+				return WRITE_COIL;
+			case 6:
+				return WRITE_REGISTER;
+			case 7:
+				return READ_EXCEPTION_STATUS;
+			case 15:
+				return WRITE_COILS;
+			case 16:
+				return WRITE_REGISTERS;
+			case 17:
+				return REPORT_SLAVE_ID;
+			case 22:
+				return WRITE_MASK_REGISTER;
+			default:
+				throw new IllegalArgumentException();
 		}
 
 	}

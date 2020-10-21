@@ -1,7 +1,6 @@
 package wei.yigulu.modbus.domain.datatype;
 
 import java.nio.ByteBuffer;
-import java.util.List;
 
 /**
  * modbus的数据类型的抽象类
@@ -27,8 +26,6 @@ public interface IModbusDataType {
 	 * @return {@link IModbusDataType}
 	 */
 	IModbusDataType decode(ByteBuffer byteBuf);
-
-
 
 
 }

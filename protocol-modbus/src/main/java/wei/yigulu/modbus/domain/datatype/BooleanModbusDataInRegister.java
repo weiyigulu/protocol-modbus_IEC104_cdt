@@ -51,12 +51,13 @@ public class BooleanModbusDataInRegister extends RegisterValue {
 	/**
 	 * 入参0  即获取高位的byte
 	 * 入参1 即获取低位的byte
+	 *
 	 * @param whichByte
 	 * @return
 	 */
-	private byte getByteFormValue(int whichByte){
-		byte b=0;
-		for (int i = whichByte*ONEBYTEBOOL; i < (whichByte+1)*ONEBYTEBOOL; i++) {
+	private byte getByteFormValue(int whichByte) {
+		byte b = 0;
+		for (int i = whichByte * ONEBYTEBOOL; i < (whichByte + 1) * ONEBYTEBOOL; i++) {
 			if (this.values[i]) {
 				b |= (0x01 << i);
 			}
@@ -64,10 +65,30 @@ public class BooleanModbusDataInRegister extends RegisterValue {
 		return b;
 	}
 
+	public boolean getValue(int index) {
+		if (index < values.length) {
+			return this.values[index];
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
+
+	public void setValue(int index,boolean value) {
+		if (index < values.length) {
+			this.values[index]=value;
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
+
+	public boolean[] getValues() {
+		return this.values;
+	}
+
 	@Override
 	public List<Register> getRegisters() {
 		List<Register> registers = new ArrayList<>();
-		registers.add(new Register(getByteFormValue(0),getByteFormValue(1)));
+		registers.add(new Register(getByteFormValue(0), getByteFormValue(1)));
 		return registers;
 	}
 }
