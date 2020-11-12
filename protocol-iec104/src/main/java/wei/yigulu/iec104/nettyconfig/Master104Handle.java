@@ -61,7 +61,7 @@ public class Master104Handle extends ChannelInboundHandlerAdapter {
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		//收数据
 		log.debug("----------------------------------------------------------------------------------");
-		log.debug(DataConvertor.ByteBuf2String((ByteBuf) msg));
+		log.debug("re <= "+DataConvertor.ByteBuf2String((ByteBuf) msg));
 		Apdu apdu = apduClass.newInstance().setChannel(ctx.channel()).setIec104Builder(masterBuilder).setLog(log).loadByteBuf((ByteBuf) msg);
 		if (apdu.getApciType() == Apdu.ApciType.I_FORMAT) {
 			this.testNum = 0;
@@ -93,7 +93,7 @@ public class Master104Handle extends ChannelInboundHandlerAdapter {
 		String clientIp = ipSocket.getAddress().getHostAddress();
 		Integer clientPort = ipSocket.getPort();
 		log.info("连接" + clientIp + ":" + clientPort + "服务端成功");
-		LinkContainer.getInstance().getLinks().put(ctx.channel().id(), new Iec104Link(ctx.channel(), clientIp, clientPort, Iec104Link.Role.SLAVER));
+		LinkContainer.getInstance().getLinks().put(ctx.channel().id(), new Iec104Link(ctx.channel(), clientIp, clientPort, Iec104Link.Role.SLAVER,masterBuilder.getLog()));
 		ctx.writeAndFlush(Unpooled.copiedBuffer(TechnicalTerm.START));
 		this.masterBuilder.connected();
 	}

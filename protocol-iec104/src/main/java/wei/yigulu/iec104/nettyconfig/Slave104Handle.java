@@ -28,7 +28,7 @@ public class Slave104Handle extends ChannelInboundHandlerAdapter {
 
 	private static final String STARTASKPROPNAME = "haveStartAsk";
 
-	private static final boolean STARTASKDEFVAL = true;
+	private static final boolean STARTASKDEFVAL = false;
 
 	private static final boolean STARTASK = PropertiesReader.getInstance().getBooleanProp(STARTASKPROPNAME, STARTASKDEFVAL);
 
@@ -57,7 +57,7 @@ public class Slave104Handle extends ChannelInboundHandlerAdapter {
 		//收数据
 		log.debug("----------------------------------------------------------------------------------");
 		log.debug(DataConvertor.ByteBuf2String((ByteBuf) msg));
-		Apdu apdu = apduClass.newInstance().setChannel(ctx.channel()).setIec104Builder(slaverBuilder).loadByteBuf((ByteBuf) msg);
+		Apdu apdu = apduClass.newInstance().setChannel(ctx.channel()).setIec104Builder(slaverBuilder).setLog(slaverBuilder.getLog()).loadByteBuf((ByteBuf) msg);
 		apdu.answer();
 	}
 
@@ -80,7 +80,7 @@ public class Slave104Handle extends ChannelInboundHandlerAdapter {
 			return;
 		}
 		log.info(clientIp + ":" + clientPort + "客户端连接");
-		LinkContainer.getInstance().getLinks().put(ctx.channel().id(), new Iec104Link(ctx.channel(), clientIp, clientPort, Iec104Link.Role.MASTER));
+		LinkContainer.getInstance().getLinks().put(ctx.channel().id(), new Iec104Link(ctx.channel(), clientIp, clientPort, Iec104Link.Role.MASTER,slaverBuilder.getLog()));
 		this.slaverBuilder.connected(ipSocket);
 		this.slaverBuilder.getChannels().add(ctx.channel());
 		if (STARTASK) {

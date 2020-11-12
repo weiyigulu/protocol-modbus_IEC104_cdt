@@ -60,13 +60,12 @@ public class ModbusRtuMasterHandler extends SimpleChannelInboundHandler<ByteBuf>
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
 		cause.printStackTrace();
-		modbusMaster.getLog().error(cause.getMessage());
-		modbusMaster.getLog().error("串口异常消息:{}", cause.getMessage());
+		modbusMaster.getLog().error("串口异常消息:{}", cause);
 	}
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-		modbusMaster.getLog().debug("接收到串口{}发来数据帧: <= " + DataConvertor.ByteBuf2String(msg), this.modbusMaster.getCommPortId());
+		modbusMaster.getLog().info("接收到串口{}发来数据帧: <= " + DataConvertor.ByteBuf2String(msg), this.modbusMaster.getCommPortId());
 		if (msg.readableBytes() >= MINLEN) {
 			this.modbusMaster.getOrCreateSynchronousWaitingRoom().setData(msg.nioBuffer());
 		}

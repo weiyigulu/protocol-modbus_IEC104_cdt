@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
  */
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-public class Iec104SMasterBuilder extends AbstractTcpMasterBuilder {
+public class Iec104MasterBuilder extends AbstractTcpMasterBuilder {
 
 	private static final String HEARTBEATPROPNAME = "heartBeatIntervalTime";
 
@@ -35,7 +35,7 @@ public class Iec104SMasterBuilder extends AbstractTcpMasterBuilder {
 	 * @param ip   ip
 	 * @param port port
 	 */
-	public Iec104SMasterBuilder(String ip, Integer port) {
+	public Iec104MasterBuilder(String ip, Integer port) {
 		super(ip, port);
 	}
 

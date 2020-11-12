@@ -41,7 +41,7 @@ public class ModbusRtuMasterBuilder extends AbstractRtuModeBuilder implements Mo
 			this.channelInitializer = new ProtocolChannelInitializer<PureJavaCommChannel>(this) {
 				@Override
 				protected void initChannel(PureJavaCommChannel ch) throws Exception {
-					ch.pipeline().addLast(new ModbusRtuMasterDelimiterHandler());
+					ch.pipeline().addLast(new ModbusRtuMasterDelimiterHandler().setLog(getLog()));
 					ch.pipeline().addLast(new ModbusRtuMasterHandler((ModbusRtuMasterBuilder) builder));
 				}
 			};

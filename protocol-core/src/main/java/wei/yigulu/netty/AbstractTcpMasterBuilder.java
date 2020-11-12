@@ -19,7 +19,6 @@ import lombok.experimental.Accessors;
  * @author 修唯xiuwei
  * @version 3.0
  */
-@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 public abstract class AbstractTcpMasterBuilder extends AbstractMasterBuilder {
 
@@ -139,5 +138,7 @@ public abstract class AbstractTcpMasterBuilder extends AbstractMasterBuilder {
 		}
 		return this.workGroup;
 	}
+
+
 
 }

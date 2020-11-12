@@ -34,7 +34,7 @@ public class ModbusTcpSlaverBuilder extends AbstractTcpSlaverBuilder {
 		return new ProtocolChannelInitializer(this) {
 			@Override
 			protected void initChannel(Channel ch) throws Exception {
-				ch.pipeline().addLast(new ModbusTcpDelimiterHandler());
+				ch.pipeline().addLast(new ModbusTcpDelimiterHandler().setLog(getLog()));
 				ch.pipeline().addLast(new ModbusTcpSlaverHandle((ModbusTcpSlaverBuilder) builder));
 			}
 		};

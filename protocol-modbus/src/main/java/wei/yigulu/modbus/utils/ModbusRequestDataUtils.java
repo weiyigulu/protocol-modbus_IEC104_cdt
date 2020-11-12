@@ -254,24 +254,9 @@ public class ModbusRequestDataUtils {
 	public static Map<Integer, IModbusDataType> getRegisterData(AbstractMasterBuilder masterBuilder, List<Obj4RequestRegister> locators) throws ModbusException {
 		Map<Integer, IModbusDataType> map = new HashMap<>();
 		Map<Integer, IModbusDataType> map1 = null;
-		AbstractModbusResponse requestData;
 		for (Obj4RequestRegister m : locators) {
 			try {
-				if (masterBuilder instanceof AbstractTcpMasterBuilder) {
-					requestData = requestData(masterBuilder, m.getTcpModbusRequest().setTransactionIdentifier(TransactionIdentifier.getInstance((AbstractTcpMasterBuilder) masterBuilder)), new TcpModbusResponse());
-				} else {
-					requestData = requestData(masterBuilder, m.getRtuModbusRequest(), new RtuModbusResponse());
-				}
-				byte[] bytes = requestData.getDataBytes();
-				if (bytes != null && bytes.length > 0) {
-					map1 = new HashMap<>();
-					int min = Collections.min(m.getLocator().keySet());
-					for (Map.Entry<Integer, ModbusDataTypeEnum> e : m.getLocator().entrySet()) {
-						if (bytes.length >= e.getKey() - min + e.getValue().getOccupiedRegister()) {
-							map1.put(e.getKey(), e.getValue().getObject().decode(bytes, e.getKey() - min));
-						}
-					}
-				}
+				map1 = getRegisterData(masterBuilder, m);
 				if (map1 != null) {
 					map.putAll(map1);
 				}
@@ -279,10 +264,40 @@ public class ModbusRequestDataUtils {
 				if ("当前并Master未链接到Salve端".equals(e.getMsg())) {
 					throw e;
 				}
-				masterBuilder.getLog().error(e.getMsg());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		return map;
+	}
+
+
+	public static Map<Integer, IModbusDataType> getRegisterData(AbstractMasterBuilder masterBuilder, Obj4RequestRegister locator) throws ModbusException {
+		Map<Integer, IModbusDataType> map = null;
+		AbstractModbusResponse response;
+		try {
+			if (masterBuilder instanceof AbstractTcpMasterBuilder) {
+				response = requestData(masterBuilder, locator.getTcpModbusRequest().setTransactionIdentifier(TransactionIdentifier.getInstance((AbstractTcpMasterBuilder) masterBuilder)), new TcpModbusResponse());
+			} else {
+				response = requestData(masterBuilder, locator.getRtuModbusRequest(), new RtuModbusResponse());
+			}
+			byte[] bytes = response.getDataBytes();
+			if (bytes != null && bytes.length > 0) {
+				map = new HashMap<>();
+				int min = Collections.min(locator.getLocator().keySet());
+				for (Map.Entry<Integer, ModbusDataTypeEnum> e : locator.getLocator().entrySet()) {
+					if (bytes.length >= e.getKey() - min + e.getValue().getOccupiedRegister()) {
+						map.put(e.getKey(), e.getValue().getObject().decode(bytes, e.getKey() - min));
+					}
+				}
+			}
+		} catch (ModbusException e) {
+			if ("当前并Master未链接到Salve端".equals(e.getMsg())) {
+				throw e;
+			}
+			masterBuilder.getLog().error(e.getMsg());
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return map;
 	}

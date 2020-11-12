@@ -3,6 +3,7 @@ package wei.yigulu.netty;
 
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
+import io.netty.util.concurrent.ScheduledFuture;
 import org.slf4j.Logger;
 
 import java.util.concurrent.TimeUnit;
@@ -35,7 +36,7 @@ public class SimpleTcpConnectionListener implements ChannelFutureListener {
 	@Override
 	public void operationComplete(ChannelFuture channelFuture) throws Exception {
 		if (channelFuture == null || channelFuture.channel() == null || !channelFuture.channel().isActive()) {
-			this.masterBuilder.getOrCreateWorkGroup().schedule(() -> {
+			 this.masterBuilder.getOrCreateWorkGroup().schedule(() -> {
 				try {
 					log.error("服务端{}:{}链接不上，开始重连操作", this.masterBuilder.getIp(), this.masterBuilder.getPort());
 					masterBuilder.create();

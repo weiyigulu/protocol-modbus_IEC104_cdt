@@ -60,7 +60,7 @@ public class AbstractModbusRequest {
 	 * @param byteBuf 字节缓冲
 	 */
 	public AbstractModbusRequest decode(ByteBuffer byteBuf) throws ModbusException {
-		this.setSlaveId(byteBuf.get() & 0xff);
+		this.setSlaveId((byteBuf.get() & 0xff));
 		this.setFunctionCode(FunctionCode.valueOf(byteBuf.get() & 0xff));
 		this.setStartAddress(new P_AB().decode(byteBuf).getValue().intValue());
 		this.setQuantity(new P_AB().decode(byteBuf).getValue().intValue());

@@ -35,5 +35,16 @@ public class BaseProtocolBuilder {
 	@Getter
 	protected Map<String, Object> configInfoMap = new HashMap<>();
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {return true;}
+		if (o == null || getClass() != o.getClass()) {return false;}
+		BaseProtocolBuilder that = (BaseProtocolBuilder) o;
+		return builderId.equals(that.builderId);
+	}
 
+	@Override
+	public int hashCode() {
+		return builderId.hashCode();
+	}
 }

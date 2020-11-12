@@ -9,7 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <version>${modbus.version}</version>
-    <description> 1.2.1 支持线圈的读取和发送</description>
+    <description>
+        1.2.1 支持线圈的读取和发送
+        1.2.2 支持BADC数据类型
+    </description>
 
     <artifactId>protocol-modbus</artifactId>
     <dependencies>

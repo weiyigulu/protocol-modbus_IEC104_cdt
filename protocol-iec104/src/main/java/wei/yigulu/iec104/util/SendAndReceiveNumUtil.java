@@ -128,7 +128,7 @@ public class SendAndReceiveNumUtil {
 			try {
 				byte[] bs = apdu1.encode();
 				//TODO  改变日志模式
-				log.debug("发送s帧：" + DataConvertor.Byte2String(bs));
+				link.getLog().debug("发送s帧：" + DataConvertor.Byte2String(bs));
 				link.getChannel().writeAndFlush(Unpooled.copiedBuffer(bs));
 			} catch (Exception e) {
 				e.printStackTrace();

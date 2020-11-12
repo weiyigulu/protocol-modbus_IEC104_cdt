@@ -3,6 +3,8 @@ package wei.yigulu.iec104.container;
 import io.netty.channel.Channel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -23,11 +25,12 @@ public class Iec104Link {
 	 * @param port         port
 	 * @param oppositeRole opposite role
 	 */
-	public Iec104Link(Channel channel, String ip, Integer port, Role oppositeRole) {
+	public Iec104Link(Channel channel, String ip, Integer port, Role oppositeRole,Logger logger) {
 		this.channel = channel;
 		this.oppositeIp = ip;
 		this.oppositePort = port;
 		this.oppositeRole = oppositeRole;
+		this.log=logger;
 		iReceive = 0;
 		iSend = 0;
 	}
@@ -62,6 +65,8 @@ public class Iec104Link {
 	private int iSend;
 
 	private LinkState linkState = LinkState.NORMAL;
+
+	private Logger log = LoggerFactory.getLogger(this.getClass());
 
 	/**
 	 * Link state

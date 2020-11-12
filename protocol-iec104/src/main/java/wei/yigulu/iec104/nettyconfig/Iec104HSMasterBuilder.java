@@ -33,7 +33,7 @@ public class Iec104HSMasterBuilder extends AbstractHSTcpMasterBuilder {
 
 	@Override
 	protected ProtocolChannelInitializer getOrCreateChannelInitializer() {
-		return Iec104SMasterBuilder.getDefaultChannelInitializer(this);
+		return Iec104MasterBuilder.getDefaultChannelInitializer(this);
 	}
 
 

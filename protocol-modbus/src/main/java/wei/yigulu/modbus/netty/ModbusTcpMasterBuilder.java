@@ -58,7 +58,7 @@ public class ModbusTcpMasterBuilder extends AbstractTcpMasterBuilder implements 
 		return new ProtocolChannelInitializer<SocketChannel>(masterBuilder) {
 			@Override
 			protected void initChannel(SocketChannel ch) throws Exception {
-				ch.pipeline().addLast(new ModbusTcpDelimiterHandler());
+				ch.pipeline().addLast(new ModbusTcpDelimiterHandler().setLog(masterBuilder.getLog()));
 				ch.pipeline().addLast(new ModbusTcpMasterHandler((AbstractTcpMasterBuilder) builder));
 			}
 		};

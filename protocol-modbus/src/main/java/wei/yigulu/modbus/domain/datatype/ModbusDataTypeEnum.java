@@ -36,6 +36,8 @@ public enum ModbusDataTypeEnum {
 	PM_CDAB(2),
 	/*ABCD 的modbus 4 字节  浮点数据*/
 	ABCD(2),
+	/*BADC 的modbus 4 字节  浮点数据*/
+	BADC(2),
 	/*CDAB 的modbus 4 字节  浮点数据*/
 	CDAB(2),
 	/*DCBA 的modbus 4 字节  浮点数据*/
@@ -75,6 +77,8 @@ public enum ModbusDataTypeEnum {
 				return new CDAB();
 			case DCBA:
 				return new DCBA();
+			case BADC:
+				return new BADC();
 			case A16:
 				return new BooleanModbusDataInRegister();
 			default:

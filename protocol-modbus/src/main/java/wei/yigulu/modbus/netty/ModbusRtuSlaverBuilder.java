@@ -36,7 +36,7 @@ public class ModbusRtuSlaverBuilder extends AbstractRtuModeBuilder {
 			this.channelInitializer = new ProtocolChannelInitializer<PureJavaCommChannel>(this) {
 				@Override
 				protected void initChannel(PureJavaCommChannel ch) throws Exception {
-					ch.pipeline().addLast(new ModbusRtuSlaverDelimiterHandler());
+					ch.pipeline().addLast(new ModbusRtuSlaverDelimiterHandler().setLog(getLog()));
 					ch.pipeline().addLast(new ModbusRtuSlaverHandler((ModbusRtuSlaverBuilder) builder));
 				}
 			};

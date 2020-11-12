@@ -1,5 +1,8 @@
+import wei.yigulu.modbus.domain.datatype.numeric.ABCD;
+import wei.yigulu.modbus.domain.datatype.numeric.BADC;
 import wei.yigulu.modbus.netty.ModbusTcpSlaverBuilder;
 
+import java.math.BigDecimal;
 import java.util.Random;
 
 /**
@@ -15,10 +18,10 @@ public class TestSlaver {
 		boolean f;
 		for (; ; ) {
 			for (int i = 0; i < 10; i++) {
-				//slaverBuilder.getModbusSlaveDataContainer().setRegister(1, i, new ABCD(BigDecimal.valueOf((0.5 - random.nextDouble()) * 100)));
-				f = random.nextBoolean();
+				slaverBuilder.getModbusSlaveDataContainer().setRegister(1, i, new BADC(BigDecimal.valueOf(20)));
+				/*f = random.nextBoolean();
 				System.out.println(i + ":" + f);
-				slaverBuilder.getModbusSlaveDataContainer().setCoil(1, i, f);
+				slaverBuilder.getModbusSlaveDataContainer().setCoil(1, i, f);*/
 			}
 			Thread.sleep(2000L);
 		}

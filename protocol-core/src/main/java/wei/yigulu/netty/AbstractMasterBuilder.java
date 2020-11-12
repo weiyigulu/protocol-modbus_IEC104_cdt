@@ -59,6 +59,8 @@ public abstract class AbstractMasterBuilder extends BaseProtocolBuilder {
 		if (this.workGroup != null) {
 			this.workGroup.shutdownGracefully();
 		}
+		this.bootstrap=null;
+		this.workGroup=null;
 	}
 
 
@@ -69,7 +71,7 @@ public abstract class AbstractMasterBuilder extends BaseProtocolBuilder {
 	 */
 	public void sendFrameToOpposite(byte[] bytes) {
 		if (getFuture() != null && getFuture().channel().isActive()) {
-			getLog().debug("se ==> " + DataConvertor.Byte2String(bytes));
+			getLog().info("se ==> " + DataConvertor.Byte2String(bytes));
 			getFuture().channel().writeAndFlush(Unpooled.copiedBuffer(bytes));
 		}
 	}
@@ -81,7 +83,7 @@ public abstract class AbstractMasterBuilder extends BaseProtocolBuilder {
 	 */
 	public void sendFrameToOpposite(ByteBuf byteBuf) {
 		if (getFuture() != null && getFuture().channel().isActive()) {
-			getLog().debug("se ==> " + DataConvertor.ByteBuf2String(byteBuf));
+			getLog().info("se ==> " + DataConvertor.ByteBuf2String(byteBuf));
 			getFuture().channel().writeAndFlush(Unpooled.copiedBuffer(byteBuf));
 		}
 	}
