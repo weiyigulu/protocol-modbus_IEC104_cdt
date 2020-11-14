@@ -42,7 +42,7 @@ public class NoQualityNormalizedIntegerType extends AbstractDataFrameType {
 	 * @throws Iec104Exception iec exception
 	 */
 	public NoQualityNormalizedIntegerType(List<InformationBodyAddress> addresses, List<Integer> datas) throws Iec104Exception {
-		if ((this.datas.size() * 3 + this.addresses.size() * 4) > 240) {
+		if ((this.datas.size() * IeShortInteger.OCCUPYBYTES + this.addresses.size() * InformationBodyAddress.OCCUPYBYTES) > 240) {
 			throw new Iec104Exception("长度超长，创建对象失败，请切割数据。");
 		}
 		this.addresses = addresses;
@@ -73,7 +73,8 @@ public class NoQualityNormalizedIntegerType extends AbstractDataFrameType {
 	 *
 	 * @param f f
 	 */
-	public void addData(int f) {
+	public void addData(int f) throws Iec104Exception {
+		validateLen(IeShortInteger.OCCUPYBYTES);
 		this.datas.add(f);
 	}
 
@@ -84,8 +85,8 @@ public class NoQualityNormalizedIntegerType extends AbstractDataFrameType {
 	 * @param address address
 	 * @param f       f
 	 */
-	public void addDataAndAdd(InformationBodyAddress address, int f) {
-		this.addresses.add(address);
+	public void addDataAndAdd(InformationBodyAddress address, int f) throws Iec104Exception {
+		addAddress(address);
 		addData(f);
 	}
 
@@ -97,7 +98,7 @@ public class NoQualityNormalizedIntegerType extends AbstractDataFrameType {
 	 * @throws Iec104Exception iec exception
 	 */
 	public void addAddress(InformationBodyAddress address) throws Iec104Exception {
-		validateLen(4);
+		validateLen(InformationBodyAddress.OCCUPYBYTES);
 		this.addresses.add(address);
 	}
 
@@ -138,7 +139,7 @@ public class NoQualityNormalizedIntegerType extends AbstractDataFrameType {
 	 * @throws Iec104Exception iec exception
 	 */
 	protected void validateLen(int increase) throws Iec104Exception {
-		if ((this.datas.size() * 3 + this.addresses.size() * 4 + increase) > 240) {
+		if ((this.datas.size() * IeShortInteger.OCCUPYBYTES + this.addresses.size() * InformationBodyAddress.OCCUPYBYTES+increase) > 240){
 			throw new Iec104Exception("长度超长，不能再向此对象中添加元素");
 		}
 	}

@@ -20,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public class IeProofreadTime {
+	public static final int  OCCUPYBYTES=8;
 
 	private DateTime time = new DateTime();
 

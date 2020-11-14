@@ -18,6 +18,8 @@ import java.util.List;
 @AllArgsConstructor
 public class InformationBodyAddress {
 
+	public static final int  OCCUPYBYTES=3;
+
 	/**
 	 * 信息体地址
 	 * 共三位16进制字节

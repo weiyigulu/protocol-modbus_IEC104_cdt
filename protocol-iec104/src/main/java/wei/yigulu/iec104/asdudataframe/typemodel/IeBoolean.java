@@ -19,6 +19,8 @@ import wei.yigulu.iec104.asdudataframe.qualitydescription.IeAbstractQuality;
 @Data
 public class IeBoolean extends IeAbstractQuality {
 
+	public static final int  OCCUPYBYTES=1;
+
 	/**
 	 * 信息状态，是否开闸 1：合；2：开
 	 */

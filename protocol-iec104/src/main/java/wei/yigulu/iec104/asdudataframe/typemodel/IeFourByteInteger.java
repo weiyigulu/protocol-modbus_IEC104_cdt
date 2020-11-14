@@ -16,7 +16,9 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class IeFourBitInteger {
+public class IeFourByteInteger {
+
+	public static final int  OCCUPYBYTES=4;
 
 	private Integer value;
 
@@ -25,7 +27,7 @@ public class IeFourBitInteger {
 	 *
 	 * @param is is
 	 */
-	public IeFourBitInteger(ByteBuf is) {
+	public IeFourByteInteger(ByteBuf is) {
 		value = ((is.readByte() & 0xff) | ((is.readByte() & 0xff) << 8) | ((is.readByte() & 0xff) << 16) | ((is.readByte() & 0xff) << 24));
 	}
 

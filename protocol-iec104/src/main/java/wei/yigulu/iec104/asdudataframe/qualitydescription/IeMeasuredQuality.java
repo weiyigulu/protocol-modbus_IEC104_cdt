@@ -18,6 +18,8 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 public class IeMeasuredQuality extends IeAbstractQuality {
 
+	public static final int  OCCUPYBYTES=1;
+
 	/**
 	 * 是否溢出 0 代表未溢出;1 代表溢出
 	 */

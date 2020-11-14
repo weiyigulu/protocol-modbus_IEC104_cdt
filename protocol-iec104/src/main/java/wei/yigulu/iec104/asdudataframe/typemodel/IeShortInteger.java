@@ -18,6 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 public class IeShortInteger {
 
+	public static final int  OCCUPYBYTES=2;
+
 	private Integer value;
 
 	/**

@@ -15,7 +15,7 @@ public class MasterTest {
 
 	public static void main(String[] args) throws Exception {
 
-		Iec104MasterBuilder masterBuilder = new Iec104MasterBuilder("127.0.0.1", 2409);
+		Iec104MasterBuilder masterBuilder = new Iec104MasterBuilder("127.0.0.1", 24004);
 		masterBuilder.createByUnBlock();
 
 	/*	//创建总召唤类型I帧

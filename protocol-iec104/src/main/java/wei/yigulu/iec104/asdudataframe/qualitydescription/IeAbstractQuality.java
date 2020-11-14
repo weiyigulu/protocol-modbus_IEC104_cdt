@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class IeAbstractQuality {
 
+	public static final int  OCCUPYBYTES=1;
 
 	/**
 	 * 品质的值

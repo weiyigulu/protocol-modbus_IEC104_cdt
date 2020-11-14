@@ -45,7 +45,7 @@ public class NormalizedIntegerType extends AbstractDataFrameType {
 	 * @throws Iec104Exception iec exception
 	 */
 	public NormalizedIntegerType(List<InformationBodyAddress> addresses, Map<IeMeasuredQuality, Integer> datas) throws Iec104Exception {
-		if ((this.datas.size() * 3 + this.addresses.size() * 4) > 240) {
+		if ((this.datas.size() * (IeMeasuredQuality.OCCUPYBYTES+IeShortInteger.OCCUPYBYTES) + this.addresses.size() * InformationBodyAddress.OCCUPYBYTES) > 240) {
 			throw new Iec104Exception("长度超长，创建对象失败，请切割数据。");
 		}
 		this.addresses = addresses;
@@ -89,7 +89,7 @@ public class NormalizedIntegerType extends AbstractDataFrameType {
 	 * @throws Iec104Exception iec exception
 	 */
 	public void addData(int f, IeMeasuredQuality quality) throws Iec104Exception {
-		validateLen(3);
+		validateLen(IeShortInteger.OCCUPYBYTES+IeMeasuredQuality.OCCUPYBYTES);
 		this.datas.put(quality, f);
 	}
 
@@ -115,7 +115,7 @@ public class NormalizedIntegerType extends AbstractDataFrameType {
 	 * @throws Iec104Exception iec exception
 	 */
 	public void addDataAndAdd(InformationBodyAddress address, int f) throws Iec104Exception {
-		this.addresses.add(address);
+		addAddress(address);
 		addData(f);
 	}
 
@@ -127,7 +127,7 @@ public class NormalizedIntegerType extends AbstractDataFrameType {
 	 * @throws Iec104Exception iec exception
 	 */
 	public void addAddress(InformationBodyAddress address) throws Iec104Exception {
-		validateLen(4);
+		validateLen(InformationBodyAddress.OCCUPYBYTES);
 		this.addresses.add(address);
 	}
 
@@ -170,7 +170,7 @@ public class NormalizedIntegerType extends AbstractDataFrameType {
 	 * @throws Iec104Exception iec exception
 	 */
 	protected void validateLen(int increase) throws Iec104Exception {
-		if ((this.datas.size() * 3 + this.addresses.size() * 4 + increase) > 240) {
+		if (((this.datas.size() * (IeMeasuredQuality.OCCUPYBYTES+IeShortInteger.OCCUPYBYTES) + this.addresses.size() * InformationBodyAddress.OCCUPYBYTES) + increase) > 240) {
 			throw new Iec104Exception("长度超长，不能再向此对象中添加元素");
 		}
 	}

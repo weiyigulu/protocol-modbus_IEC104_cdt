@@ -18,6 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 public class IeShortFloat {
 
+	public static final int  OCCUPYBYTES=4;
+
 	private float value;
 
 	/**
