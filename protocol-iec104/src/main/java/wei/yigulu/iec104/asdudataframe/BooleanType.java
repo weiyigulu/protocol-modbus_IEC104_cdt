@@ -95,7 +95,7 @@ public class BooleanType extends AbstractDataFrameType {
 	 * @throws Iec104Exception iec exception
 	 */
 	protected void validateLen(int increase) throws Iec104Exception {
-		if ((this.datas.size() * 5 + this.addresses.size() * 4 + increase) > 240) {
+		if ((this.datas.size() * 1 + this.addresses.size() * 4 + increase) > 240) {
 			throw new Iec104Exception("长度超长，不能再向此对象中添加元素");
 		}
 	}
