@@ -12,6 +12,7 @@ import wei.yigulu.iec104.asdudataframe.typemodel.IeBoolean;
 import wei.yigulu.iec104.asdudataframe.typemodel.InformationBodyAddress;
 import wei.yigulu.iec104.exception.Iec104Exception;
 import wei.yigulu.iec104.nettyconfig.TechnicalTerm;
+import wei.yigulu.iec104.util.SendDataFrameHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,7 @@ public class BooleanType extends AbstractDataFrameType {
 	 */
 	public static final int TYPEID = TechnicalTerm.SINGEL_POINT_TYPE;
 
+
 	private List<InformationBodyAddress> addresses = new ArrayList<>();
 
 	private List<IeBoolean> datas = new ArrayList<>();
@@ -44,6 +46,9 @@ public class BooleanType extends AbstractDataFrameType {
 	 * @throws Iec104Exception iec exception
 	 */
 	public BooleanType(List<InformationBodyAddress> addresses, List<IeBoolean> datas) throws Iec104Exception {
+		if(datas.size()> SendDataFrameHelper.MAXCONTINUITYYXNUM){
+			throw new Iec104Exception("数据个数过多，创建对象失败，请切割数据。");
+		}
 		if ((this.datas.size()*IeBoolean.OCCUPYBYTES + this.addresses.size() * InformationBodyAddress.OCCUPYBYTES) > 240) {
 			throw new Iec104Exception("长度超长，创建对象失败，请切割数据。");
 		}
@@ -95,6 +100,9 @@ public class BooleanType extends AbstractDataFrameType {
 	 * @throws Iec104Exception iec exception
 	 */
 	protected void validateLen(int increase) throws Iec104Exception {
+		if(datas.size()> SendDataFrameHelper.MAXCONTINUITYYXNUM){
+			throw new Iec104Exception("数据个数过多，不能再向此对象中添加元素");
+		}
 		if ((this.datas.size() * IeBoolean.OCCUPYBYTES + this.addresses.size() * InformationBodyAddress.OCCUPYBYTES + increase) > 240) {
 			throw new Iec104Exception("长度超长，不能再向此对象中添加元素");
 		}

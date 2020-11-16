@@ -21,6 +21,27 @@ import java.util.*;
 public class SendDataFrameHelper {
 
 	/**
+	 * 单帧最长连续遥信个数
+	 */
+	public static final int MAXCONTINUITYYXNUM=127;
+
+	/**
+	 * 单帧最长单点遥信个数
+	 */
+	public static final int MAXDISCONTINUITYYXNUM=49;
+
+	/**
+	 * 单帧最长连续遥测个数
+	 */
+	public static final int MAXCONTINUITYYCNUM=45;
+
+	/**
+	 * 单帧最长单点遥测个数
+	 */
+	public static final int MAXDISCONTINUITYYCNUM=25;
+
+
+	/**
 	 * 发送遥信数据帧
 	 *
 	 * @param channel 通达对象
@@ -41,7 +62,7 @@ public class SendDataFrameHelper {
 			max = Collections.max(keys);
 			min = Collections.min(keys);
 			if ((max - min) == (keys.size() - 1)) {
-				for (List<Integer> li : splitAndSort(keys, 400)) {
+				for (List<Integer> li : splitAndSort(keys, MAXCONTINUITYYXNUM)) {
 					booleanType = new BooleanType();
 					booleanType.addAddress(new InformationBodyAddress(li.get(0)));
 					for (Integer i : li) {
@@ -56,7 +77,7 @@ public class SendDataFrameHelper {
 					Thread.sleep(20);
 				}
 			} else {
-				for (Map<Integer, Boolean> m : split(dates, 100)) {
+				for (Map<Integer, Boolean> m : split(dates, MAXDISCONTINUITYYXNUM)) {
 					booleanType = new BooleanType();
 					for (Map.Entry<Integer, Boolean> em : m.entrySet()) {
 						booleanType.addDataAndAdd(new InformationBodyAddress(em.getKey()), em.getValue());
@@ -88,7 +109,7 @@ public class SendDataFrameHelper {
 		Apdu apdu;
 		Asdu asdu;
 		if (dates.size() > 0) {
-			for (Map<Integer, Boolean> m : split(dates, 100)) {
+			for (Map<Integer, Boolean> m : split(dates, MAXDISCONTINUITYYXNUM)) {
 				booleanType = new BooleanType();
 				for (Map.Entry<Integer, Boolean> em : m.entrySet()) {
 					booleanType.addDataAndAdd(new InformationBodyAddress(em.getKey()), em.getValue());
@@ -125,7 +146,7 @@ public class SendDataFrameHelper {
 			max = Collections.max(keys);
 			min = Collections.min(keys);
 			if ((max - min) == (keys.size() - 1)) {
-				for (List<Integer> li : splitAndSort(keys, 45)) {
+				for (List<Integer> li : splitAndSort(keys, MAXCONTINUITYYCNUM)) {
 					shortFloatType = new ShortFloatType();
 					shortFloatType.addAddress(new InformationBodyAddress(li.get(0)));
 					for (Integer i : li) {
@@ -140,7 +161,7 @@ public class SendDataFrameHelper {
 					Thread.sleep(20);
 				}
 			} else {
-				for (Map<Integer, Number> m : split(dates, 25)) {
+				for (Map<Integer, Number> m : split(dates, MAXDISCONTINUITYYCNUM)) {
 					shortFloatType = new ShortFloatType();
 					for (Map.Entry<Integer, Number> em : m.entrySet()) {
 						shortFloatType.addDataAndAdd(new InformationBodyAddress(em.getKey()), em.getValue().floatValue());
@@ -172,7 +193,7 @@ public class SendDataFrameHelper {
 		Asdu asdu;
 		ShortFloatType shortFloatType;
 		if (dates.size() > 0) {
-			for (Map<Integer, Number> m : split(dates, 25)) {
+			for (Map<Integer, Number> m : split(dates, MAXDISCONTINUITYYCNUM)) {
 				shortFloatType = new ShortFloatType();
 				for (Map.Entry<Integer, Number> em : m.entrySet()) {
 					shortFloatType.addDataAndAdd(new InformationBodyAddress(em.getKey()), em.getValue().floatValue());
@@ -239,7 +260,7 @@ public class SendDataFrameHelper {
 
 	/**
 	 * 进行拆分并排序 主要是排序map 中的keyset 对keyset的int型进行排序
-	 *
+	 * 	 *
 	 * @param set    要排序的set
 	 * @param maxLen 设定的最长长度
 	 * @return 拆分后的集合 的集合
