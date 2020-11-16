@@ -1,5 +1,7 @@
 import wei.yigulu.iec104.nettyconfig.Iec104SlaverBuilder;
 
+import java.net.InetSocketAddress;
+
 /**
  * @author: xiuwei
  * @version:
@@ -11,18 +13,17 @@ public class SlaveTest {
 
 
 
-		/*slaverBuilder.getConnectFilterManager().appendFilter((c)->{
+		slaverBuilder.getConnectFilterManager().appendFilter((c)->{
 			if(slaverBuilder.getChannels().size()>=1){
 				return -1;
 			}
-			return 1;
-			*//*InetSocketAddress ipSocket = (InetSocketAddress) c.remoteAddress();
+			InetSocketAddress ipSocket = (InetSocketAddress) c.remoteAddress();
 			String clientIp = ipSocket.getAddress().getHostAddress();
 			Integer clientPort = ipSocket.getPort();
 			if(clientPort>30000){
 				return -1;
-			}else {return 1;}*//*
-		});*/
+			}else {return 1;}
+		});
 		slaverBuilder.create();
 	}
 
