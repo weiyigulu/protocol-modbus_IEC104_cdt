@@ -45,7 +45,7 @@ public class ModbusRtuMasterDelimiterHandler extends AbstractDelimiterHandler {
 		int functionCode;
 		while (cumulation.readableBytes() >= 5) {
 			cumulation.markReaderIndex();
-			cumulation.readBytes(1);
+			cumulation.readBytes(1).release();
 			functionCode = cumulation.readUnsignedByte();
 			if (functionCode > 0x80) {
 				//异常功能码 异常帧

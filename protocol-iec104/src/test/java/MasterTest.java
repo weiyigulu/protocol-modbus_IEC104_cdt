@@ -1,3 +1,4 @@
+import io.netty.util.ResourceLeakDetector;
 import wei.yigulu.iec104.apdumodel.Apdu;
 import wei.yigulu.iec104.apdumodel.Asdu;
 import wei.yigulu.iec104.asdudataframe.TotalSummonType;
@@ -14,8 +15,8 @@ import wei.yigulu.iec104.nettyconfig.Iec104MasterBuilder;
 public class MasterTest {
 
 	public static void main(String[] args) throws Exception {
-
-		Iec104MasterBuilder masterBuilder = new Iec104MasterBuilder("127.0.0.1", 24004);
+		ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.ADVANCED);
+		Iec104MasterBuilder masterBuilder = new Iec104MasterBuilder("127.0.0.1", 2404);
 		masterBuilder.createByUnBlock();
 
 	/*	//创建总召唤类型I帧

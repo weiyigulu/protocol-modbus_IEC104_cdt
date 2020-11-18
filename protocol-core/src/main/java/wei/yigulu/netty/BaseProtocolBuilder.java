@@ -1,5 +1,6 @@
 package wei.yigulu.netty;
 
+import io.netty.util.ResourceLeakDetector;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -17,6 +18,10 @@ import java.util.UUID;
  * @version 3.0
  */
 public class BaseProtocolBuilder {
+
+	public  BaseProtocolBuilder(){
+		//ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.ADVANCED);
+	}
 
 	@Setter
 	@Getter

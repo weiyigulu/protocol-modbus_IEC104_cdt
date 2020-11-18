@@ -42,12 +42,12 @@ public class AllCustomDelimiterHandler extends AbstractDelimiterHandler {
 		while (cumulation.readableBytes() >= 6 && headIndex != -1) {
 			//如果头字节不在第一个字节 那么读取标志向后推到头字节位置
 			if (headIndex > cumulation.readerIndex()) {
-				log.warn("舍弃了一无用段报文:" + DataConvertor.ByteBuf2String(cumulation.readBytes(headIndex - cumulation.readerIndex())));
+				log.warn("舍弃了一无用段报文:" + DataConvertor.ByteBuf2StringAndRelease(cumulation.readBytes(headIndex - cumulation.readerIndex())));
 			}
 			//标记读取位置
 			cumulation.markReaderIndex();
 			//向后读取一位 即0x68的占位
-			cumulation.readBytes(1);
+			cumulation.readBytes(1).release();
 			//获取到该帧的长度 帧内标定的长度
 			len = cumulation.readUnsignedByte();
 			//如果帧的真实长度少于 帧内标定长度则代表数据帧不完整，退出循环等待下一数据帧进入进行粘帧

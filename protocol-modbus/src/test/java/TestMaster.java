@@ -46,7 +46,7 @@ public class TestMaster {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			Thread.sleep(3000L);
+			Thread.sleep(30L);
 		}
 
 

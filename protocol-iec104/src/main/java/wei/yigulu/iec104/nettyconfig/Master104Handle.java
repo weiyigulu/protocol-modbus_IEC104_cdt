@@ -5,7 +5,9 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.timeout.IdleStateEvent;
+import io.netty.util.ReferenceCountUtil;
 import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import wei.yigulu.iec104.apdumodel.Apdu;
@@ -24,7 +26,7 @@ import java.net.InetSocketAddress;
  */
 
 @NoArgsConstructor
-public class Master104Handle extends ChannelInboundHandlerAdapter {
+public class Master104Handle extends SimpleChannelInboundHandler<ByteBuf> {
 
 	private Logger log;
 
@@ -58,11 +60,11 @@ public class Master104Handle extends ChannelInboundHandlerAdapter {
 
 
 	@Override
-	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+	public void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
 		//收数据
 		log.debug("----------------------------------------------------------------------------------");
-		log.debug("re <= "+DataConvertor.ByteBuf2String((ByteBuf) msg));
-		Apdu apdu = apduClass.newInstance().setChannel(ctx.channel()).setIec104Builder(masterBuilder).setLog(log).loadByteBuf((ByteBuf) msg);
+		log.debug("re <= "+DataConvertor.ByteBuf2String(msg));
+		Apdu apdu = apduClass.newInstance().setChannel(ctx.channel()).setIec104Builder(masterBuilder).setLog(log).loadByteBuf(msg);
 		if (apdu.getApciType() == Apdu.ApciType.I_FORMAT) {
 			this.testNum = 0;
 		}

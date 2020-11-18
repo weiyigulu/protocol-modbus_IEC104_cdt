@@ -45,7 +45,7 @@ public class TestRtuMaster {
 			} catch (ModbusException e) {
 				System.out.println(e.getMsg());
 			}
-			Thread.sleep(3000L);
+			Thread.sleep(10L);
 		}
 
 

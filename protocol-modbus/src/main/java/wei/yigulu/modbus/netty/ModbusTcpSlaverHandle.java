@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import wei.yigulu.modbus.domain.request.TcpModbusRequest;
@@ -22,7 +23,7 @@ import java.net.InetSocketAddress;
  * @version 3.0
  */
 @NoArgsConstructor
-public class ModbusTcpSlaverHandle extends ChannelInboundHandlerAdapter {
+public class ModbusTcpSlaverHandle extends SimpleChannelInboundHandler<ByteBuf> {
 
 	protected Logger log;
 
@@ -40,9 +41,8 @@ public class ModbusTcpSlaverHandle extends ChannelInboundHandlerAdapter {
 
 
 	@Override
-	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+	public void channelRead0(ChannelHandlerContext ctx, ByteBuf byteBuf) throws Exception {
 		//收数据
-		ByteBuf byteBuf = (ByteBuf) msg;
 		log.debug("re <=" + DataConvertor.ByteBuf2String(byteBuf));
 		TcpModbusRequest request = new TcpModbusRequest().decode(byteBuf.nioBuffer());
 		TcpModbusResponse response = new TcpModbusResponse();

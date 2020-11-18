@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import wei.yigulu.iec104.apdumodel.Apdu;
@@ -22,7 +23,7 @@ import java.net.InetSocketAddress;
  * @version 3.0
  */
 @NoArgsConstructor
-public class Slave104Handle extends ChannelInboundHandlerAdapter {
+public class Slave104Handle extends SimpleChannelInboundHandler<ByteBuf> {
 
 	private Logger log;
 
@@ -53,11 +54,11 @@ public class Slave104Handle extends ChannelInboundHandlerAdapter {
 	private Class<? extends Apdu> apduClass = Apdu.class;
 
 	@Override
-	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+	public void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
 		//收数据
 		log.debug("----------------------------------------------------------------------------------");
-		log.debug(DataConvertor.ByteBuf2String((ByteBuf) msg));
-		Apdu apdu = apduClass.newInstance().setChannel(ctx.channel()).setIec104Builder(slaverBuilder).setLog(slaverBuilder.getLog()).loadByteBuf((ByteBuf) msg);
+		log.debug(DataConvertor.ByteBuf2String( msg));
+		Apdu apdu = apduClass.newInstance().setChannel(ctx.channel()).setIec104Builder(slaverBuilder).setLog(slaverBuilder.getLog()).loadByteBuf(msg);
 		apdu.answer();
 	}
 

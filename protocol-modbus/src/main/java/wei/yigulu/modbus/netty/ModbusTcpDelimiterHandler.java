@@ -25,13 +25,15 @@ public class ModbusTcpDelimiterHandler extends AbstractDelimiterHandler {
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		//log.warn("接收到原始的报文 ："+ DataConvertor.ByteBuf2String((ByteBuf) msg));
-		isOverMaxLength((ByteBuf) msg);
+		if (isOverMaxLength((ByteBuf) msg)) {
+			return;
+		}
 		//数据帧长度不足 记录时间 等待下一帧进入
 		int length;
 		while(cumulation.readableBytes()>=MINLENGTH){
 			cumulation.markReaderIndex();
 			//去掉四位事务帧
-			cumulation.readBytes(4);
+			cumulation.readBytes(4).release();
 			length = cumulation.readUnsignedShort();
 			if (length > 255 || length < 3) {
 				log.warn("不是正常的长度，该帧疑似异常帧，舍弃");

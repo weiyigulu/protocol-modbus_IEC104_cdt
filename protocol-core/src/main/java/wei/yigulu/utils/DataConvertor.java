@@ -1,6 +1,7 @@
 package wei.yigulu.utils;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.util.ReferenceCountUtil;
 
 import java.util.Formatter;
 
@@ -57,8 +58,22 @@ public class DataConvertor {
 		ByteBuf b1 = buf.copy();
 		byte[] bs = new byte[b1.readableBytes()];
 		b1.readBytes(bs);
-		b1.release();
+		ReferenceCountUtil.release( b1);
 		return Byte2String(bs);
+	}
+
+
+	/**
+	 * 字节数缓冲区字转16进制字符串 并解除指向
+	 *
+	 * @param buf buf
+	 * @return string
+	 */
+	public static String ByteBuf2StringAndRelease(ByteBuf buf) {
+		String s= ByteBuf2String(buf);
+		ReferenceCountUtil.release( buf);
+		return s;
+
 	}
 
 }
