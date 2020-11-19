@@ -42,20 +42,24 @@ public class HSConnectionListener implements ChannelFutureListener {
 		if (channelFuture == null || channelFuture.channel() == null || !channelFuture.channel().isActive()) {
 			this.masterBuilder.getOrCreateWorkGroup().schedule(() -> {
 				try {
-					if (this.retryTimes < 10) {
-						log.error("服务端{}:{}链接不上，开始重连操作,第{}次尝试", this.masterBuilder.getIp(), this.masterBuilder.getPort(), retryTimes);
-						masterBuilder.create();
-						log.warn("重试连接失败");
-						this.retryTimes++;
-					} else {
-						if (!StringUtil.isNullOrEmpty(this.masterBuilder.getSpareIp()) || (this.masterBuilder.getSparePort() != null && this.masterBuilder.getSparePort() != 0)) {
-							log.info("服务端{}:{}链接不上，切换主备机{}:{}", this.masterBuilder.getIp(), this.masterBuilder.getPort(), this.masterBuilder.getSpareIp(), this.masterBuilder.getSparePort());
-							this.masterBuilder.switchover();
+					if(masterBuilder.future==null ||!masterBuilder.future.channel().isActive()) {
+						if (this.retryTimes < 10) {
+							log.error("服务端{}:{}链接不上，开始重连操作,第{}次尝试", this.masterBuilder.getIp(), this.masterBuilder.getPort(), retryTimes);
+							masterBuilder.create();
+							log.warn("重试连接失败");
+							this.retryTimes++;
+						} else {
+							if (!StringUtil.isNullOrEmpty(this.masterBuilder.getSpareIp()) || (this.masterBuilder.getSparePort() != null && this.masterBuilder.getSparePort() != 0)) {
+								log.info("服务端{}:{}链接不上，切换主备机{}:{}", this.masterBuilder.getIp(), this.masterBuilder.getPort(), this.masterBuilder.getSpareIp(), this.masterBuilder.getSparePort());
+								this.masterBuilder.switchover();
+							}
+							this.masterBuilder.refreshLoopGroup();
+							this.retryTimes = 0;
+							masterBuilder.create();
+							log.info("重置重试次数=0");
 						}
-						this.masterBuilder.refreshLoopGroup();
-						this.retryTimes = 0;
-						masterBuilder.create();
-						log.info("重置重试次数=0");
+					}else {
+						log.warn("masterBuilder在延迟过程中已由其他线程连接成功，此处略过重连");
 					}
 				} catch (Exception e) {
 					log.error("ModbusMaster重试连接时发生异常", e);

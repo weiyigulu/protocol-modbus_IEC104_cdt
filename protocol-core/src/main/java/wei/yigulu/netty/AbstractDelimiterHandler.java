@@ -128,7 +128,6 @@ public abstract class AbstractDelimiterHandler extends ChannelInboundHandlerAdap
 	 */
 	protected void mergeOrFlushByTimeSpan(ByteBuf byteBuf){
 		if (timeMark.plusMillis(maxTimeSpace).isBeforeNow()) {
-			System.out.println(cumulation);
 			log.warn("上一帧数据长度不足，但两帧时间间隔较长上一帧被舍弃 舍弃的数据帧为：" + DataConvertor.ByteBuf2String(cumulation));
 			while (!cumulation.release()) {
 			}

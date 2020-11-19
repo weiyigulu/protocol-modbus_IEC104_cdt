@@ -91,7 +91,7 @@ public abstract class AbstractMasterBuilder extends BaseProtocolBuilder {
 	/**
 	 * 创建Master 连接
 	 */
-	public abstract void create();
+	public  abstract void create();
 
 	/**
 	 * Create by un block
