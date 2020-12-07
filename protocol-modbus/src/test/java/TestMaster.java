@@ -26,7 +26,7 @@ public class TestMaster {
 		TcpSynchronousWaitingRoom.waitTime=5000L;
 		Thread.sleep(3000L);
 		Map<Integer, ModbusDataTypeEnum> map = new HashMap<>();
-		for (int i = 0; i <= 120; i++) {
+		for (int i = 0; i <= 90; i++) {
 			map.put(i , ModbusDataTypeEnum.P_AB);
 		}
 		List<Obj4RequestRegister> ll = ModbusRequestDataUtils.splitModbusRequest(map, 1, FunctionCode.READ_HOLDING_REGISTERS);
@@ -38,7 +38,7 @@ public class TestMaster {
 				Collections.sort(lll);
 				for (Integer i : lll) {
 					if(map1.get(i) instanceof  NumericModbusData) {
-						//System.out.println(i + " ============ " + ((NumericModbusData) map1.get(i)).getValue());
+					//System.out.println(i + " ============ " + ((NumericModbusData) map1.get(i)).getValue());
 					}else {
 						//System.out.println(i + " ============ " + JSON.toJSONString(((BooleanModbusDataInRegister) map1.get(i)).getValues()));
 				}

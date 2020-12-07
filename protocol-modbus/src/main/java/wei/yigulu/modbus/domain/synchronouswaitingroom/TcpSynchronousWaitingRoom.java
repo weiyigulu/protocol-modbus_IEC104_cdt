@@ -3,6 +3,7 @@ package wei.yigulu.modbus.domain.synchronouswaitingroom;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import wei.yigulu.modbus.domain.datatype.numeric.P_AB;
 
 import java.nio.ByteBuffer;
 import java.util.Map;
@@ -28,7 +29,12 @@ public class TcpSynchronousWaitingRoom implements SynchronousWaitingRoom {
 	public ByteBuffer getData(int key) {
 		Guest guest = new Guest();
 		this.guestMap.put(key, guest);
-		ByteBuffer byteBuffer = guest.getData();
+		ByteBuffer byteBuffer = null;
+		try {
+			byteBuffer = guest.getData();
+		} catch (InterruptedException e) {
+			log.error("响应超时，事务识别码为:"+key);
+		}
 		this.guestMap.remove(key);
 		return byteBuffer;
 	}
@@ -37,10 +43,12 @@ public class TcpSynchronousWaitingRoom implements SynchronousWaitingRoom {
 	public void setData(ByteBuffer bytes) {
 		if (bytes.remaining() > 2) {
 			bytes.mark();
-			int key = bytes.getShort();
+			int key = new P_AB().decode(bytes).getValue().intValue();
 			bytes.reset();
 			if (this.guestMap.containsKey(key)) {
 				this.guestMap.get(key).setData(bytes);
+			}else{
+				log.error("置入响应数据时，未发现等待者:"+key);
 			}
 		}
 	}
@@ -49,8 +57,7 @@ public class TcpSynchronousWaitingRoom implements SynchronousWaitingRoom {
 
 		protected ByteBuffer bytes = null;
 
-		@SneakyThrows
-		public synchronized ByteBuffer getData() {
+		public synchronized ByteBuffer getData() throws InterruptedException {
 			ByteBuffer returnBytes = null;
 			try {
 				if (this.bytes == null) {
