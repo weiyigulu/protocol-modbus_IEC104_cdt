@@ -27,7 +27,7 @@ public class ModbusRtuMasterDelimiterHandler extends AbstractDelimiterHandler {
 	/**
 	 * 是否进行CRC校验判断
 	 */
-	private boolean doCrcCheck = true;
+	private boolean doCrcCheck = false;
 
 
 	@Override

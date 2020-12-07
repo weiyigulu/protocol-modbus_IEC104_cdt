@@ -4,6 +4,7 @@ package wei.yigulu.cdt.netty;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import lombok.Getter;
+import lombok.Setter;
 import wei.yigulu.cdt.cdtframe.AbstractCDTDataHandler;
 import wei.yigulu.netty.AbstractRtuModeBuilder;
 import wei.yigulu.netty.ProtocolChannelInitializer;
@@ -19,7 +20,7 @@ public class CDTMaster extends AbstractRtuModeBuilder {
 
 	private static final int MAXLEN = 10240;
 
-	private static final byte[] HEAD = new byte[]{(byte) 0xEB, (byte) 0x90, (byte) 0xEB, (byte) 0x90, (byte) 0xEB, (byte) 0x90};
+	private  final byte[] HEAD = new byte[]{(byte) 0xEB, (byte) 0x90, (byte) 0xEB, (byte) 0x90, (byte) 0xEB, (byte) 0x90};
 
 	@Getter
 	private final AbstractCDTDataHandler dataHandler;

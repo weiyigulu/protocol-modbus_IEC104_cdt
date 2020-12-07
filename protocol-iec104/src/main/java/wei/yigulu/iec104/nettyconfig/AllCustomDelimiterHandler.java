@@ -25,8 +25,8 @@ public class AllCustomDelimiterHandler extends AbstractDelimiterHandler {
 
 
 	public AllCustomDelimiterHandler(){
-		maxTimeSpace=100;
-		maxLength=10240;
+		super.maxTimeSpace=100;
+		super.maxLength=10240;
 	}
 
 

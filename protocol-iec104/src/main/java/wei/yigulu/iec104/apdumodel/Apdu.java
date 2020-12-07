@@ -281,8 +281,8 @@ public class Apdu {
 			bb = new byte[1][];
 			bb[0] = TechnicalTerm.STARTBACK;
 		} else if (this.apciType == ApciType.STARTDT_CON) {
-			bb = new byte[1][];
-			bb[0] = TechnicalTerm.GENERALINTERROGATION;
+			//bb = new byte[1][];
+			//bb[0] = TechnicalTerm.GENERALINTERROGATION;
 		} else if (this.apciType == ApciType.STOPDT_ACT) {
 			bb = new byte[1][];
 			bb[0] = TechnicalTerm.STOPBACK;
