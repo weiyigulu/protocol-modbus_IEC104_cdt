@@ -32,7 +32,7 @@ public class IeProofreadTime {
 	 * @param is is
 	 */
 	public IeProofreadTime(ByteBuf is) {
-		byte[] btime = new byte[8];
+		byte[] btime = new byte[7];
 		is.readBytes(btime);
 		int milliSecond = (btime[0] & 0xff) + ((btime[1] & 0xff) << 8);
 		int minute = btime[2] & 0xff;

@@ -68,6 +68,7 @@ public class Master104Handle extends SimpleChannelInboundHandler<ByteBuf> {
 		if (apdu.getApciType() == Apdu.ApciType.I_FORMAT) {
 			this.testNum = 0;
 		}
+
 		apdu.answer();
 
 	}

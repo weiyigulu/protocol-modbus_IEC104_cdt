@@ -11,7 +11,7 @@ import wei.yigulu.iec104.nettyconfig.Iec104HSMasterBuilder;
 public class ClientTest {
 
 	public static void main(String[] args) {
-		new Iec104HSMasterBuilder("127.0.0.1", 2404).setSpareIp("127.0.0.2").create();
+		new Iec104HSMasterBuilder("127.0.0.1", 2404).create();
 		System.out.println(123);
 	}
 

@@ -1,7 +1,6 @@
 package wei.yigulu.modbus.domain.synchronouswaitingroom;
 
 
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import wei.yigulu.modbus.domain.datatype.numeric.P_AB;
 
@@ -33,7 +32,7 @@ public class TcpSynchronousWaitingRoom implements SynchronousWaitingRoom {
 		try {
 			byteBuffer = guest.getData();
 		} catch (InterruptedException e) {
-			log.error("响应超时，事务识别码为:"+key);
+			log.trace("响应超时，事务识别码为:"+key);
 		}
 		this.guestMap.remove(key);
 		return byteBuffer;
@@ -48,7 +47,7 @@ public class TcpSynchronousWaitingRoom implements SynchronousWaitingRoom {
 			if (this.guestMap.containsKey(key)) {
 				this.guestMap.get(key).setData(bytes);
 			}else{
-				log.error("置入响应数据时，未发现等待者:"+key);
+				log.trace("置入响应数据时，未发现等待者:"+key);
 			}
 		}
 	}

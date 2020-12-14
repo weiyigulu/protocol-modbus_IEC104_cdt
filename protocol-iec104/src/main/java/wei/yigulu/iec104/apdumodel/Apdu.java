@@ -243,17 +243,17 @@ public class Apdu {
 	 * @throws Iec104Exception iec exception
 	 */
 	public void answer() throws Iec104Exception {
-		byte[][] bb;
+		byte[][] bb = new byte[0][];
 		if (this.apciType == ApciType.I_FORMAT) {
 			try {
 				bb = this.asdu.getDataFrame().handleAndAnswer(this);
 			} catch (Exception e) {
 				if (e instanceof NullPointerException) {
 					log.error("数据帧解析后的逻辑处理出现异常", e);
-					throw new Iec104Exception("该I帧无数据体");
+					//throw new Iec104Exception("该I帧无数据体");
 				}
 				log.error("数据帧解析后的逻辑处理出现异常", e);
-				throw new Iec104Exception("I帧响应帧编译出错");
+				//throw new Iec104Exception("I帧响应帧编译出错");
 			}
 		} else if (this.apciType == ApciType.S_FORMAT) {
 			bb = sHandleAndAnswer();

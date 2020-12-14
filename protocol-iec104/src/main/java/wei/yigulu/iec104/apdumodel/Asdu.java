@@ -157,9 +157,12 @@ public class Asdu {
 			} else {
 				byte[] unknown = new byte[dataInputStream.readableBytes()];
 				dataInputStream.readBytes(unknown);
-				throw new IOException("无法转换信息对象，由于类型标识未知: " + typeId);
+				//throw new IOException("无法转换信息对象，由于类型标识未知: " + typeId);
+				log.error("无法转换信息对象，由于类型标识未知: " + typeId);
 			}
-			log.debug(dataFrame.toString());
+			if(dataFrame!=null) {
+				log.debug(dataFrame.toString());
+			}
 			privateInformation = null;
 		} else {
 			log.debug("");
