@@ -138,7 +138,6 @@ public class Master104Handle extends SimpleChannelInboundHandler<ByteBuf> {
 		if (masterBuilder != null) {
 			this.testNum = 0;
 			this.exceptionNum = 0;
-			this.isInitiative = false;
 			log.error(masterBuilder.getIp() + ":" + masterBuilder.getPort() + "断线,尝试重连");
 			masterBuilder.getOrCreateConnectionListener().operationComplete(masterBuilder.getFuture());
 		}
