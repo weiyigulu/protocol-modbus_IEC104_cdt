@@ -31,8 +31,8 @@ public class TestRtuMaster {
 		master3.createByUnBlock();*/
 		Thread.sleep(5000L);
 		Map<Integer, ModbusDataTypeEnum> map = new HashMap<>();
-		for (int i = 0; i < 23; i+=1) {
-			map.put(2*i , ModbusDataTypeEnum.CDAB);
+		for (int i = 0; i < 43; i+=1) {
+			map.put(i , ModbusDataTypeEnum.PM_AB);
 		}
 		List<Obj4RequestRegister> ll = ModbusRequestDataUtils.splitModbusRequest(map, 1, FunctionCode.READ_HOLDING_REGISTERS);
 
@@ -45,7 +45,7 @@ public class TestRtuMaster {
 			} catch (ModbusException e) {
 				System.out.println(e.getMsg());
 			}
-			Thread.sleep(10L);
+			Thread.sleep(1000L);
 		}
 
 

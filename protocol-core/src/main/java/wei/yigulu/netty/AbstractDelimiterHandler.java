@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.joda.time.DateTime;
@@ -40,6 +41,7 @@ public abstract class AbstractDelimiterHandler extends ChannelInboundHandlerAdap
 	 * 接收的最长的报文长度
 	 */
 	@Setter
+	@Getter
 	@Accessors(chain = true)
 	protected  int maxLength = 10240;
 
@@ -48,6 +50,7 @@ public abstract class AbstractDelimiterHandler extends ChannelInboundHandlerAdap
 	 * 判断是否是断包的最大时间间隔
 	 */
 	@Setter
+	@Getter
 	@Accessors(chain = true)
 	protected  int maxTimeSpace=200;
 
@@ -127,7 +130,7 @@ public abstract class AbstractDelimiterHandler extends ChannelInboundHandlerAdap
 	 * @param byteBuf 字节缓冲区
 	 */
 	protected void mergeOrFlushByTimeSpan(ByteBuf byteBuf){
-		if (timeMark.plusMillis(maxTimeSpace).isBeforeNow()) {
+		if (timeMark.plusMillis(getMaxTimeSpace()).isBeforeNow()) {
 			log.warn("上一帧数据长度不足，但两帧时间间隔较长上一帧被舍弃 舍弃的数据帧为：" + DataConvertor.ByteBuf2String(cumulation));
 			while (!cumulation.release()) {
 			}
@@ -147,7 +150,7 @@ public abstract class AbstractDelimiterHandler extends ChannelInboundHandlerAdap
 	 * @return boolean
 	 */
 	protected boolean isOverMaxLength(ByteBuf byteBuf){
-		if (byteBuf.readableBytes() > maxLength) {
+		if (byteBuf.readableBytes() > getMaxLength()) {
 			while (!cumulation.release()) {
 			}
 			cumulation = null;

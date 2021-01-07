@@ -3,6 +3,7 @@ package wei.yigulu.modbus.netty;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.joda.time.DateTime;
@@ -29,10 +30,18 @@ public class ModbusRtuMasterDelimiterHandler extends AbstractDelimiterHandler {
 	 */
 	private boolean doCrcCheck = true;
 
+	/**
+	 * 判断是否是断包的最大时间间隔
+	 */
+	@Setter
+	@Getter
+	@Accessors(chain = true)
+	protected  int maxTimeSpace=1000;
+
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		//log.warn("接收到原始的报文 ："+ DataConvertor.ByteBuf2String((ByteBuf) msg));
+		log.info("接收到原始的报文 ："+ DataConvertor.ByteBuf2String((ByteBuf) msg));
 		if (isOverMaxLength((ByteBuf) msg)) {
 			return;
 		}
@@ -47,7 +56,7 @@ public class ModbusRtuMasterDelimiterHandler extends AbstractDelimiterHandler {
 			cumulation.markReaderIndex();
 			cumulation.readBytes(1).release();
 			functionCode = cumulation.readUnsignedByte();
-			if (functionCode > 0x80) {
+			if (functionCode > 0x80 ) {
 				//异常功能码 异常帧
 				byteNum = 0;
 			} else {
