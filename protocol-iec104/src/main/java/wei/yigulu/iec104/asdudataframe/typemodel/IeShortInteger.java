@@ -4,7 +4,6 @@ import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 
 /**
@@ -28,7 +27,7 @@ public class IeShortInteger {
 	 * @param is is
 	 */
 	public IeShortInteger(ByteBuf is) {
-		value = ((is.readByte() & 0xff) | ((is.readByte() & 0xff) << 8));
+		value =((short) ((is.readByte() & 0xff) | ((is.readByte() & 0xff) << 8)))+0;
 	}
 
 	/**

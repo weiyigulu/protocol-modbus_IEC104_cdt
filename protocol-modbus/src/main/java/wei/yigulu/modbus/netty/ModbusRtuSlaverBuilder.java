@@ -10,7 +10,7 @@ import wei.yigulu.purejavacomm.PureJavaCommChannel;
 
 
 /**
- * 104的子站  是向主站提供数据的 主站发送总召唤 子站响应主站的召唤
+ * modbus的子站  是向主站提供数据的 主站发送总召唤 子站响应主站的召唤
  * 向主站上送数据
  *
  * @author 修唯xiuwei
