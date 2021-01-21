@@ -1,15 +1,21 @@
 package wei.yigulu.netty;
 
 
+import com.sun.deploy.util.StringUtils;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.internal.StringUtil;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
+
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 
 /**
  * TCP主站  向子站发送总召唤 获取子站的数据
@@ -36,6 +42,21 @@ public abstract class AbstractTcpMasterBuilder extends AbstractMasterBuilder {
 	@Getter
 	Integer port;
 
+
+	/**
+	 * 本端的ip
+	 */
+	@Getter
+	@Setter
+	private String selfIp;
+
+	/**
+	 * 本端的端口
+	 */
+	@Getter
+	@Setter
+	private Integer selfPort;
+
 	/**
 	 * 构造方法
 	 *
@@ -59,7 +80,13 @@ public abstract class AbstractTcpMasterBuilder extends AbstractMasterBuilder {
 			}
 			log.debug("创建连接");
 			try {
-				future = getOrCreateBootstrap().connect(this.ip, this.port);
+				SocketAddress remoteAddress= InetSocketAddress.createUnresolved(getIp(),getPort());
+				if(StringUtil.isNullOrEmpty(getSelfIp()) && getSelfPort()!=null){
+					SocketAddress localAddress= InetSocketAddress.createUnresolved(getSelfIp(),getSelfPort());
+					future = getOrCreateBootstrap().connect(remoteAddress,localAddress);
+				}else{
+					future = getOrCreateBootstrap().connect(remoteAddress);
+				}
 				log.debug("为连接添加监听");
 				future.addListener(getOrCreateConnectionListener());
 			} catch (Exception e) {

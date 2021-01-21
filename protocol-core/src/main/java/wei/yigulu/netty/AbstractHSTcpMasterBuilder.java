@@ -59,19 +59,7 @@ public abstract class AbstractHSTcpMasterBuilder extends AbstractTcpMasterBuilde
 	@Setter
 	private Integer sparePort;
 
-	/**
-	 * 本端的ip
-	 */
-	@Getter
-	@Setter
-	private String selfIp;
 
-	/**
-	 * 本端的端口
-	 */
-	@Getter
-	@Setter
-	private Integer selfPort;
 
 
 	@Override
