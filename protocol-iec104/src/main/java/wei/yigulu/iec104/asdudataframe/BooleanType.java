@@ -137,15 +137,21 @@ public class BooleanType extends AbstractDataFrameType {
 
 	@Override
 	public void loadByteBuf(ByteBuf is, Vsq vsq) {
-		if (vsq.getSq() == 0) {
-			for (int i = 0; i < vsq.getNum(); i++) {
+		try {
+			if (vsq.getSq() == 0) {
+				for (int i = 0; i < vsq.getNum(); i++) {
+					addresses.add(new InformationBodyAddress(is));
+					datas.add(new IeBoolean(is));
+				}
+			} else {
 				addresses.add(new InformationBodyAddress(is));
-				datas.add(new IeBoolean(is));
+				for (int i = 0; i < vsq.getNum(); i++) {
+					datas.add(new IeBoolean(is));
+				}
 			}
-		} else {
-			addresses.add(new InformationBodyAddress(is));
-			for (int i = 0; i < vsq.getNum(); i++) {
-				datas.add(new IeBoolean(is));
+		}catch (Iec104Exception e){
+			if(e.getCode()==3301){
+				return;
 			}
 		}
 	}

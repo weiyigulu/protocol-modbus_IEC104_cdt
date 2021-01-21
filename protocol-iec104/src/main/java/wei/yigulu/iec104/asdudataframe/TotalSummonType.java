@@ -9,6 +9,7 @@ import wei.yigulu.iec104.apdumodel.Apdu;
 import wei.yigulu.iec104.apdumodel.Asdu;
 import wei.yigulu.iec104.apdumodel.Vsq;
 import wei.yigulu.iec104.asdudataframe.typemodel.InformationBodyAddress;
+import wei.yigulu.iec104.exception.Iec104Exception;
 import wei.yigulu.iec104.nettyconfig.TechnicalTerm;
 
 import java.util.List;
@@ -56,8 +57,14 @@ public class TotalSummonType extends AbstractDataFrameType {
 
 	@Override
 	public void loadByteBuf(ByteBuf is, Vsq vsq) {
-		this.address = new InformationBodyAddress(is);
-		this.value = (is.readByte() & 0xff);
+		try {
+			this.address = new InformationBodyAddress(is);
+			this.value = (is.readByte() & 0xff);
+		}catch (Iec104Exception e){
+			if(e.getCode()==3301){
+				return;
+			}
+		}
 	}
 
 	@Override

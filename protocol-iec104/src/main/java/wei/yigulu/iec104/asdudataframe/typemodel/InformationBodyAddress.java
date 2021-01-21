@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import wei.yigulu.iec104.exception.Iec104Exception;
 
 import java.util.List;
 
@@ -44,7 +45,10 @@ public class InformationBodyAddress {
 	 *
 	 * @param is is
 	 */
-	public InformationBodyAddress(ByteBuf is) {
+	public InformationBodyAddress(ByteBuf is) throws Iec104Exception {
+		if(is.readableBytes()<OCCUPYBYTES){
+			throw new Iec104Exception(3301,"可用字节不足，不能进行读取");
+		}
 		this.address = (is.readByte() & 0xff) | ((is.readByte() & 0xff) << 8) | ((is.readByte() & 0xff) << 16);
 	}
 

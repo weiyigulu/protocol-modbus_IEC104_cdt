@@ -53,17 +53,23 @@ public class NoQualityNormalizedIntegerType extends AbstractDataFrameType {
 	@Override
 	public void loadByteBuf(ByteBuf is, Vsq vsq) {
 		Integer f;
-		if (vsq.getSq() == 0) {
-			for (int i = 0; i < vsq.getNum(); i++) {
+		try {
+			if (vsq.getSq() == 0) {
+				for (int i = 0; i < vsq.getNum(); i++) {
+					addresses.add(new InformationBodyAddress(is));
+					f = new IeShortInteger(is).getValue();
+					datas.add(f);
+				}
+			} else {
 				addresses.add(new InformationBodyAddress(is));
-				f = new IeShortInteger(is).getValue();
-				datas.add(f);
+				for (int i = 0; i < vsq.getNum(); i++) {
+					f = new IeShortInteger(is).getValue();
+					datas.add(f);
+				}
 			}
-		} else {
-			addresses.add(new InformationBodyAddress(is));
-			for (int i = 0; i < vsq.getNum(); i++) {
-				f = new IeShortInteger(is).getValue();
-				datas.add(f);
+		}catch (Iec104Exception e){
+			if(e.getCode()==3301){
+				return;
 			}
 		}
 	}

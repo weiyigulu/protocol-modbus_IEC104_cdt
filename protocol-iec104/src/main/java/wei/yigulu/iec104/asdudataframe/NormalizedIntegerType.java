@@ -56,6 +56,7 @@ public class NormalizedIntegerType extends AbstractDataFrameType {
 	@Override
 	public void loadByteBuf(ByteBuf is, Vsq vsq) {
 		Integer f;
+		try{
 		if (vsq.getSq() == 0) {
 			for (int i = 0; i < vsq.getNum(); i++) {
 				addresses.add(new InformationBodyAddress(is));
@@ -67,6 +68,10 @@ public class NormalizedIntegerType extends AbstractDataFrameType {
 			for (int i = 0; i < vsq.getNum(); i++) {
 				f = new IeShortInteger(is).getValue();
 				datas.put(new IeMeasuredQuality(is), f);
+			}
+		}}catch (Iec104Exception e){
+			if(e.getCode()==3301){
+				return;
 			}
 		}
 	}

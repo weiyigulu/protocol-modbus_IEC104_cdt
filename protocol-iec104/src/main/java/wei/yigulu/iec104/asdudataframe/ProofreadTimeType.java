@@ -10,6 +10,7 @@ import wei.yigulu.iec104.apdumodel.Asdu;
 import wei.yigulu.iec104.apdumodel.Vsq;
 import wei.yigulu.iec104.asdudataframe.typemodel.IeProofreadTime;
 import wei.yigulu.iec104.asdudataframe.typemodel.InformationBodyAddress;
+import wei.yigulu.iec104.exception.Iec104Exception;
 import wei.yigulu.iec104.nettyconfig.TechnicalTerm;
 
 import java.util.List;
@@ -57,8 +58,14 @@ public class ProofreadTimeType extends AbstractDataFrameType {
 
 	@Override
 	public void loadByteBuf(ByteBuf is, Vsq vsq) {
-		address = new InformationBodyAddress(is);
-		ieProofreadTime = new IeProofreadTime(is);
+		try {
+			address = new InformationBodyAddress(is);
+			ieProofreadTime = new IeProofreadTime(is);
+		}catch (Iec104Exception e){
+			if(e.getCode()==3301){
+				return;
+			}
+		}
 	}
 
 	@Override

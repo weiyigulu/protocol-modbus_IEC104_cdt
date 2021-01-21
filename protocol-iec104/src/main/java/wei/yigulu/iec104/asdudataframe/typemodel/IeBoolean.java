@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import wei.yigulu.iec104.asdudataframe.qualitydescription.IeAbstractQuality;
+import wei.yigulu.iec104.exception.Iec104Exception;
 
 
 /**
@@ -31,7 +32,7 @@ public class IeBoolean extends IeAbstractQuality {
 	 *
 	 * @param is is
 	 */
-	public IeBoolean(ByteBuf is) {
+	public IeBoolean(ByteBuf is) throws Iec104Exception {
 		super(is);
 		this.on = (value & 0x01) == 0x01;
 	}

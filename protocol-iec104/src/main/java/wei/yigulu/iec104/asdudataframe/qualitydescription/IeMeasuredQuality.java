@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import wei.yigulu.iec104.exception.Iec104Exception;
 
 /**
  * 测量值品质描述
@@ -30,7 +31,7 @@ public class IeMeasuredQuality extends IeAbstractQuality {
 	 *
 	 * @param is is
 	 */
-	public IeMeasuredQuality(ByteBuf is) {
+	public IeMeasuredQuality(ByteBuf is) throws Iec104Exception {
 		super(is);
 		this.overflow = (value & 0x01) == 0x01;
 	}

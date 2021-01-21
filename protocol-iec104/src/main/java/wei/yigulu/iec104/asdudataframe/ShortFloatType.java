@@ -162,17 +162,23 @@ public class ShortFloatType extends AbstractDataFrameType {
 	@Override
 	public void loadByteBuf(ByteBuf is, Vsq vsq) {
 		float f;
-		if (vsq.getSq() == 0) {
-			for (int i = 0; i < vsq.getNum(); i++) {
+		try {
+			if (vsq.getSq() == 0) {
+				for (int i = 0; i < vsq.getNum(); i++) {
+					addresses.add(new InformationBodyAddress(is));
+					f = new IeShortFloat(is).getValue();
+					datas.put(new IeMeasuredQuality(is), f);
+				}
+			} else {
 				addresses.add(new InformationBodyAddress(is));
-				f = new IeShortFloat(is).getValue();
-				datas.put(new IeMeasuredQuality(is), f);
+				for (int i = 0; i < vsq.getNum(); i++) {
+					f = new IeShortFloat(is).getValue();
+					datas.put(new IeMeasuredQuality(is), f);
+				}
 			}
-		} else {
-			addresses.add(new InformationBodyAddress(is));
-			for (int i = 0; i < vsq.getNum(); i++) {
-				f = new IeShortFloat(is).getValue();
-				datas.put(new IeMeasuredQuality(is), f);
+		}catch (Iec104Exception e){
+			if(e.getCode()==3301){
+				return;
 			}
 		}
 	}

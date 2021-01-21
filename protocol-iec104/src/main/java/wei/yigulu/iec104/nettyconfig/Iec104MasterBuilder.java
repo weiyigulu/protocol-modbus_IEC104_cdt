@@ -57,6 +57,4 @@ public class Iec104MasterBuilder extends AbstractTcpMasterBuilder {
 			}
 		};
 	}
-
-
 }

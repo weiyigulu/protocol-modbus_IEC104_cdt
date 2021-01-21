@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import wei.yigulu.iec104.exception.Iec104Exception;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public class IeProofreadTime {
-	public static final int  OCCUPYBYTES=8;
+	public static final int  OCCUPYBYTES=7;
 
 	private DateTime time = new DateTime();
 
@@ -31,7 +32,10 @@ public class IeProofreadTime {
 	 *
 	 * @param is is
 	 */
-	public IeProofreadTime(ByteBuf is) {
+	public IeProofreadTime(ByteBuf is) throws Iec104Exception {
+		if(is.readableBytes()<OCCUPYBYTES){
+			throw new Iec104Exception(3301,"可用字节不足，不能进行读取");
+		}
 		byte[] btime = new byte[7];
 		is.readBytes(btime);
 		int milliSecond = (btime[0] & 0xff) + ((btime[1] & 0xff) << 8);

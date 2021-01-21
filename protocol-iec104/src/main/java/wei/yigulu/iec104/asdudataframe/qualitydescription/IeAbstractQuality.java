@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import wei.yigulu.iec104.exception.Iec104Exception;
 
 
 /**
@@ -50,7 +51,10 @@ public class IeAbstractQuality {
 	 *
 	 * @param is is
 	 */
-	public IeAbstractQuality(ByteBuf is) {
+	public IeAbstractQuality(ByteBuf is) throws Iec104Exception {
+		if(is.readableBytes()<OCCUPYBYTES){
+			throw new Iec104Exception(3301,"可用字节不足，不能进行读取");
+		}
 		this.value = (is.readByte() & 0xff);
 		this.blocked = (value & 0x10) == 0x10;
 		this.substituted = (value & 0x20) == 0x20;

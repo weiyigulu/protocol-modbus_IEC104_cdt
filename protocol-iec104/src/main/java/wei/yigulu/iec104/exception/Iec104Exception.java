@@ -24,7 +24,8 @@ public class Iec104Exception extends Exception {
 		this.msg = msg;
 	}
 
-	private String msg;
+
 	private int code;
+	private String msg;
 
 }
