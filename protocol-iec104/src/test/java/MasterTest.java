@@ -16,7 +16,9 @@ public class MasterTest {
 
 	public static void main(String[] args) throws Exception {
 		ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.ADVANCED);
-		Iec104MasterBuilder masterBuilder = new Iec104MasterBuilder("127.0.0.1", 2404);
+		Iec104MasterBuilder masterBuilder = new Iec104MasterBuilder("192.168.9.112", 2404);
+		masterBuilder.setSelfIp("192.168.9.156");
+		masterBuilder.setSelfPort(28732);
 		masterBuilder.createByUnBlock();
 
 	/*	//创建总召唤类型I帧

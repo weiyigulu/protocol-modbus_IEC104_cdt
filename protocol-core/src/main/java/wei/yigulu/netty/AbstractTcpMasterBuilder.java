@@ -1,7 +1,6 @@
 package wei.yigulu.netty;
 
 
-import com.sun.deploy.util.StringUtils;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelOption;
@@ -9,7 +8,6 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.internal.StringUtil;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -80,9 +78,9 @@ public abstract class AbstractTcpMasterBuilder extends AbstractMasterBuilder {
 			}
 			log.debug("创建连接");
 			try {
-				SocketAddress remoteAddress= InetSocketAddress.createUnresolved(getIp(),getPort());
-				if(StringUtil.isNullOrEmpty(getSelfIp()) && getSelfPort()!=null){
-					SocketAddress localAddress= InetSocketAddress.createUnresolved(getSelfIp(),getSelfPort());
+				SocketAddress remoteAddress= new InetSocketAddress(getIp(),getPort());
+				if(!StringUtil.isNullOrEmpty(getSelfIp()) && getSelfPort()!=null){
+					SocketAddress localAddress= new InetSocketAddress(getSelfIp(),getSelfPort());
 					future = getOrCreateBootstrap().connect(remoteAddress,localAddress);
 				}else{
 					future = getOrCreateBootstrap().connect(remoteAddress);
