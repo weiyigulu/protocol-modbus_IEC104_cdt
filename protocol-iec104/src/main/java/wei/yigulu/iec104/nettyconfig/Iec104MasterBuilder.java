@@ -49,10 +49,10 @@ public class Iec104MasterBuilder extends AbstractTcpMasterBuilder {
 		return new ProtocolChannelInitializer<SocketChannel>(masterBuilder) {
 			@Override
 			protected void initChannel(SocketChannel ch) throws Exception {
-				ch.pipeline().addLast(new IdleStateHandler(HEARTBEAT, 0, 0, TimeUnit.SECONDS));
 				AllCustomDelimiterHandler handler = new AllCustomDelimiterHandler();
 				handler.setLog(masterBuilder.getLog());
 				ch.pipeline().addLast(handler);
+				ch.pipeline().addLast(new IdleStateHandler(HEARTBEAT, 0, 0, TimeUnit.SECONDS));
 				ch.pipeline().addLast(new Master104Handle((AbstractTcpMasterBuilder) builder));
 			}
 		};
