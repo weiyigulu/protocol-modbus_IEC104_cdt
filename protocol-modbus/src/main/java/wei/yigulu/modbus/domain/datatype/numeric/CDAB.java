@@ -29,15 +29,15 @@ public class CDAB extends NumericModbusData {
 
 	@Override
 	public CDAB decode(byte[] bytes, int offset) {
-		this.value = BigDecimal.valueOf(Float.intBitsToFloat((bytes[offset * 2] & 0xff) << 8 | ((bytes[offset * 2 + 1] & 0xff))
-				| ((bytes[offset * 2 + 2] & 0xff) << 24) | ((bytes[offset * 2 + 3] & 0xff) << 16)));
+		this.value =new BigDecimal(Float.toString(Float.intBitsToFloat((bytes[offset * 2] & 0xff) << 8 | ((bytes[offset * 2 + 1] & 0xff))
+				| ((bytes[offset * 2 + 2] & 0xff) << 24) | ((bytes[offset * 2 + 3] & 0xff) << 16))));
 		return this;
 	}
 
 	@Override
 	public CDAB decode(ByteBuffer byteBuf) {
-		this.value = BigDecimal.valueOf(Float.intBitsToFloat((byteBuf.get() & 0xff) << 8 | ((byteBuf.get() & 0xff))
-				| ((byteBuf.get() & 0xff) << 24) | ((byteBuf.get() & 0xff) << 16)));
+		this.value = new BigDecimal(Float.toString(Float.intBitsToFloat((byteBuf.get() & 0xff) << 8 | ((byteBuf.get() & 0xff))
+				| ((byteBuf.get() & 0xff) << 24) | ((byteBuf.get() & 0xff) << 16))));
 		return this;
 	}
 

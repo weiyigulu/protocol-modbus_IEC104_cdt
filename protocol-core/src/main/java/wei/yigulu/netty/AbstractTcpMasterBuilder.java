@@ -134,6 +134,11 @@ public abstract class AbstractTcpMasterBuilder extends AbstractMasterBuilder {
 		return this.connectionListener;
 	}
 
+	/**
+	 * 获取或创建通道初始化
+	 *
+	 * @return {@link ProtocolChannelInitializer}
+	 */
 	@Override
 	protected abstract ProtocolChannelInitializer getOrCreateChannelInitializer();
 

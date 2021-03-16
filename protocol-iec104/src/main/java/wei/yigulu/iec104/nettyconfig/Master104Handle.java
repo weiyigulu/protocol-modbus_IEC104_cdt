@@ -59,6 +59,7 @@ public class Master104Handle extends SimpleChannelInboundHandler<ByteBuf> {
 	private Class<? extends Apdu> apduClass = Apdu.class;
 
 
+
 	@Override
 	public void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
 		//收数据
@@ -68,9 +69,7 @@ public class Master104Handle extends SimpleChannelInboundHandler<ByteBuf> {
 		if (apdu.getApciType() == Apdu.ApciType.I_FORMAT) {
 			this.testNum = 0;
 		}
-
 		apdu.answer();
-
 	}
 
 

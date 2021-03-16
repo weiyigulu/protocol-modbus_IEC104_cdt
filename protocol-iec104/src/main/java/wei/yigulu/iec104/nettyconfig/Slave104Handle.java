@@ -57,7 +57,7 @@ public class Slave104Handle extends SimpleChannelInboundHandler<ByteBuf> {
 	public void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
 		//收数据
 		log.debug("----------------------------------------------------------------------------------");
-		log.debug(DataConvertor.ByteBuf2String( msg));
+		log.debug("re <= "+DataConvertor.ByteBuf2String( msg));
 		Apdu apdu = apduClass.newInstance().setChannel(ctx.channel()).setIec104Builder(slaverBuilder).setLog(slaverBuilder.getLog()).loadByteBuf(msg);
 		apdu.answer();
 	}

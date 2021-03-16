@@ -19,7 +19,7 @@ import java.util.Map;
 @Slf4j
 public class TestRtuMaster {
 	public static void main(String[] args) throws InterruptedException, ModbusException {
-		ModbusRtuMasterBuilder master = new ModbusRtuMasterBuilder("COM2");
+		ModbusRtuMasterBuilder master = new ModbusRtuMasterBuilder("COM1");
 		master.setBaudRate(9600);
 		master.createByUnBlock();
 /*
@@ -31,8 +31,8 @@ public class TestRtuMaster {
 		master3.createByUnBlock();*/
 		Thread.sleep(5000L);
 		Map<Integer, ModbusDataTypeEnum> map = new HashMap<>();
-		for (int i = 0; i < 43; i+=1) {
-			map.put(i , ModbusDataTypeEnum.PM_AB);
+		for (int i = 0; i < 60; i+=2) {
+			map.put(i , ModbusDataTypeEnum.CDAB);
 		}
 		List<Obj4RequestRegister> ll = ModbusRequestDataUtils.splitModbusRequest(map, 1, FunctionCode.READ_HOLDING_REGISTERS);
 

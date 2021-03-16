@@ -1,8 +1,10 @@
+import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
@@ -15,20 +17,18 @@ import io.netty.handler.codec.string.StringEncoder;
  **/
 public class NettyClient {
 	public static void main(String[] args) {
-
 		EventLoopGroup group = new NioEventLoopGroup();
 		try {
-			ServerBootstrap sb = new ServerBootstrap();
+			Bootstrap sb = new Bootstrap();
 			// 绑定线程池
 			sb.group(group)
 					// 指定使用的channel
-					.channel(NioServerSocketChannel.class)
+					.channel(NioSocketChannel.class)
 					// 绑定监听端口
-					.localAddress(9001)
 					// 绑定客户端连接时候触发操作
-					.childHandler(new ChannelInitializer<SocketChannel>() {
+					.handler(new ChannelInitializer<NioSocketChannel>() {
 						@Override
-						protected void initChannel(SocketChannel ch) throws Exception {
+						protected void initChannel(NioSocketChannel ch) throws Exception {
 							ch.pipeline().addLast(new StringDecoder());
 							//字符串编码器
 							ch.pipeline().addLast(new StringEncoder());
@@ -37,9 +37,20 @@ public class NettyClient {
 						}
 					});
 			// 服务器异步创建绑定
-			ChannelFuture cf = sb.bind().sync();
+			ChannelFuture cf = sb.bind("127.0.0.1",2404);
+			System.out.println("1"+cf.isSuccess());
+			cf.sync();
+			System.out.println("2"+cf.isSuccess());
+
+			System.out.println("4"+cf.isDone());
+			System.out.println(cf.getClass().getSimpleName());
 			// 关闭服务器通道
-			cf.channel().closeFuture().sync();
+			ChannelFuture ff = cf.channel().closeFuture();
+			System.out.println(ff.getClass().getSimpleName());
+			System.out.println(ff.sync());
+			System.out.println("is=="+ (cf==ff));
+			System.out.println(cf.isDone());
+			System.out.println("3"+cf.isSuccess());
 
 		} catch (InterruptedException e) {
 			e.printStackTrace();
