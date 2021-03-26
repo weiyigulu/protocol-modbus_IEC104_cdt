@@ -11,14 +11,14 @@
 ### Matser的创建 
 
 ```java
-SimpleMasterBuilder simpleMasterBuilder=new SimpleMasterBuilder("127.0.0.1",2404);
+Iec104MasterBuilder simpleMasterBuilder=new Iec104MasterBuilder("127.0.0.1",2404);
         simpleMasterBuilder.create();
 ```
 
  上面 这种master仅支持一个ip和端口号，与之相对的是HSMasterBuilder 支持主备链接 ，主动切换。
 
 ```java
- HSMasterBuilder masterBuilder=new HSMasterBuilder("127.0.0.1",2404).setSpareIp("127.0.0.2");
+ Iec104HSMasterBuilder masterBuilder = new Iec104HSMasterBuilder("127.0.0.1",2404).setSpareIp("127.0.0.2");
         masterBuilder.create();
 ```
 
