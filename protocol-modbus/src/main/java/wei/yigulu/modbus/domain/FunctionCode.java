@@ -58,7 +58,12 @@ public enum FunctionCode {
 	/**
 	 * Constant <code>WRITE_MASK_REGISTER 22</code>
 	 */
-	WRITE_MASK_REGISTER(22);
+	WRITE_MASK_REGISTER(22),
+
+	/**
+	 * Constant <code>READ_WRITE_REGISTERS 23</code>
+	 */
+	READ_WRITE_REGISTERS(23);
 
 
 	@Getter
@@ -97,6 +102,8 @@ public enum FunctionCode {
 				return REPORT_SLAVE_ID;
 			case 22:
 				return WRITE_MASK_REGISTER;
+			case 23:
+				return READ_WRITE_REGISTERS;
 			default:
 				throw new IllegalArgumentException();
 		}

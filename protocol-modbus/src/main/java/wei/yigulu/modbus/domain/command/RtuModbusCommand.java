@@ -1,8 +1,9 @@
-package wei.yigulu.modbus.domain.request;
+package wei.yigulu.modbus.domain.command;
 
 import com.google.common.primitives.Bytes;
 import wei.yigulu.modbus.domain.ModbusPacketInterface;
 import wei.yigulu.modbus.domain.datatype.numeric.P_BA;
+import wei.yigulu.modbus.domain.request.RtuModbusRequest;
 import wei.yigulu.modbus.exceptiom.ModbusException;
 import wei.yigulu.utils.CrcUtils;
 
@@ -11,12 +12,12 @@ import java.nio.ByteBuffer;
 import java.util.List;
 
 /**
- * RTU 通讯所用的请求报文
+ * RTU的控制命令
  *
  * @author: xiuwei
  * @version:
  */
-public class RtuModbusRequest extends AbstractModbusRequest {
+public class RtuModbusCommand extends AbstractModbusCommand{
 
 	/**
 	 * crc 校验  两位 除去本两位 其余所有字节的校验位
@@ -30,7 +31,7 @@ public class RtuModbusRequest extends AbstractModbusRequest {
 	 * @return
 	 */
 	@Override
-	public RtuModbusRequest encode(List<Byte> bytes) {
+	public RtuModbusCommand encode(List<Byte> bytes) throws ModbusException {
 		super.encode(bytes);
 		this.crc16 = CrcUtils.generateCRC16(Bytes.toArray(bytes));
 		new P_BA(BigDecimal.valueOf(this.crc16)).encode(bytes);
@@ -43,10 +44,8 @@ public class RtuModbusRequest extends AbstractModbusRequest {
 	 * @param byteBuf 字节缓冲
 	 */
 	@Override
-	public RtuModbusRequest decode(ByteBuffer byteBuf) throws ModbusException {
-		super.decode(byteBuf);
+	public RtuModbusCommand decode(ByteBuffer byteBuf) throws ModbusException {
+		//super.decode(byteBuf);
 		return this;
 	}
-
-
 }

@@ -4,6 +4,7 @@ package wei.yigulu.modbus.domain.request;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import wei.yigulu.modbus.domain.FunctionCode;
+import wei.yigulu.modbus.domain.ModbusPacketInterface;
 import wei.yigulu.modbus.domain.datatype.numeric.P_AB;
 import wei.yigulu.modbus.exceptiom.ModbusException;
 
@@ -19,7 +20,7 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-public class AbstractModbusRequest {
+public class AbstractModbusRequest  implements ModbusPacketInterface {
 
 
 	/**
@@ -46,12 +47,15 @@ public class AbstractModbusRequest {
 	 * 编码
 	 *
 	 * @param bytes 字节
+	 * @return
 	 */
-	public void encode(List<Byte> bytes) {
+	@Override
+	public AbstractModbusRequest encode(List<Byte> bytes) {
 		bytes.add((byte) (slaveId & 0xff));
 		bytes.add((byte) (functionCode.getCode() & 0xff));
 		new P_AB(BigDecimal.valueOf(startAddress)).encode(bytes);
 		new P_AB(BigDecimal.valueOf(quantity)).encode(bytes);
+		return this;
 	}
 
 	/**
@@ -59,6 +63,7 @@ public class AbstractModbusRequest {
 	 *
 	 * @param byteBuf 字节缓冲
 	 */
+	@Override
 	public AbstractModbusRequest decode(ByteBuffer byteBuf) throws ModbusException {
 		this.setSlaveId((byteBuf.get() & 0xff));
 		this.setFunctionCode(FunctionCode.valueOf(byteBuf.get() & 0xff));

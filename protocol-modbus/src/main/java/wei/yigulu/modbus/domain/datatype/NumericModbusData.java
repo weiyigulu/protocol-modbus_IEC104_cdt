@@ -26,11 +26,6 @@ public abstract class NumericModbusData extends RegisterValue {
 	@Accessors(chain = true)
 	protected BigDecimal value;
 
-	/**
-	 * 编码
-	 *
-	 * @param bytes 字节
-	 */
-	public abstract IModbusDataType encode(List<Byte> bytes);
+
 
 }

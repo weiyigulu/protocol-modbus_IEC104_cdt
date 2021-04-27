@@ -38,6 +38,13 @@ public class BooleanModbusDataInRegister extends RegisterValue {
 
 	}
 
+	@Override
+	public IModbusDataType encode(List<Byte> bytes) {
+		bytes.add(getByteFormValue(0));
+		bytes.add(getByteFormValue(1));
+		return this;
+	}
+
 	private BooleanModbusDataInRegister getValFormByte(byte b1, byte b2) {
 		for (int i = 0; i < ONEBYTEBOOL; i++) {
 			this.values[i] = (byte) ((b1 >> i) & 0x01) == 0x01;

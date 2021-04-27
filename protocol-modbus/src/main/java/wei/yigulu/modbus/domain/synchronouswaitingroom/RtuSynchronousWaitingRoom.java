@@ -19,7 +19,6 @@ public class RtuSynchronousWaitingRoom implements SynchronousWaitingRoom {
 
 	protected ByteBuffer bytes = null;
 
-
 	protected boolean hasGuest;
 
 

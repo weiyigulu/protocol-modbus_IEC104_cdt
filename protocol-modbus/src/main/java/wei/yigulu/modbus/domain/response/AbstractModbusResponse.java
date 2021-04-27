@@ -4,6 +4,7 @@ import com.google.common.primitives.Bytes;
 import lombok.Getter;
 import lombok.Setter;
 import wei.yigulu.modbus.domain.FunctionCode;
+import wei.yigulu.modbus.domain.ModbusPacketInterface;
 import wei.yigulu.modbus.exceptiom.ModbusException;
 
 import java.nio.ByteBuffer;
@@ -17,7 +18,7 @@ import java.util.List;
  */
 @Setter
 @Getter
-public class AbstractModbusResponse {
+public class AbstractModbusResponse implements ModbusPacketInterface {
 
 
 	/**
@@ -41,6 +42,7 @@ public class AbstractModbusResponse {
 	protected byte[] dataBytes;
 
 
+	@Override
 	public AbstractModbusResponse decode(ByteBuffer byteBuf) throws ModbusException {
 		this.slaveId = (int) byteBuf.get() & 0xff;
 		this.functionCode = FunctionCode.valueOf((int) byteBuf.get() & 0xff);
@@ -50,6 +52,7 @@ public class AbstractModbusResponse {
 		return this;
 	}
 
+	@Override
 	public AbstractModbusResponse encode(List<Byte> bytes) throws ModbusException {
 		bytes.add((byte) (slaveId & 0xff));
 		bytes.add((byte) (functionCode.getCode() & 0xff));
