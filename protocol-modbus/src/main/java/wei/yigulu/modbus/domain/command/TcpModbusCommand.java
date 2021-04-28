@@ -1,5 +1,6 @@
 package wei.yigulu.modbus.domain.command;
 
+import lombok.Getter;
 import lombok.Setter;
 import wei.yigulu.modbus.domain.datatype.numeric.P_AB;
 import wei.yigulu.modbus.domain.tcpextracode.TcpExtraCode;
@@ -22,6 +23,7 @@ public class TcpModbusCommand extends AbstractModbusCommand {
 	 * tcp通讯时的前端附加码
 	 */
 	@Setter
+	@Getter
 	protected TcpExtraCode tcpExtraCode = new TcpExtraCode();
 	/**
 	 * 除去四个附加码 和两个长度字节 剩余的报文的字节个数
@@ -43,7 +45,7 @@ public class TcpModbusCommand extends AbstractModbusCommand {
 	@Override
 	public TcpModbusCommand encode(List<Byte> bytes) throws ModbusException {
 		tcpExtraCode.encode(bytes);
-		new P_AB(BigDecimal.valueOf(length)).encode(bytes);
+		new P_AB(BigDecimal.valueOf(super.getLength())).encode(bytes);
 		super.encode(bytes);
 		return this;
 	}

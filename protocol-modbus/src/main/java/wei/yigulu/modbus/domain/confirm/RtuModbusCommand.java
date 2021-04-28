@@ -1,9 +1,7 @@
-package wei.yigulu.modbus.domain.command;
+package wei.yigulu.modbus.domain.confirm;
 
 import com.google.common.primitives.Bytes;
-import wei.yigulu.modbus.domain.ModbusPacketInterface;
 import wei.yigulu.modbus.domain.datatype.numeric.P_BA;
-import wei.yigulu.modbus.domain.request.RtuModbusRequest;
 import wei.yigulu.modbus.exceptiom.ModbusException;
 import wei.yigulu.utils.CrcUtils;
 
@@ -17,7 +15,7 @@ import java.util.List;
  * @author: xiuwei
  * @version:
  */
-public class RtuModbusCommand extends AbstractModbusCommand{
+public class RtuModbusCommand extends AbstractModbusConfirm {
 
 	/**
 	 * crc 校验  两位 除去本两位 其余所有字节的校验位

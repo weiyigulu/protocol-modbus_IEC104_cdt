@@ -183,7 +183,7 @@ public class ModbusRequestDataUtils {
 	 */
 	public static <T extends AbstractModbusResponse> T requestData(AbstractMasterBuilder masterBuilder, AbstractModbusRequest modbusRequest, T response) throws ModbusException {
 		if (!(masterBuilder instanceof ModbusMasterBuilderInterface)) {
-			throw new ModbusException("请传人实现了<ModbusMasterBuilderInterface>的Master");
+			throw new RuntimeException("请传人实现了<ModbusMasterBuilderInterface>的Master");
 		}
 		if (masterBuilder.getFuture() != null && masterBuilder.getFuture().channel().isActive()) {
 			List<Byte> byteList = new ArrayList<>();

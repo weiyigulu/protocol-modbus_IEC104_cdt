@@ -1,4 +1,4 @@
-package wei.yigulu.modbus.domain.command;
+package wei.yigulu.modbus.domain.confirm;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +18,7 @@ import java.util.List;
  * @version:
  */
 
-public class TcpModbusCommand extends AbstractModbusCommand {
+public class TcpModbusCommand extends AbstractModbusConfirm {
 	/**
 	 * tcp通讯时的前端附加码
 	 */

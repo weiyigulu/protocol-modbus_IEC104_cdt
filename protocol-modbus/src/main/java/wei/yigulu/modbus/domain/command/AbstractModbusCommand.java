@@ -26,6 +26,10 @@ import java.util.List;
 public abstract class AbstractModbusCommand implements ModbusPacketInterface {
 
 
+	public static final int R_MAX_NUM=120;
+
+	public static final int C_MAX_NUM=1968;
+
 	/**
 	 * 客户端地址 一字节
 	 */
@@ -59,6 +63,18 @@ public abstract class AbstractModbusCommand implements ModbusPacketInterface {
 	protected byte[] dataBytes;
 
 
+
+	public Integer getLength(){
+		if(functionCode==FunctionCode.WRITE_COIL){
+			return 6;
+		}else if(functionCode==FunctionCode.WRITE_REGISTER){
+			return 6;
+		}else {
+			return 7+dataBytes.length;
+		}
+	}
+
+
 	public AbstractModbusCommand setRegisters(@Nonnull Integer startAddress, @Nonnull List<RegisterValue> values) {
 		if (values.size() == 0) {
 			throw new RuntimeException("未传入具体的控制值");
@@ -68,7 +84,10 @@ public abstract class AbstractModbusCommand implements ModbusPacketInterface {
 		for (RegisterValue rv : values) {
 			registers.addAll(rv.getRegisters());
 		}
-		if (registers.size() == 1) {
+		if(registers.size()>R_MAX_NUM){
+			throw new RuntimeException("传入寄存器的数量超过120个");
+		}
+		if (registers.size() > 1) {
 			functionCode = FunctionCode.WRITE_REGISTERS;
 			this.quantity = registers.size();
 			this.numOfByte = registers.size() * 2;
@@ -89,9 +108,12 @@ public abstract class AbstractModbusCommand implements ModbusPacketInterface {
 	}
 
 
-	public AbstractModbusCommand setCoils(Integer startAddress, List<Boolean> values) {
+	public AbstractModbusCommand setCoils(@Nonnull Integer startAddress, @Nonnull List<Boolean> values) {
 		if (values.size() == 0) {
 			throw new RuntimeException("未传入具体的控制值");
+		}
+		if(values.size()>C_MAX_NUM){
+			throw new RuntimeException("传入线圈的数量超过1968个");
 		}
 		this.startAddress = startAddress;
 		if (values.size() == 1) {
