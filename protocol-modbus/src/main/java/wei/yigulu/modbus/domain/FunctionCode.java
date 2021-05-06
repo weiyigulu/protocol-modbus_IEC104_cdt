@@ -118,7 +118,7 @@ public enum FunctionCode {
 			case 0x90:
 				return WRITE_REGISTERS_ERROR;
 			default:
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("异常传参 : "+code);
 		}
 
 	}

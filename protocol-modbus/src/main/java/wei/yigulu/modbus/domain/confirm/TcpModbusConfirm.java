@@ -58,7 +58,7 @@ public class TcpModbusConfirm extends AbstractModbusConfirm {
 		}
 		this.tcpExtraCode.decode(byteBuf);
 		this.setLength(new P_AB().decode(byteBuf).getValue().intValue());
-		//super.decode(byteBuf);
+		super.decode(byteBuf);
 		return this;
 	}
 

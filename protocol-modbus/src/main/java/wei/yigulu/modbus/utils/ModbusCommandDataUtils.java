@@ -9,6 +9,7 @@ import wei.yigulu.modbus.domain.command.RtuModbusCommand;
 import wei.yigulu.modbus.domain.command.TcpModbusCommand;
 import wei.yigulu.modbus.domain.confirm.AbstractModbusConfirm;
 import wei.yigulu.modbus.domain.confirm.RtuModbusConfirm;
+import wei.yigulu.modbus.domain.confirm.TcpModbusConfirm;
 import wei.yigulu.modbus.domain.datatype.RegisterValue;
 import wei.yigulu.modbus.domain.tcpextracode.TransactionIdentifier;
 import wei.yigulu.modbus.exceptiom.ModbusException;
@@ -62,7 +63,7 @@ public class ModbusCommandDataUtils {
 			modbusCommand.encode(bs);
 			masterBuilder.sendFrameToOpposite(Bytes.toArray(bs));
 			buffer = ((ModbusMasterBuilderInterface) masterBuilder).getOrCreateSynchronousWaitingRoom().getData(((TcpModbusCommand)modbusCommand).getTcpExtraCode().getTransactionIdentifier().getSeq());
-			confirm = new RtuModbusConfirm().decode(buffer);
+			confirm = new TcpModbusConfirm().decode(buffer);
 		}}catch (ModbusException e){
 			log.error("控制命令执行失败:"+e.getMsg());
 			return false;
@@ -72,10 +73,14 @@ public class ModbusCommandDataUtils {
 				if(confirm.getFunctionCode()== FunctionCode.WRITE_COIL ||confirm.getFunctionCode()== FunctionCode.WRITE_REGISTER ){
 					if(Bytes.indexOf(confirm.getB2(),modbusCommand.getDataBytes())==0){
 						return true;
+					}else{
+						log.warn("返回的确认值和输出值不同");
 					}
 				}else{
 					if (confirm.getQuantity().equals(modbusCommand.getQuantity())){
 						return true;
+					}else{
+						log.warn("返回的值数量和输出数量不同");
 					}
 				}
 			}

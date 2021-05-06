@@ -9,6 +9,7 @@ import wei.yigulu.modbus.domain.datatype.numeric.ABCD;
 import wei.yigulu.modbus.domain.datatype.numeric.P_AB;
 import wei.yigulu.modbus.domain.synchronouswaitingroom.TcpSynchronousWaitingRoom;
 import wei.yigulu.modbus.exceptiom.ModbusException;
+import wei.yigulu.modbus.netty.ModbusRtuMasterBuilder;
 import wei.yigulu.modbus.netty.ModbusTcpMasterBuilder;
 import wei.yigulu.modbus.utils.ModbusCommandDataUtils;
 import wei.yigulu.modbus.utils.ModbusRequestDataUtils;
@@ -23,17 +24,27 @@ import java.util.*;
 @Slf4j
 public class TestTcpCommandMaster {
 	public static void main(String[] args) throws InterruptedException, ModbusException {
-		ModbusTcpMasterBuilder master = new ModbusTcpMasterBuilder("127.0.0.1", 5002);
+		ModbusTcpMasterBuilder master = new ModbusTcpMasterBuilder("127.0.0.1",5002);
 		master.createByUnBlock();
-		TcpSynchronousWaitingRoom.waitTime=5000L;
+		TcpSynchronousWaitingRoom.waitTime = 5000L;
 		Thread.sleep(3000L);
-		List<RegisterValue> list = new ArrayList<>();
-		for (int i = 0; i <= 0; i++) {
-			list.add(new ABCD().setValue(BigDecimal.valueOf(2*i)));
+		Random random = new Random();
+		BigDecimal val;
+		BigDecimal val1;
+		for (; ; ) {
+			val=BigDecimal.valueOf(random.nextInt(100));
+			System.out.println("数据个数："+val);
+			List<RegisterValue> list = new ArrayList<>();
+			for (int i = 0; i <= val.intValue(); i++) {
+				val1=BigDecimal.valueOf(random.nextInt(11));
+				System.out.println("数据值："+val1);
+				list.add(new P_AB().setValue(val1));
+			}
+			System.out.println(ModbusCommandDataUtils.commandRegister(master, 1, 0, list));
+			Thread.sleep(60000L);
 		}
-		ModbusCommandDataUtils.commandRegister(master,1,0,list);
-		Thread.sleep(30L);
-		}
+	}
+
 
 
 }
