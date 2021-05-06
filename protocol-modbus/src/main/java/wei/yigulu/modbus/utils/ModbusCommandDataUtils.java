@@ -2,10 +2,14 @@ package wei.yigulu.modbus.utils;
 
 import com.google.common.primitives.Bytes;
 import io.netty.buffer.Unpooled;
+import lombok.extern.slf4j.Slf4j;
+import wei.yigulu.modbus.domain.FunctionCode;
+import wei.yigulu.modbus.domain.command.AbstractModbusCommand;
 import wei.yigulu.modbus.domain.command.RtuModbusCommand;
 import wei.yigulu.modbus.domain.command.TcpModbusCommand;
+import wei.yigulu.modbus.domain.confirm.AbstractModbusConfirm;
+import wei.yigulu.modbus.domain.confirm.RtuModbusConfirm;
 import wei.yigulu.modbus.domain.datatype.RegisterValue;
-import wei.yigulu.modbus.domain.request.TcpModbusRequest;
 import wei.yigulu.modbus.domain.tcpextracode.TransactionIdentifier;
 import wei.yigulu.modbus.exceptiom.ModbusException;
 import wei.yigulu.modbus.netty.ModbusMasterBuilderInterface;
@@ -24,6 +28,7 @@ import java.util.List;
  * @author: xiuwei
  * @version:
  */
+@Slf4j
 public class ModbusCommandDataUtils {
 
 
@@ -34,26 +39,47 @@ public class ModbusCommandDataUtils {
 	 * @param address       起始地址
 	 * @param values        命令值
 	 */
-	public static void commandRegister(AbstractMasterBuilder masterBuilder,Integer slaveId,Integer address, List<RegisterValue> values) throws ModbusException {
+	public static boolean commandRegister(AbstractMasterBuilder masterBuilder, Integer slaveId, Integer address, List<RegisterValue> values) throws ModbusException {
 		if (!(masterBuilder instanceof ModbusMasterBuilderInterface)) {
 			throw new RuntimeException("请传人实现了<ModbusMasterBuilderInterface>的Master");
 		}
-		List<Byte> bs=new ArrayList<>();
+		List<Byte> bs = new ArrayList<>();
+		AbstractModbusCommand modbusCommand;
 		ByteBuffer buffer;
-		if(masterBuilder instanceof ModbusRtuMasterBuilder){
-			RtuModbusCommand rtuModbusCommand =new RtuModbusCommand();
-			rtuModbusCommand.setSlaveId(slaveId).setRegisters(address,values);
-			rtuModbusCommand.encode(bs);
+		AbstractModbusConfirm confirm;
+		try{
+		if (masterBuilder instanceof ModbusRtuMasterBuilder) {
+			modbusCommand = new RtuModbusCommand();
+			modbusCommand.setSlaveId(slaveId).setRegisters(address, values);
+			modbusCommand.encode(bs);
 			masterBuilder.sendFrameToOpposite(Bytes.toArray(bs));
 			buffer = ((ModbusMasterBuilderInterface) masterBuilder).getOrCreateSynchronousWaitingRoom().getData(0);
-		}else{
-			TcpModbusCommand tcpModbusCommand =new TcpModbusCommand();
-			tcpModbusCommand.setTransactionIdentifier(TransactionIdentifier.getInstance((AbstractTcpMasterBuilder) masterBuilder));
-			tcpModbusCommand.setSlaveId(slaveId).setRegisters(address,values);
-			tcpModbusCommand.encode(bs);
+			confirm = new RtuModbusConfirm().decode(buffer);
+		} else {
+			modbusCommand= new TcpModbusCommand();
+			((TcpModbusCommand)modbusCommand).setTransactionIdentifier(TransactionIdentifier.getInstance((AbstractTcpMasterBuilder) masterBuilder));
+			modbusCommand.setSlaveId(slaveId).setRegisters(address, values);
+			modbusCommand.encode(bs);
 			masterBuilder.sendFrameToOpposite(Bytes.toArray(bs));
-			buffer = ((ModbusMasterBuilderInterface) masterBuilder).getOrCreateSynchronousWaitingRoom().getData(tcpModbusCommand.getTcpExtraCode().getTransactionIdentifier().getSeq());
+			buffer = ((ModbusMasterBuilderInterface) masterBuilder).getOrCreateSynchronousWaitingRoom().getData(((TcpModbusCommand)modbusCommand).getTcpExtraCode().getTransactionIdentifier().getSeq());
+			confirm = new RtuModbusConfirm().decode(buffer);
+		}}catch (ModbusException e){
+			log.error("控制命令执行失败:"+e.getMsg());
+			return false;
 		}
-		System.out.println(DataConvertor.ByteBuf2String(Unpooled.copiedBuffer(buffer)));
+		if(address.equals(confirm.getStartAddress())){
+			if(confirm.getFunctionCode()==modbusCommand.getFunctionCode()){
+				if(confirm.getFunctionCode()== FunctionCode.WRITE_COIL ||confirm.getFunctionCode()== FunctionCode.WRITE_REGISTER ){
+					if(Bytes.indexOf(confirm.getB2(),modbusCommand.getDataBytes())==0){
+						return true;
+					}
+				}else{
+					if (confirm.getQuantity().equals(modbusCommand.getQuantity())){
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 }

@@ -11,6 +11,7 @@ import wei.yigulu.modbus.utils.ModbusCommandDataUtils;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author: xiuwei
@@ -21,15 +22,24 @@ public class TestRtuCommandMaster {
 	public static void main(String[] args) throws InterruptedException, ModbusException {
 		ModbusRtuMasterBuilder master = new ModbusRtuMasterBuilder("COM1");
 		master.createByUnBlock();
-		TcpSynchronousWaitingRoom.waitTime=5000L;
+		TcpSynchronousWaitingRoom.waitTime = 5000L;
 		Thread.sleep(3000L);
-		List<RegisterValue> list = new ArrayList<>();
-		for (int i = 0; i <= 00; i++) {
-			list.add(new P_AB().setValue(BigDecimal.valueOf(2*i)));
+		Random random = new Random();
+		BigDecimal val;
+		BigDecimal val1;
+		for (; ; ) {
+			val=BigDecimal.valueOf(random.nextInt(100));
+			System.out.println("数据个数："+val);
+			List<RegisterValue> list = new ArrayList<>();
+			for (int i = 0; i <= val.intValue(); i++) {
+				val1=BigDecimal.valueOf(random.nextInt(11));
+				System.out.println("数据值："+val1);
+				list.add(new P_AB().setValue(val1));
+			}
+			System.out.println(ModbusCommandDataUtils.commandRegister(master, 1, 0, list));
+			Thread.sleep(60000L);
 		}
-		ModbusCommandDataUtils.commandRegister(master,1,0,list);
-		Thread.sleep(30L);
-		}
+	}
 
 
 }

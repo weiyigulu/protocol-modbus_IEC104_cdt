@@ -18,7 +18,7 @@ import java.util.List;
  * @version:
  */
 
-public class TcpModbusCommand extends AbstractModbusConfirm {
+public class TcpModbusConfirm extends AbstractModbusConfirm {
 	/**
 	 * tcp通讯时的前端附加码
 	 */
@@ -37,13 +37,13 @@ public class TcpModbusCommand extends AbstractModbusConfirm {
 	 * @param transactionIdentifier
 	 * @return
 	 */
-	public TcpModbusCommand setTransactionIdentifier(TransactionIdentifier transactionIdentifier) {
+	public TcpModbusConfirm setTransactionIdentifier(TransactionIdentifier transactionIdentifier) {
 		this.tcpExtraCode.setTransactionIdentifier(transactionIdentifier);
 		return this;
 	}
 
 	@Override
-	public TcpModbusCommand encode(List<Byte> bytes) throws ModbusException {
+	public TcpModbusConfirm encode(List<Byte> bytes) throws ModbusException {
 		tcpExtraCode.encode(bytes);
 		new P_AB(BigDecimal.valueOf(super.getLength())).encode(bytes);
 		super.encode(bytes);
@@ -52,7 +52,7 @@ public class TcpModbusCommand extends AbstractModbusConfirm {
 
 
 	@Override
-	public TcpModbusCommand decode(ByteBuffer byteBuf) throws ModbusException {
+	public TcpModbusConfirm decode(ByteBuffer byteBuf) throws ModbusException {
 		if (byteBuf.remaining() != 12) {
 			throw new ModbusException("该帧非数据请求帧");
 		}

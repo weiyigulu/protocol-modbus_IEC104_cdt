@@ -14,7 +14,7 @@ public class Test {
 		master.stop();
 		master.createByUnBlock();*/
 	//43 b0 ca ed
-		byte[] bs=new byte[]{(byte)0x43,(byte)0xb0,(byte)0xca,(byte)0xed};
+		byte[] bs=new byte[]{(byte)0x00,(byte)0x30,(byte)0x00,(byte)0x18};
 		System.out.println("ABCD:"+new ABCD().decode(bs,0).getValue());
 		System.out.println("CDAB:"+new CDAB().decode(bs,0).getValue());
 		System.out.println("DCBA:"+new DCBA().decode(bs,0).getValue());

@@ -35,10 +35,13 @@ public enum FunctionCode {
 	 * Constant <code>WRITE_COIL 5</code>
 	 */
 	WRITE_COIL(5),
+
+	WRITE_COIL_ERROR(0x85),
 	/**
 	 * Constant <code>WRITE_REGISTER 6</code>
 	 */
 	WRITE_REGISTER(6),
+	WRITE_REGISTER_ERROR(0x86),
 	/**
 	 * Constant <code>READ_EXCEPTION_STATUS 7</code>
 	 */
@@ -47,10 +50,12 @@ public enum FunctionCode {
 	 * Constant <code>WRITE_COILS 15</code>
 	 */
 	WRITE_COILS(15),
+	WRITE_COILS_ERROR(0x8F),
 	/**
 	 * Constant <code>WRITE_REGISTERS 16</code>
 	 */
 	WRITE_REGISTERS(16),
+	WRITE_REGISTERS_ERROR(0x90),
 	/**
 	 * Constant <code>REPORT_SLAVE_ID 17</code>
 	 */
@@ -104,6 +109,14 @@ public enum FunctionCode {
 				return WRITE_MASK_REGISTER;
 			case 23:
 				return READ_WRITE_REGISTERS;
+			case 0x85:
+				return WRITE_COIL_ERROR;
+			case 0x86:
+				return WRITE_REGISTER_ERROR;
+			case 0x8F:
+				return WRITE_COILS_ERROR;
+			case 0x90:
+				return WRITE_REGISTERS_ERROR;
 			default:
 				throw new IllegalArgumentException();
 		}

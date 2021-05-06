@@ -1,6 +1,7 @@
 package wei.yigulu.modbus.domain.command;
 
 import com.google.common.primitives.Bytes;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import wei.yigulu.modbus.domain.FunctionCode;
@@ -40,6 +41,7 @@ public abstract class AbstractModbusCommand implements ModbusPacketInterface {
 	/**
 	 * 功能码  一字节
 	 */
+	@Getter
 	protected FunctionCode functionCode;
 
 	/**
@@ -50,16 +52,19 @@ public abstract class AbstractModbusCommand implements ModbusPacketInterface {
 	/**
 	 * 输出数据的数量  两字节  （线圈或者寄存器的数量） 两字节  15 16 有    5 6 没有
 	 */
+	@Getter
 	protected Integer quantity;
 
 	/**
 	 * 输出数据的字节数  一字节（线圈数量*1或寄存器数量*2） 15 16 有    5 6 没有
 	 */
+	@Getter
 	protected Integer numOfByte;
 
 	/**
 	 * 具体输出值的内容
 	 */
+	@Getter
 	protected byte[] dataBytes;
 
 

@@ -15,7 +15,7 @@ import java.util.List;
  * @author: xiuwei
  * @version:
  */
-public class RtuModbusCommand extends AbstractModbusConfirm {
+public class RtuModbusConfirm extends AbstractModbusConfirm {
 
 	/**
 	 * crc 校验  两位 除去本两位 其余所有字节的校验位
@@ -29,7 +29,7 @@ public class RtuModbusCommand extends AbstractModbusConfirm {
 	 * @return
 	 */
 	@Override
-	public RtuModbusCommand encode(List<Byte> bytes) throws ModbusException {
+	public RtuModbusConfirm encode(List<Byte> bytes) throws ModbusException {
 		super.encode(bytes);
 		this.crc16 = CrcUtils.generateCRC16(Bytes.toArray(bytes));
 		new P_BA(BigDecimal.valueOf(this.crc16)).encode(bytes);
@@ -42,8 +42,8 @@ public class RtuModbusCommand extends AbstractModbusConfirm {
 	 * @param byteBuf 字节缓冲
 	 */
 	@Override
-	public RtuModbusCommand decode(ByteBuffer byteBuf) throws ModbusException {
-		//super.decode(byteBuf);
+	public RtuModbusConfirm decode(ByteBuffer byteBuf) throws ModbusException {
+		super.decode(byteBuf);
 		return this;
 	}
 }
