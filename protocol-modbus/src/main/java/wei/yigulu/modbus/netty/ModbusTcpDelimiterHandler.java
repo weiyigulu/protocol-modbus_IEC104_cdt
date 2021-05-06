@@ -56,8 +56,6 @@ public class ModbusTcpDelimiterHandler extends AbstractDelimiterHandler {
 		}else{
 			clearCumulation();
 		}
-
-
 	}
 
 
