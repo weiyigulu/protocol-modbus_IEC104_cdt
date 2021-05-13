@@ -2,11 +2,9 @@ package wei.yigulu.modbus.netty;
 
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import org.joda.time.DateTime;
 import wei.yigulu.netty.AbstractDelimiterHandler;
-import wei.yigulu.utils.DataConvertor;
 
 
 /**
@@ -21,7 +19,7 @@ public class ModbusTcpDelimiterHandler extends AbstractDelimiterHandler {
 	/**
 	 * 最短帧为错误帧 9为   4位事务+2位长度+1位slaveID+1位functionCode+1位exceptionCode
 	 */
-	private static final int MINLENGTH=9;
+	private static final int MINLENGTH = 9;
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -31,7 +29,7 @@ public class ModbusTcpDelimiterHandler extends AbstractDelimiterHandler {
 		}
 		//数据帧长度不足 记录时间 等待下一帧进入
 		int length;
-		while(cumulation.readableBytes()>=MINLENGTH){
+		while (cumulation.readableBytes() >= MINLENGTH) {
 			cumulation.markReaderIndex();
 			//去掉四位事务帧
 			cumulation.readBytes(4).release();
@@ -46,14 +44,14 @@ public class ModbusTcpDelimiterHandler extends AbstractDelimiterHandler {
 				timeMark = DateTime.now();
 				cumulation.resetReaderIndex();
 				return;
-			} else  {
+			} else {
 				cumulation.resetReaderIndex();
-				ctx.fireChannelRead(cumulation.readBytes(length+6));
+				ctx.fireChannelRead(cumulation.readBytes(length + 6));
 			}
 		}
-		if(cumulation.readableBytes()!=0){
-			this.timeMark=DateTime.now();
-		}else{
+		if (cumulation.readableBytes() != 0) {
+			this.timeMark = DateTime.now();
+		} else {
 			clearCumulation();
 		}
 	}

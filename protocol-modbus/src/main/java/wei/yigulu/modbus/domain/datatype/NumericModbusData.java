@@ -6,7 +6,6 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * 数字的类型
@@ -25,7 +24,6 @@ public abstract class NumericModbusData extends RegisterValue {
 	@Getter
 	@Accessors(chain = true)
 	protected BigDecimal value;
-
 
 
 }

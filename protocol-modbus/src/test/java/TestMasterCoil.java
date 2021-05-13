@@ -24,7 +24,7 @@ public class TestMasterCoil {
 		Thread.sleep(3000L);
 		List<Integer> list = new ArrayList<>();
 		for (int i = 0; i <= 7; i++) {
-			list.add(i );
+			list.add(i);
 		}
 		list.add(30);
 		List<Obj4RequestCoil> ll = ModbusRequestDataUtils.splitModbusRequest(list, 1, FunctionCode.READ_COILS);

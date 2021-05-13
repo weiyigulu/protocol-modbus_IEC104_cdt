@@ -40,10 +40,10 @@ public class SimpleTcpConnectionListener implements ChannelFutureListener {
 		if (channelFuture == null || channelFuture.channel() == null || !channelFuture.channel().isActive()) {
 			this.future = this.masterBuilder.getOrCreateWorkGroup().schedule(() -> {
 				try {
-					if(masterBuilder.future==null ||!masterBuilder.future.channel().isActive()) {
+					if (masterBuilder.future == null || !masterBuilder.future.channel().isActive()) {
 						log.error("服务端{}:{}链接不上，开始重连操作", this.masterBuilder.getIp(), this.masterBuilder.getPort());
 						masterBuilder.create();
-					}else{
+					} else {
 						log.warn("masterBuilder在延迟过程中已由其他线程连接成功，此处略过重连");
 					}
 				} catch (Exception e) {
@@ -55,7 +55,7 @@ public class SimpleTcpConnectionListener implements ChannelFutureListener {
 					}
 				}
 			}, 6L, TimeUnit.SECONDS);
-		}else{
+		} else {
 			log.warn("masterBuilder已经连接成功，不进行重连操作");
 		}
 	}

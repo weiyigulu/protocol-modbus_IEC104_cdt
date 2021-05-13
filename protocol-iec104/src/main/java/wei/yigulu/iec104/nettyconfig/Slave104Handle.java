@@ -4,7 +4,6 @@ package wei.yigulu.iec104.nettyconfig;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
@@ -57,7 +56,7 @@ public class Slave104Handle extends SimpleChannelInboundHandler<ByteBuf> {
 	public void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
 		//收数据
 		log.debug("----------------------------------------------------------------------------------");
-		log.debug("re <= "+DataConvertor.ByteBuf2String( msg));
+		log.debug("re <= " + DataConvertor.ByteBuf2String(msg));
 		Apdu apdu = apduClass.newInstance().setChannel(ctx.channel()).setIec104Builder(slaverBuilder).setLog(slaverBuilder.getLog()).loadByteBuf(msg);
 		apdu.answer();
 	}
@@ -81,7 +80,7 @@ public class Slave104Handle extends SimpleChannelInboundHandler<ByteBuf> {
 			return;
 		}
 		log.info(clientIp + ":" + clientPort + "客户端连接");
-		LinkContainer.getInstance().getLinks().put(ctx.channel().id(), new Iec104Link(ctx.channel(), clientIp, clientPort, Iec104Link.Role.MASTER,slaverBuilder.getLog()));
+		LinkContainer.getInstance().getLinks().put(ctx.channel().id(), new Iec104Link(ctx.channel(), clientIp, clientPort, Iec104Link.Role.MASTER, slaverBuilder.getLog()));
 		this.slaverBuilder.connected(ipSocket);
 		this.slaverBuilder.getChannels().add(ctx.channel());
 		if (STARTASK) {

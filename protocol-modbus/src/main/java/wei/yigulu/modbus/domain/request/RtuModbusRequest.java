@@ -1,7 +1,6 @@
 package wei.yigulu.modbus.domain.request;
 
 import com.google.common.primitives.Bytes;
-import wei.yigulu.modbus.domain.ModbusPacketInterface;
 import wei.yigulu.modbus.domain.datatype.numeric.P_BA;
 import wei.yigulu.modbus.exceptiom.ModbusException;
 import wei.yigulu.utils.CrcUtils;

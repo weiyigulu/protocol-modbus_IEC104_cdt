@@ -12,7 +12,6 @@ import wei.yigulu.iec104.asdudataframe.AbstractDataFrameType;
 import wei.yigulu.iec104.container.AsduTypeAnnotationContainer;
 import wei.yigulu.iec104.container.DataTypeClasses;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,7 @@ import java.util.Map;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Asdu {
+public class Asdu<T extends AbstractDataFrameType> {
 
 	@Accessors(chain = true)
 	private Logger log = LoggerFactory.getLogger(this.getClass());
@@ -122,7 +121,7 @@ public class Asdu {
 	 * 数据单元 数据单元的类型是有typeId决定的
 	 * 类型不同里面说承载的数据也不同
 	 */
-	protected AbstractDataFrameType dataFrame;
+	protected T dataFrame;
 
 
 	/**
@@ -151,7 +150,7 @@ public class Asdu {
 		if (typeId < 128) {
 			Map<Integer, DataTypeClasses> map = AsduTypeAnnotationContainer.getInstance().getDataTypes();
 			if (map.containsKey(typeId)) {
-				dataFrame = (AbstractDataFrameType) (map.get(typeId).getTypeClass().newInstance());
+				this.setDataFrame((T) map.get(typeId).getTypeClass().newInstance());
 				Method load = map.get(typeId).getLoad();
 				load.invoke(dataFrame, dataInputStream, this.getVsq());
 			} else {
@@ -160,7 +159,7 @@ public class Asdu {
 				//throw new IOException("无法转换信息对象，由于类型标识未知: " + typeId);
 				log.error("无法转换信息对象，由于类型标识未知: " + typeId);
 			}
-			if(dataFrame!=null) {
+			if (dataFrame != null) {
 				log.debug(dataFrame.toString());
 			}
 			privateInformation = null;

@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 public class InformationBodyAddress {
 
-	public static final int  OCCUPYBYTES=3;
+	public static final int OCCUPYBYTES = 3;
 
 	/**
 	 * 信息体地址
@@ -46,8 +46,8 @@ public class InformationBodyAddress {
 	 * @param is is
 	 */
 	public InformationBodyAddress(ByteBuf is) throws Iec104Exception {
-		if(is.readableBytes()<OCCUPYBYTES){
-			throw new Iec104Exception(3301,"可用字节不足，不能进行读取");
+		if (is.readableBytes() < OCCUPYBYTES) {
+			throw new Iec104Exception(3301, "可用字节不足，不能进行读取");
 		}
 		this.address = (is.readByte() & 0xff) | ((is.readByte() & 0xff) << 8) | ((is.readByte() & 0xff) << 16);
 	}

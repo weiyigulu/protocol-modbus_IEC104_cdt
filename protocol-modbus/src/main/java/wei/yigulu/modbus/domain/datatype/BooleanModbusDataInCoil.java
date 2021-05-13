@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class BooleanModbusDataInCoil extends CoilValue {
 
-	public static final int BIT_NUM =8;
+	public static final int BIT_NUM = 8;
 
 	/**
 	 * 八个布尔 对应一字节 八比特
@@ -34,10 +34,10 @@ public class BooleanModbusDataInCoil extends CoilValue {
 
 	@Override
 	public BooleanModbusDataInCoil encode(List<Byte> bytes) {
-		byte b=0;
-		for (int i = 0; i <values.length ; i++) {
-			if(this.values[i]){
-				b=(byte)(b|0x01>>i);
+		byte b = 0;
+		for (int i = 0; i < values.length; i++) {
+			if (this.values[i]) {
+				b = (byte) (b | 0x01 >> i);
 			}
 		}
 		bytes.add(b);
@@ -74,18 +74,18 @@ public class BooleanModbusDataInCoil extends CoilValue {
 	 * @param booleanValues 布尔值
 	 * @return {@link List<BooleanModbusDataInCoil>}
 	 */
-	public static List<BooleanModbusDataInCoil> getFormBooleanList(List<Boolean> booleanValues){
-		int size= Double.valueOf(Math.ceil(booleanValues.size()/BIT_NUM)).intValue();
-		List<BooleanModbusDataInCoil> booleanModbusDataInCoils=new ArrayList<>();
+	public static List<BooleanModbusDataInCoil> getFormBooleanList(List<Boolean> booleanValues) {
+		int size = Double.valueOf(Math.ceil(booleanValues.size() / BIT_NUM)).intValue();
+		List<BooleanModbusDataInCoil> booleanModbusDataInCoils = new ArrayList<>();
 		BooleanModbusDataInCoil booleanModbusDataInCoil;
 		int index;
 		for (int i = 0; i < size; i++) {
-			booleanModbusDataInCoil=new BooleanModbusDataInCoil();
-			for (int j = 0; j <BIT_NUM; j++) {
-				index=BIT_NUM*i+j;
-				if (booleanValues.size()>index){
-					booleanModbusDataInCoil.setValue(j,booleanValues.get(index));
-				}else{
+			booleanModbusDataInCoil = new BooleanModbusDataInCoil();
+			for (int j = 0; j < BIT_NUM; j++) {
+				index = BIT_NUM * i + j;
+				if (booleanValues.size() > index) {
+					booleanModbusDataInCoil.setValue(j, booleanValues.get(index));
+				} else {
 					booleanModbusDataInCoils.add(booleanModbusDataInCoil);
 					break;
 				}

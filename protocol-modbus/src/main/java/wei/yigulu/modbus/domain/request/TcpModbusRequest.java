@@ -4,7 +4,6 @@ package wei.yigulu.modbus.domain.request;
 import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import wei.yigulu.modbus.domain.ModbusPacketInterface;
 import wei.yigulu.modbus.domain.datatype.numeric.P_AB;
 import wei.yigulu.modbus.domain.tcpextracode.TcpExtraCode;
 import wei.yigulu.modbus.domain.tcpextracode.TransactionIdentifier;

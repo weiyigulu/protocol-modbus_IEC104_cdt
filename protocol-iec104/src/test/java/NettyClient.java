@@ -1,9 +1,6 @@
 import io.netty.bootstrap.Bootstrap;
-import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
@@ -37,20 +34,20 @@ public class NettyClient {
 						}
 					});
 			// 服务器异步创建绑定
-			ChannelFuture cf = sb.bind("127.0.0.1",2404);
-			System.out.println("1"+cf.isSuccess());
+			ChannelFuture cf = sb.bind("127.0.0.1", 2404);
+			System.out.println("1" + cf.isSuccess());
 			cf.sync();
-			System.out.println("2"+cf.isSuccess());
+			System.out.println("2" + cf.isSuccess());
 
-			System.out.println("4"+cf.isDone());
+			System.out.println("4" + cf.isDone());
 			System.out.println(cf.getClass().getSimpleName());
 			// 关闭服务器通道
 			ChannelFuture ff = cf.channel().closeFuture();
 			System.out.println(ff.getClass().getSimpleName());
 			System.out.println(ff.sync());
-			System.out.println("is=="+ (cf==ff));
+			System.out.println("is==" + (cf == ff));
 			System.out.println(cf.isDone());
-			System.out.println("3"+cf.isSuccess());
+			System.out.println("3" + cf.isSuccess());
 
 		} catch (InterruptedException e) {
 			e.printStackTrace();

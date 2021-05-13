@@ -1,6 +1,5 @@
 package wei.yigulu.netty;
 
-import io.netty.util.ResourceLeakDetector;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -19,7 +18,7 @@ import java.util.UUID;
  */
 public class BaseProtocolBuilder {
 
-	public  BaseProtocolBuilder(){
+	public BaseProtocolBuilder() {
 		//ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.ADVANCED);
 	}
 
@@ -42,8 +41,12 @@ public class BaseProtocolBuilder {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) {return true;}
-		if (o == null || getClass() != o.getClass()) {return false;}
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
 		BaseProtocolBuilder that = (BaseProtocolBuilder) o;
 		return builderId.equals(that.builderId);
 	}

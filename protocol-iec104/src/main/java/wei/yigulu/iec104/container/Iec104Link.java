@@ -25,12 +25,12 @@ public class Iec104Link {
 	 * @param port         port
 	 * @param oppositeRole opposite role
 	 */
-	public Iec104Link(Channel channel, String ip, Integer port, Role oppositeRole,Logger logger) {
+	public Iec104Link(Channel channel, String ip, Integer port, Role oppositeRole, Logger logger) {
 		this.channel = channel;
 		this.oppositeIp = ip;
 		this.oppositePort = port;
 		this.oppositeRole = oppositeRole;
-		this.log=logger;
+		this.log = logger;
 		iReceive = 0;
 		iSend = 0;
 	}

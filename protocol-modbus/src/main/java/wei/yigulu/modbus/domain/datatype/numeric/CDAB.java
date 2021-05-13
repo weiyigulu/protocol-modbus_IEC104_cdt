@@ -29,7 +29,7 @@ public class CDAB extends NumericModbusData {
 
 	@Override
 	public CDAB decode(byte[] bytes, int offset) {
-		this.value =new BigDecimal(Float.toString(Float.intBitsToFloat((bytes[offset * 2] & 0xff) << 8 | ((bytes[offset * 2 + 1] & 0xff))
+		this.value = new BigDecimal(Float.toString(Float.intBitsToFloat((bytes[offset * 2] & 0xff) << 8 | ((bytes[offset * 2 + 1] & 0xff))
 				| ((bytes[offset * 2 + 2] & 0xff) << 24) | ((bytes[offset * 2 + 3] & 0xff) << 16))));
 		return this;
 	}

@@ -7,4 +7,14 @@ package wei.yigulu.iec104.asdudataframe.typemodel;
  * @create: 2021-05-10 15:07
  */
 public interface IecDataInterface {
+
+
+	/**
+	 * 获取代表值
+	 *
+	 * @return {@link Object}
+	 */
+	Object getIecValue();
+
+
 }

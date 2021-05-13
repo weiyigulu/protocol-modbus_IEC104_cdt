@@ -1,6 +1,5 @@
 package wei.yigulu.modbus.domain.tcpextracode;
 
-import com.alibaba.fastjson.JSON;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;

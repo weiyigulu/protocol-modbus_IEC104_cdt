@@ -56,7 +56,6 @@ public class SendAndReceiveNumUtil {
 	public static void sendIFrame(Apdu apdu, Channel channel) throws Exception {
 		setSendAndReceiveNum(apdu, channel.id());
 		byte[] bb = apdu.encode();
-		//TODO  改变日志模式
 		log.debug("向104对端发出数据帧：" + DataConvertor.Byte2String(bb));
 		channel.writeAndFlush(Unpooled.copiedBuffer(bb));
 	}
@@ -72,7 +71,6 @@ public class SendAndReceiveNumUtil {
 	public static void sendIFrame(Apdu apdu, Channel channel, Logger log) throws Exception {
 		setSendAndReceiveNum(apdu, channel.id());
 		byte[] bb = apdu.encode();
-		//TODO  改变日志模式
 		if (log != null) {
 			log.debug("向104对端发出数据帧：" + DataConvertor.Byte2String(bb));
 		} else {

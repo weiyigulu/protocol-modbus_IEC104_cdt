@@ -113,6 +113,12 @@ public class TechnicalTerm {
 
 
 	/**
+	 * 设置短浮点命令
+	 */
+	public static final Integer SHORT_FLOAT_COMMAND_TYPE = 0x32;
+
+
+	/**
 	 * 对时帧
 	 */
 	public static final Integer DATESYNCHRONIZATION_TYPE = 0x67;

@@ -46,7 +46,7 @@ public class ShortFloatType extends AbstractDataFrameType {
 	 * @throws Iec104Exception iec exception
 	 */
 	public ShortFloatType(List<InformationBodyAddress> addresses, Map<IeMeasuredQuality, Float> datas) throws Iec104Exception {
-		if ((this.datas.size() * (IeShortFloat.OCCUPYBYTES+IeMeasuredQuality.OCCUPYBYTES) + this.addresses.size() * InformationBodyAddress.OCCUPYBYTES) > 240) {
+		if ((this.datas.size() * (IeShortFloat.OCCUPYBYTES + IeMeasuredQuality.OCCUPYBYTES) + this.addresses.size() * InformationBodyAddress.OCCUPYBYTES) > 240) {
 			throw new Iec104Exception("长度超长，创建对象失败，请切割数据。");
 		}
 		this.addresses = addresses;
@@ -72,7 +72,7 @@ public class ShortFloatType extends AbstractDataFrameType {
 	 * @throws Iec104Exception iec exception
 	 */
 	public void addData(float f, IeMeasuredQuality quality) throws Iec104Exception {
-		validateLen(IeShortFloat.OCCUPYBYTES+IeMeasuredQuality.OCCUPYBYTES);
+		validateLen(IeShortFloat.OCCUPYBYTES + IeMeasuredQuality.OCCUPYBYTES);
 		this.datas.put(quality, f);
 	}
 
@@ -154,7 +154,7 @@ public class ShortFloatType extends AbstractDataFrameType {
 	 * @throws Iec104Exception iec exception
 	 */
 	protected void validateLen(int increase) throws Iec104Exception {
-		if ((this.datas.size() * (IeShortFloat.OCCUPYBYTES+IeMeasuredQuality.OCCUPYBYTES) + this.addresses.size() * InformationBodyAddress.OCCUPYBYTES + increase) > 240) {
+		if ((this.datas.size() * (IeShortFloat.OCCUPYBYTES + IeMeasuredQuality.OCCUPYBYTES) + this.addresses.size() * InformationBodyAddress.OCCUPYBYTES + increase) > 240) {
 			throw new Iec104Exception("长度超长，不能再向此对象中添加元素");
 		}
 	}
@@ -176,8 +176,8 @@ public class ShortFloatType extends AbstractDataFrameType {
 					datas.put(new IeMeasuredQuality(is), f);
 				}
 			}
-		}catch (Iec104Exception e){
-			if(e.getCode()==3301){
+		} catch (Iec104Exception e) {
+			if (e.getCode() == 3301) {
 				return;
 			}
 		}

@@ -23,22 +23,22 @@ public class SendDataFrameHelper {
 	/**
 	 * 单帧最长连续遥信个数
 	 */
-	public static final int MAXCONTINUITYYXNUM=127;
+	public static final int MAXCONTINUITYYXNUM = 127;
 
 	/**
 	 * 单帧最长单点遥信个数
 	 */
-	public static final int MAXDISCONTINUITYYXNUM=49;
+	public static final int MAXDISCONTINUITYYXNUM = 49;
 
 	/**
 	 * 单帧最长连续遥测个数
 	 */
-	public static final int MAXCONTINUITYYCNUM=45;
+	public static final int MAXCONTINUITYYCNUM = 45;
 
 	/**
 	 * 单帧最长单点遥测个数
 	 */
-	public static final int MAXDISCONTINUITYYCNUM=25;
+	public static final int MAXDISCONTINUITYYCNUM = 25;
 
 
 	/**
@@ -257,10 +257,10 @@ public class SendDataFrameHelper {
 		return list;
 	}
 
-
 	/**
 	 * 进行拆分并排序 主要是排序map 中的keyset 对keyset的int型进行排序
-	 * 	 *
+	 * *
+	 *
 	 * @param set    要排序的set
 	 * @param maxLen 设定的最长长度
 	 * @return 拆分后的集合 的集合
@@ -288,4 +288,6 @@ public class SendDataFrameHelper {
 		list.add(transfer);
 		return list;
 	}
+
+
 }

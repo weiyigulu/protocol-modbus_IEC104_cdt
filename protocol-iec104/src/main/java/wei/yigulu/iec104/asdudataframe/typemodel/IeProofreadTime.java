@@ -21,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public class IeProofreadTime {
-	public static final int  OCCUPYBYTES=7;
+	public static final int OCCUPYBYTES = 7;
 
 	private DateTime time = new DateTime();
 
@@ -33,8 +33,8 @@ public class IeProofreadTime {
 	 * @param is is
 	 */
 	public IeProofreadTime(ByteBuf is) throws Iec104Exception {
-		if(is.readableBytes()<OCCUPYBYTES){
-			throw new Iec104Exception(3301,"可用字节不足，不能进行读取");
+		if (is.readableBytes() < OCCUPYBYTES) {
+			throw new Iec104Exception(3301, "可用字节不足，不能进行读取");
 		}
 		byte[] btime = new byte[7];
 		is.readBytes(btime);

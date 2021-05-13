@@ -17,9 +17,9 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class IeShortInteger {
+public class IeShortInteger implements IecDataInterface {
 
-	public static final int  OCCUPYBYTES=2;
+	public static final int OCCUPYBYTES = 2;
 
 	private Integer value;
 
@@ -29,10 +29,10 @@ public class IeShortInteger {
 	 * @param is is
 	 */
 	public IeShortInteger(ByteBuf is) throws Iec104Exception {
-		if(is.readableBytes()<OCCUPYBYTES){
-			throw new Iec104Exception(3301,"可用字节不足，不能进行读取");
+		if (is.readableBytes() < OCCUPYBYTES) {
+			throw new Iec104Exception(3301, "可用字节不足，不能进行读取");
 		}
-		value =((short) ((is.readByte() & 0xff) | ((is.readByte() & 0xff) << 8)))+0;
+		value = ((short) ((is.readByte() & 0xff) | ((is.readByte() & 0xff) << 8))) + 0;
 	}
 
 	/**
@@ -46,4 +46,8 @@ public class IeShortInteger {
 		buffer.add((byte) (tempVal >> 8));
 	}
 
+	@Override
+	public Integer getIecValue() {
+		return this.value;
+	}
 }

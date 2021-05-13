@@ -113,7 +113,7 @@ public class ModbusRtuMasterDelimiterHandler extends AbstractDelimiterHandler {
 					cumulation.resetReaderIndex();
 					ctx.fireChannelRead(cumulation.readBytes(8));
 				}
-			}else{
+			} else {
 				log.error("不支持该种类型报文解析");
 				clearCumulation();
 			}

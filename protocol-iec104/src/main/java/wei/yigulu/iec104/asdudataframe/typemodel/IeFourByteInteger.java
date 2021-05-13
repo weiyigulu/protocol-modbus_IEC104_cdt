@@ -16,9 +16,9 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class IeFourByteInteger {
+public class IeFourByteInteger implements IecDataInterface {
 
-	public static final int  OCCUPYBYTES=4;
+	public static final int OCCUPYBYTES = 4;
 
 	private Integer value;
 
@@ -44,4 +44,8 @@ public class IeFourByteInteger {
 		buffer.add((byte) (tempVal >> 24));
 	}
 
+	@Override
+	public Integer getIecValue() {
+		return this.value;
+	}
 }

@@ -80,9 +80,9 @@ public class BooleanModbusDataInRegister extends RegisterValue {
 		}
 	}
 
-	public void setValue(int index,boolean value) {
+	public void setValue(int index, boolean value) {
 		if (index < values.length) {
-			this.values[index]=value;
+			this.values[index] = value;
 		} else {
 			throw new IllegalArgumentException();
 		}

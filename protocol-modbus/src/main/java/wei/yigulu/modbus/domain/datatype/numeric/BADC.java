@@ -29,15 +29,15 @@ public class BADC extends NumericModbusData {
 
 	@Override
 	public BADC decode(byte[] bytes, int offset) {
-		this.value =new BigDecimal(Float.toString(Float.intBitsToFloat( ((bytes[offset * 2 + 0] & 0xff) << 16) | ((bytes[offset * 2 + 1] & 0xff) << 24)|(bytes[offset * 2+2] & 0xff) | ((bytes[offset * 2 + 3] & 0xff) << 8)
-				)));
+		this.value = new BigDecimal(Float.toString(Float.intBitsToFloat(((bytes[offset * 2 + 0] & 0xff) << 16) | ((bytes[offset * 2 + 1] & 0xff) << 24) | (bytes[offset * 2 + 2] & 0xff) | ((bytes[offset * 2 + 3] & 0xff) << 8)
+		)));
 		return this;
 	}
 
 	@Override
 	public BADC decode(ByteBuffer byteBuf) {
 		this.value = new BigDecimal(Float.toString(Float.intBitsToFloat(
-				((byteBuf.get() & 0xff) << 16) | ((byteBuf.get() & 0xff) << 24)|(byteBuf.get() & 0xff) | ((byteBuf.get() & 0xff) << 8))));
+				((byteBuf.get() & 0xff) << 16) | ((byteBuf.get() & 0xff) << 24) | (byteBuf.get() & 0xff) | ((byteBuf.get() & 0xff) << 8))));
 		return this;
 	}
 

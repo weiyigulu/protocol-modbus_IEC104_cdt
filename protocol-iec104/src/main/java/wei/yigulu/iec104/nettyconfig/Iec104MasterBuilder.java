@@ -29,6 +29,7 @@ public class Iec104MasterBuilder extends AbstractTcpMasterBuilder {
 
 	private static final int HEARTBEAT = PropertiesReader.getInstance().getIntProp(HEARTBEATPROPNAME, HEARTBEATDEFVAL);
 
+
 	/**
 	 * Simple master builder
 	 *

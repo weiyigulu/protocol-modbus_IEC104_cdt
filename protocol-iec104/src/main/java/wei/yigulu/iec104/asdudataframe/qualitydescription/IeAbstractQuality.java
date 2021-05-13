@@ -18,7 +18,7 @@ import wei.yigulu.iec104.exception.Iec104Exception;
 @NoArgsConstructor
 public class IeAbstractQuality {
 
-	public static final int  OCCUPYBYTES=1;
+	public static final int OCCUPYBYTES = 1;
 
 	/**
 	 * 品质的值
@@ -52,8 +52,8 @@ public class IeAbstractQuality {
 	 * @param is is
 	 */
 	public IeAbstractQuality(ByteBuf is) throws Iec104Exception {
-		if(is.readableBytes()<OCCUPYBYTES){
-			throw new Iec104Exception(3301,"可用字节不足，不能进行读取");
+		if (is.readableBytes() < OCCUPYBYTES) {
+			throw new Iec104Exception(3301, "可用字节不足，不能进行读取");
 		}
 		this.value = (is.readByte() & 0xff);
 		this.blocked = (value & 0x10) == 0x10;

@@ -3,12 +3,7 @@ package wei.yigulu.modbus.netty;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import wei.yigulu.modbus.domain.datatype.numeric.P_BA;
 import wei.yigulu.netty.AbstractDelimiterHandler;
 import wei.yigulu.utils.CrcUtils;
@@ -61,8 +56,8 @@ public class ModbusRtuSlaverDelimiterHandler extends AbstractDelimiterHandler {
 		}
 		if (cumulation.readableBytes() == 0) {
 			clearCumulation();
-		}else{
-			timeMark=DateTime.now();
+		} else {
+			timeMark = DateTime.now();
 		}
 	}
 

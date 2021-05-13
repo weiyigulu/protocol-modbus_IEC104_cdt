@@ -42,7 +42,7 @@ public class HSConnectionListener implements ChannelFutureListener {
 		if (channelFuture == null || channelFuture.channel() == null || !channelFuture.channel().isActive()) {
 			this.masterBuilder.getOrCreateWorkGroup().schedule(() -> {
 				try {
-					if(masterBuilder.future==null ||!masterBuilder.future.channel().isActive()) {
+					if (masterBuilder.future == null || !masterBuilder.future.channel().isActive()) {
 						if (this.retryTimes < 10) {
 							log.error("服务端{}:{}链接不上，开始重连操作,第{}次尝试", this.masterBuilder.getIp(), this.masterBuilder.getPort(), retryTimes);
 							masterBuilder.create();
@@ -58,7 +58,7 @@ public class HSConnectionListener implements ChannelFutureListener {
 							masterBuilder.create();
 							log.info("重置重试次数=0");
 						}
-					}else {
+					} else {
 						log.warn("masterBuilder在延迟过程中已由其他线程连接成功，此处略过重连");
 					}
 				} catch (Exception e) {

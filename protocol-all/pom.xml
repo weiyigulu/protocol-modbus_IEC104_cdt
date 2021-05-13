@@ -10,7 +10,6 @@
     </parent>
 
 
-
     <packaging>jar</packaging>
     <artifactId>protocol-all</artifactId>
 

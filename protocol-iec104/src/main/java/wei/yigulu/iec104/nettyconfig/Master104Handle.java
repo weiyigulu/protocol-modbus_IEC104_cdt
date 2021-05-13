@@ -4,10 +4,8 @@ package wei.yigulu.iec104.nettyconfig;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.timeout.IdleStateEvent;
-import io.netty.util.ReferenceCountUtil;
 import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import wei.yigulu.iec104.apdumodel.Apdu;
@@ -59,12 +57,11 @@ public class Master104Handle extends SimpleChannelInboundHandler<ByteBuf> {
 	private Class<? extends Apdu> apduClass = Apdu.class;
 
 
-
 	@Override
 	public void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
 		//收数据
 		log.debug("----------------------------------------------------------------------------------");
-		log.debug("re <= "+DataConvertor.ByteBuf2String(msg));
+		log.debug("re <= " + DataConvertor.ByteBuf2String(msg));
 		Apdu apdu = apduClass.newInstance().setChannel(ctx.channel()).setIec104Builder(masterBuilder).setLog(log).loadByteBuf(msg);
 		if (apdu.getApciType() == Apdu.ApciType.I_FORMAT) {
 			this.testNum = 0;
@@ -95,7 +92,7 @@ public class Master104Handle extends SimpleChannelInboundHandler<ByteBuf> {
 		String clientIp = ipSocket.getAddress().getHostAddress();
 		Integer clientPort = ipSocket.getPort();
 		log.info("连接" + clientIp + ":" + clientPort + "服务端成功");
-		LinkContainer.getInstance().getLinks().put(ctx.channel().id(), new Iec104Link(ctx.channel(), clientIp, clientPort, Iec104Link.Role.SLAVER,masterBuilder.getLog()));
+		LinkContainer.getInstance().getLinks().put(ctx.channel().id(), new Iec104Link(ctx.channel(), clientIp, clientPort, Iec104Link.Role.SLAVER, masterBuilder.getLog()));
 		ctx.writeAndFlush(Unpooled.copiedBuffer(TechnicalTerm.START));
 		this.masterBuilder.connected();
 	}

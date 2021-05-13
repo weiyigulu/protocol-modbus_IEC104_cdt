@@ -6,5 +6,11 @@ package wei.yigulu.iec104.asdudataframe.typemodel;
  * @author: xiuwei
  * @version:
  */
-public class IeBooleanCommand {
+public class IeBooleanCommand implements IecDataInterface {
+
+
+	@Override
+	public Object getIecValue() {
+		return null;
+	}
 }

@@ -81,9 +81,9 @@ public abstract class AbstractTcpSlaverBuilder extends BaseProtocolBuilder {
 		log.info("Slaver端启动成功；端口" + port);
 		// 关闭服务器通道
 		cf.channel().closeFuture().sync();
-	// 释放线程池资源
+		// 释放线程池资源
 		group.shutdownGracefully().sync();
-}
+	}
 
 
 	/**

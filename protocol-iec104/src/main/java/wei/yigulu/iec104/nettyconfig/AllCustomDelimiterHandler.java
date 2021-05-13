@@ -2,13 +2,10 @@ package wei.yigulu.iec104.nettyconfig;
 
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.ChannelHandlerContext;
 import org.joda.time.DateTime;
 import wei.yigulu.netty.AbstractDelimiterHandler;
 import wei.yigulu.utils.DataConvertor;
-
-import java.util.HashMap;
 
 
 /**
@@ -24,15 +21,15 @@ public class AllCustomDelimiterHandler extends AbstractDelimiterHandler {
 	private static final byte[] HEAD = new byte[]{0x68};
 
 
-	public AllCustomDelimiterHandler(){
-		super.maxTimeSpace=100;
-		super.maxLength=10240;
+	public AllCustomDelimiterHandler() {
+		super.maxTimeSpace = 100;
+		super.maxLength = 10240;
 	}
 
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		if(isOverMaxLength((ByteBuf) msg)){
+		if (isOverMaxLength((ByteBuf) msg)) {
 			return;
 		}
 		int len;
@@ -61,7 +58,7 @@ public class AllCustomDelimiterHandler extends AbstractDelimiterHandler {
 				//如果数据帧长度足够 将规定长度的直接加入out 队列
 				ctx.fireChannelRead(cumulation.readBytes(len + 2));
 				//查看后续的字节里面头字节的位置
-				headIndex = getHeadIndex(cumulation.readerIndex(), cumulation.writerIndex(), cumulation,HEAD);
+				headIndex = getHeadIndex(cumulation.readerIndex(), cumulation.writerIndex(), cumulation, HEAD);
 			}
 		}
 		if (cumulation.readableBytes() != 0 && headIndex >= cumulation.readerIndex()) {

@@ -17,9 +17,9 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class IeShortFloat {
+public class IeShortFloat implements IecDataInterface {
 
-	public static final int  OCCUPYBYTES=4;
+	public static final int OCCUPYBYTES = 4;
 
 	private float value;
 
@@ -29,8 +29,8 @@ public class IeShortFloat {
 	 * @param is is
 	 */
 	public IeShortFloat(ByteBuf is) throws Iec104Exception {
-		if(is.readableBytes()<OCCUPYBYTES){
-			throw new Iec104Exception(3301,"可用字节不足，不能进行读取");
+		if (is.readableBytes() < OCCUPYBYTES) {
+			throw new Iec104Exception(3301, "可用字节不足，不能进行读取");
 		}
 		value = Float.intBitsToFloat((is.readByte() & 0xff) | ((is.readByte() & 0xff) << 8)
 				| ((is.readByte() & 0xff) << 16) | ((is.readByte() & 0xff) << 24));
@@ -54,5 +54,10 @@ public class IeShortFloat {
 	@Override
 	public String toString() {
 		return "短浮点数值: " + value;
+	}
+
+	@Override
+	public Float getIecValue() {
+		return this.value;
 	}
 }

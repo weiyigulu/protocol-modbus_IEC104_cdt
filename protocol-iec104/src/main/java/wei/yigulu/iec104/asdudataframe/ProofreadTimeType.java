@@ -61,8 +61,8 @@ public class ProofreadTimeType extends AbstractDataFrameType {
 		try {
 			address = new InformationBodyAddress(is);
 			ieProofreadTime = new IeProofreadTime(is);
-		}catch (Iec104Exception e){
-			if(e.getCode()==3301){
+		} catch (Iec104Exception e) {
+			if (e.getCode() == 3301) {
 				return;
 			}
 		}

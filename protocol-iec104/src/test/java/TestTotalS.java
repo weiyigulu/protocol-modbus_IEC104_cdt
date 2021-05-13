@@ -16,11 +16,11 @@ public class TestTotalS extends TotalSummonType {
 
 	@Override
 	public byte[][] handleAndAnswer(Apdu apdu) throws Exception {
-		Map<Integer,Boolean> booleans=new HashMap<>();
-		for(int i =0 ;i<100;i++){
-			booleans.put(i,true);
+		Map<Integer, Boolean> booleans = new HashMap<>();
+		for (int i = 0; i < 100; i++) {
+			booleans.put(i, true);
 		}
-		SendDataFrameHelper.sendYxDataFrame(apdu.getChannel(),booleans,1,20,null);
+		SendDataFrameHelper.sendYxDataFrame(apdu.getChannel(), booleans, 1, 20, null);
 		return null;
 	}
 

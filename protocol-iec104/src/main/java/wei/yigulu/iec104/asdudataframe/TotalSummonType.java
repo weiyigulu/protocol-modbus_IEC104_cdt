@@ -30,7 +30,7 @@ public class TotalSummonType extends AbstractDataFrameType {
 	 */
 	public static final int TYPEID = TechnicalTerm.TOTAL_SUMMONTYPE_TYPE;
 
-	private InformationBodyAddress address=new InformationBodyAddress(20);
+	private InformationBodyAddress address = new InformationBodyAddress(20);
 
 	private int value;
 
@@ -60,8 +60,8 @@ public class TotalSummonType extends AbstractDataFrameType {
 		try {
 			this.address = new InformationBodyAddress(is);
 			this.value = (is.readByte() & 0xff);
-		}catch (Iec104Exception e){
-			if(e.getCode()==3301){
+		} catch (Iec104Exception e) {
+			if (e.getCode() == 3301) {
 				return;
 			}
 		}

@@ -1,4 +1,3 @@
-import wei.yigulu.modbus.domain.datatype.numeric.ABCD;
 import wei.yigulu.modbus.domain.datatype.numeric.BADC;
 import wei.yigulu.modbus.netty.ModbusTcpSlaverBuilder;
 

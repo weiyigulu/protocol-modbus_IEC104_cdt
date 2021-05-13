@@ -46,10 +46,10 @@ public class BooleanType extends AbstractDataFrameType {
 	 * @throws Iec104Exception iec exception
 	 */
 	public BooleanType(List<InformationBodyAddress> addresses, List<IeBoolean> datas) throws Iec104Exception {
-		if(datas.size()> SendDataFrameHelper.MAXCONTINUITYYXNUM){
+		if (datas.size() > SendDataFrameHelper.MAXCONTINUITYYXNUM) {
 			throw new Iec104Exception("数据个数过多，创建对象失败，请切割数据。");
 		}
-		if ((this.datas.size()*IeBoolean.OCCUPYBYTES + this.addresses.size() * InformationBodyAddress.OCCUPYBYTES) > 240) {
+		if ((this.datas.size() * IeBoolean.OCCUPYBYTES + this.addresses.size() * InformationBodyAddress.OCCUPYBYTES) > 240) {
 			throw new Iec104Exception("长度超长，创建对象失败，请切割数据。");
 		}
 		this.addresses = addresses;
@@ -100,7 +100,7 @@ public class BooleanType extends AbstractDataFrameType {
 	 * @throws Iec104Exception iec exception
 	 */
 	protected void validateLen(int increase) throws Iec104Exception {
-		if(datas.size()> SendDataFrameHelper.MAXCONTINUITYYXNUM){
+		if (datas.size() > SendDataFrameHelper.MAXCONTINUITYYXNUM) {
 			throw new Iec104Exception("数据个数过多，不能再向此对象中添加元素");
 		}
 		if ((this.datas.size() * IeBoolean.OCCUPYBYTES + this.addresses.size() * InformationBodyAddress.OCCUPYBYTES + increase) > 240) {
@@ -149,8 +149,8 @@ public class BooleanType extends AbstractDataFrameType {
 					datas.add(new IeBoolean(is));
 				}
 			}
-		}catch (Iec104Exception e){
-			if(e.getCode()==3301){
+		} catch (Iec104Exception e) {
+			if (e.getCode() == 3301) {
 				return;
 			}
 		}

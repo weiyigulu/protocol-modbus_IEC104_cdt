@@ -20,7 +20,6 @@ import wei.yigulu.netty.ProtocolChannelInitializer;
 public class Iec104SlaverBuilder extends AbstractTcpSlaverBuilder {
 
 
-
 	public Iec104SlaverBuilder(int port) {
 		super(port);
 	}
@@ -28,11 +27,11 @@ public class Iec104SlaverBuilder extends AbstractTcpSlaverBuilder {
 	@Override
 	protected ProtocolChannelInitializer getOrCreateChannelInitializer() {
 		return new ProtocolChannelInitializer<SocketChannel>(this) {
-				@Override
-				protected void initChannel(SocketChannel ch) throws Exception {
-					ch.pipeline().addLast(new AllCustomDelimiterHandler());
-					ch.pipeline().addLast(new Slave104Handle((Iec104SlaverBuilder) builder));
-				}
+			@Override
+			protected void initChannel(SocketChannel ch) throws Exception {
+				ch.pipeline().addLast(new AllCustomDelimiterHandler());
+				ch.pipeline().addLast(new Slave104Handle((Iec104SlaverBuilder) builder));
+			}
 
 		};
 	}

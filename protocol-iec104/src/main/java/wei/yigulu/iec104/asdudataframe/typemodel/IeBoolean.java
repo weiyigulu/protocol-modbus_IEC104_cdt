@@ -18,9 +18,9 @@ import wei.yigulu.iec104.exception.Iec104Exception;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class IeBoolean extends IeAbstractQuality {
+public class IeBoolean extends IeAbstractQuality implements IecDataInterface {
 
-	public static final int  OCCUPYBYTES=1;
+	public static final int OCCUPYBYTES = 1;
 
 	/**
 	 * 信息状态，是否开闸 1：合；2：开
@@ -50,5 +50,10 @@ public class IeBoolean extends IeAbstractQuality {
 	@Override
 	public String toString() {
 		return "开关量, 是否开闸: " + isOn() + ", " + super.toString() + ";\n";
+	}
+
+	@Override
+	public Boolean getIecValue() {
+		return this.on;
 	}
 }

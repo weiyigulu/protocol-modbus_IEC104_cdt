@@ -50,7 +50,7 @@ public abstract class AbstractModbusConfirm implements ModbusPacketInterface {
 	 * 输出数据 （5，6）  两字节
 	 */
 	@Getter
-	protected  byte[] b2;
+	protected byte[] b2;
 
 
 	public Integer getLength() {
@@ -76,11 +76,11 @@ public abstract class AbstractModbusConfirm implements ModbusPacketInterface {
 	 */
 	@Override
 	public AbstractModbusConfirm decode(ByteBuffer byteBuf) throws ModbusException {
-		slaveId=byteBuf.get()&0xff;
-		functionCode=FunctionCode.valueOf(byteBuf.get()&0xff);
-		if(functionCode.getCode()>0x80){
-			int i=byteBuf.get()&0xff;
-			if(functionCode.getCode().equals(0x89)||functionCode.getCode().equals(0x90)){
+		slaveId = byteBuf.get() & 0xff;
+		functionCode = FunctionCode.valueOf(byteBuf.get() & 0xff);
+		if (functionCode.getCode() > 0x80) {
+			int i = byteBuf.get() & 0xff;
+			if (functionCode.getCode().equals(0x89) || functionCode.getCode().equals(0x90)) {
 				switch (i) {
 					case 1:
 						throw new ModbusException("功能码异常");
@@ -91,7 +91,7 @@ public abstract class AbstractModbusConfirm implements ModbusPacketInterface {
 					case 4:
 						throw new ModbusException("写入过程异常");
 				}
-			}else {
+			} else {
 
 				switch (i) {
 					case 1:
@@ -105,11 +105,11 @@ public abstract class AbstractModbusConfirm implements ModbusPacketInterface {
 				}
 			}
 		}
-		startAddress=new P_AB().decode(byteBuf).getValue().intValue();
-		if(functionCode==FunctionCode.WRITE_COIL || functionCode==FunctionCode.WRITE_REGISTER){
-			b2=new byte[2];
+		startAddress = new P_AB().decode(byteBuf).getValue().intValue();
+		if (functionCode == FunctionCode.WRITE_COIL || functionCode == FunctionCode.WRITE_REGISTER) {
+			b2 = new byte[2];
 			byteBuf.get(b2);
-		}else {
+		} else {
 			quantity = new P_AB().decode(byteBuf).getValue().intValue();
 		}
 		return this;

@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-public class AbstractModbusRequest  implements ModbusPacketInterface {
+public class AbstractModbusRequest implements ModbusPacketInterface {
 
 
 	/**

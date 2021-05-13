@@ -3,7 +3,6 @@ package wei.yigulu.modbus.netty;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.slf4j.Logger;
 import wei.yigulu.netty.AbstractTcpMasterBuilder;
@@ -38,7 +37,7 @@ public class ModbusTcpMasterHandler extends SimpleChannelInboundHandler<ByteBuf>
 	}
 
 	@Override
-	public void channelRead0(ChannelHandlerContext ctx, ByteBuf byteBuf ) throws Exception {
+	public void channelRead0(ChannelHandlerContext ctx, ByteBuf byteBuf) throws Exception {
 		//收数据
 		log.debug("re <== " + DataConvertor.ByteBuf2String(byteBuf));
 		((ModbusMasterBuilderInterface) this.masterBuilder).getOrCreateSynchronousWaitingRoom().setData(byteBuf.nioBuffer());

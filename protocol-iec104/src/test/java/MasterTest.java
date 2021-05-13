@@ -1,9 +1,6 @@
 import io.netty.util.ResourceLeakDetector;
-import wei.yigulu.iec104.apdumodel.Apdu;
-import wei.yigulu.iec104.apdumodel.Asdu;
-import wei.yigulu.iec104.asdudataframe.TotalSummonType;
 import wei.yigulu.iec104.nettyconfig.Iec104HSMasterBuilder;
-import wei.yigulu.iec104.nettyconfig.Iec104MasterBuilder;
+import wei.yigulu.iec104.util.SendCommandHelper;
 
 /**
  * dad
@@ -19,6 +16,8 @@ public class MasterTest {
 		Iec104HSMasterBuilder masterBuilder = new Iec104HSMasterBuilder("127.0.0.1", 2404);
 
 		masterBuilder.createByUnBlock();
+		Thread.sleep(3000L);
+		SendCommandHelper.sendShortCommand(masterBuilder, 0, 1, 16385, 0.452f);
 
 	/*	//创建总召唤类型I帧
 		TotalSummonType totalSummonType = new TotalSummonType();

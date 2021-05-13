@@ -67,8 +67,8 @@ public class NoQualityNormalizedIntegerType extends AbstractDataFrameType {
 					datas.add(f);
 				}
 			}
-		}catch (Iec104Exception e){
-			if(e.getCode()==3301){
+		} catch (Iec104Exception e) {
+			if (e.getCode() == 3301) {
 				return;
 			}
 		}
@@ -145,7 +145,7 @@ public class NoQualityNormalizedIntegerType extends AbstractDataFrameType {
 	 * @throws Iec104Exception iec exception
 	 */
 	protected void validateLen(int increase) throws Iec104Exception {
-		if ((this.datas.size() * IeShortInteger.OCCUPYBYTES + this.addresses.size() * InformationBodyAddress.OCCUPYBYTES+increase) > 240){
+		if ((this.datas.size() * IeShortInteger.OCCUPYBYTES + this.addresses.size() * InformationBodyAddress.OCCUPYBYTES + increase) > 240) {
 			throw new Iec104Exception("长度超长，不能再向此对象中添加元素");
 		}
 	}
