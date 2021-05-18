@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import wei.yigulu.iec104.container.Iec104Link;
+import wei.yigulu.iec104.container.LinkContainer;
 import wei.yigulu.iec104.exception.Iec104Exception;
 import wei.yigulu.iec104.nettyconfig.TechnicalTerm;
 import wei.yigulu.iec104.util.SendAndReceiveNumUtil;
@@ -301,6 +303,17 @@ public class Apdu {
 	 * @throws Iec104Exception iec exception
 	 */
 	public byte[][] sHandleAndAnswer() throws Iec104Exception {
+		Iec104Link link = LinkContainer.getInstance().getLink(channel.id());
+		int send = this.receiveSeqNum;
+		int send1=link.getISend();
+		if(send1>send){
+			loseSend();
+			link.setISend(send);
+		}
+		if(send1<send){
+			log.warn("我方或对方计数出错");
+			link.setISend(send);
+		}
 		return null;
 	}
 
