@@ -10,7 +10,7 @@ public class SlaveTest {
 
 	public static void main(String[] args) throws Exception {
 		Iec104SlaverBuilder slaverBuilder = new Iec104SlaverBuilder(2404);
-		slaverBuilder.getConnectFilterManager().appendFilter((c) -> {
+		/*slaverBuilder.getConnectFilterManager().appendFilter((c) -> {
 			if (slaverBuilder.getChannels().size() >= 1) {
 				return -1;
 			}
@@ -22,7 +22,7 @@ public class SlaveTest {
 			} else {
 				return 1;
 			}
-		});
+		});*/
 		slaverBuilder.create();
 	}
 

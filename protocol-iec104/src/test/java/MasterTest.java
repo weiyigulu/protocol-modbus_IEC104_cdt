@@ -13,7 +13,7 @@ public class MasterTest {
 
 	public static void main(String[] args) throws Exception {
 		ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.ADVANCED);
-		Iec104HSMasterBuilder masterBuilder = new Iec104HSMasterBuilder("127.0.0.1", 2404);
+		Iec104HSMasterBuilder masterBuilder = new Iec104HSMasterBuilder("127.0.0.1", 2409);
 
 		masterBuilder.createByUnBlock();
 		Thread.sleep(3000L);

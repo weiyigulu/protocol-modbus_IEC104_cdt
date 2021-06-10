@@ -33,7 +33,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <protocol.version>1.1.10</protocol.version>
-        <iec104.version>1.4.15</iec104.version>
+        <iec104.version>1.4.16</iec104.version>
         <modbus.version>2.2.4</modbus.version>
         <cdt.version>1.0.0</cdt.version>
     </properties>

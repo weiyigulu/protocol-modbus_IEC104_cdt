@@ -119,6 +119,25 @@ public class TechnicalTerm {
 
 
 	/**
+	 * 单点遥控命令
+	 */
+	public static final Integer SINGLE_BOOLEAN_COMMAND_TYPE = 0x2D;
+
+
+
+	/**
+	 * 归一化值遥调命令
+	 */
+	public static final Integer NORMALIZATION_COMMAND_TYPE = 0x30;
+
+
+	/**
+	 * 双点遥控命令
+	 */
+	public static final Integer DOUBLE_BOOLEAN_COMMAND_TYPE = 0x2E;
+
+
+	/**
 	 * 对时帧
 	 */
 	public static final Integer DATESYNCHRONIZATION_TYPE = 0x67;
