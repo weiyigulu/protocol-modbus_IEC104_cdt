@@ -39,11 +39,6 @@ public class HSConnectionListener implements ChannelFutureListener {
 
 	@Override
 	public void operationComplete(ChannelFuture channelFuture) throws Exception {
-		try {
-			log.warn("通道任务和重连任务是否是一个：" + channelFuture.equals(masterBuilder.getFuture()));
-		}catch ( Exception e){
-
-		}
 		if (channelFuture == null || channelFuture.channel() == null || !channelFuture.channel().isActive()) {
 			this.masterBuilder.getOrCreateWorkGroup().schedule(() -> {
 				try {
