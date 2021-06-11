@@ -78,11 +78,11 @@ public abstract class AbstractTcpMasterBuilder extends AbstractMasterBuilder {
 			}
 			log.debug("创建连接");
 			try {
-				SocketAddress remoteAddress= new InetSocketAddress(getIp(),getPort());
-				if(!StringUtil.isNullOrEmpty(getSelfIp()) && getSelfPort()!=null){
-					SocketAddress localAddress= new InetSocketAddress(getSelfIp(),getSelfPort());
-					future = getOrCreateBootstrap().connect(remoteAddress,localAddress);
-				}else{
+				SocketAddress remoteAddress = new InetSocketAddress(getIp(), getPort());
+				if (!StringUtil.isNullOrEmpty(getSelfIp()) && getSelfPort() != null) {
+					SocketAddress localAddress = new InetSocketAddress(getSelfIp(), getSelfPort());
+					future = getOrCreateBootstrap().connect(remoteAddress, localAddress);
+				} else {
 					future = getOrCreateBootstrap().connect(remoteAddress);
 				}
 				log.debug("为连接添加监听");
@@ -168,7 +168,6 @@ public abstract class AbstractTcpMasterBuilder extends AbstractMasterBuilder {
 		}
 		return this.workGroup;
 	}
-
 
 
 }

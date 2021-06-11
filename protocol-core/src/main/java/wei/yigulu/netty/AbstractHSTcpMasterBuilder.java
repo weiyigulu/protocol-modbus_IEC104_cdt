@@ -60,8 +60,6 @@ public abstract class AbstractHSTcpMasterBuilder extends AbstractTcpMasterBuilde
 	private Integer sparePort;
 
 
-
-
 	@Override
 	public ChannelFutureListener getOrCreateConnectionListener() {
 		if (this.connectionListener == null) {

@@ -58,7 +58,7 @@ public class DataConvertor {
 		ByteBuf b1 = buf.copy();
 		byte[] bs = new byte[b1.readableBytes()];
 		b1.readBytes(bs);
-		ReferenceCountUtil.release( b1);
+		ReferenceCountUtil.release(b1);
 		return Byte2String(bs);
 	}
 
@@ -70,8 +70,8 @@ public class DataConvertor {
 	 * @return string
 	 */
 	public static String ByteBuf2StringAndRelease(ByteBuf buf) {
-		String s= ByteBuf2String(buf);
-		ReferenceCountUtil.release( buf);
+		String s = ByteBuf2String(buf);
+		ReferenceCountUtil.release(buf);
 		return s;
 
 	}

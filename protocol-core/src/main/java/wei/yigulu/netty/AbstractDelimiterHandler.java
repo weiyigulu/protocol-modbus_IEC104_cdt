@@ -43,7 +43,7 @@ public abstract class AbstractDelimiterHandler extends ChannelInboundHandlerAdap
 	@Setter
 	@Getter
 	@Accessors(chain = true)
-	protected  int maxLength = 10240;
+	protected int maxLength = 10240;
 
 
 	/**
@@ -52,15 +52,12 @@ public abstract class AbstractDelimiterHandler extends ChannelInboundHandlerAdap
 	@Setter
 	@Getter
 	@Accessors(chain = true)
-	protected  int maxTimeSpace=200;
-
-
+	protected int maxTimeSpace = 200;
 
 
 	/**
 	 * 拓展寄居 ByteBuf
 	 * 拓展规则是: 初始容量为 两个ByteBuf的长度和,内容是byteBuf1未读部分+ byteBuf2未读部分。
-	 *
 	 *
 	 * @param byteBuf1
 	 * @param byteBuf2
@@ -94,7 +91,7 @@ public abstract class AbstractDelimiterHandler extends ChannelInboundHandlerAdap
 	 * @param head    头字节数组
 	 * @return int  头位置
 	 */
-	protected int getHeadIndex(int from, int end, ByteBuf byteBuf,byte[] head) {
+	protected int getHeadIndex(int from, int end, ByteBuf byteBuf, byte[] head) {
 		if (byteBuf.readableBytes() < head.length) {
 			return -1;
 		}
@@ -109,7 +106,7 @@ public abstract class AbstractDelimiterHandler extends ChannelInboundHandlerAdap
 	/**
 	 * 清除寄存ByteBuf的指向和内容
 	 */
-	protected void clearCumulation(){
+	protected void clearCumulation() {
 		while (!cumulation.release()) {
 		}
 		cumulation = null;
@@ -118,7 +115,7 @@ public abstract class AbstractDelimiterHandler extends ChannelInboundHandlerAdap
 	/**
 	 * 清除寄存ByteBuf的指向  并提供新的指向内容重新赋值
 	 */
-	protected void setCumulation(ByteBuf byteBuf){
+	protected void setCumulation(ByteBuf byteBuf) {
 		while (!cumulation.release()) {
 		}
 		cumulation = byteBuf;
@@ -129,7 +126,7 @@ public abstract class AbstractDelimiterHandler extends ChannelInboundHandlerAdap
 	 *
 	 * @param byteBuf 字节缓冲区
 	 */
-	protected void mergeOrFlushByTimeSpan(ByteBuf byteBuf){
+	protected void mergeOrFlushByTimeSpan(ByteBuf byteBuf) {
 		if (timeMark.plusMillis(getMaxTimeSpace()).isBeforeNow()) {
 			log.warn("上一帧数据长度不足，但两帧时间间隔较长上一帧被舍弃 舍弃的数据帧为：" + DataConvertor.ByteBuf2String(cumulation));
 			while (!cumulation.release()) {
@@ -149,14 +146,14 @@ public abstract class AbstractDelimiterHandler extends ChannelInboundHandlerAdap
 	 * @param byteBuf 字节缓冲区
 	 * @return boolean
 	 */
-	protected boolean isOverMaxLength(ByteBuf byteBuf){
+	protected boolean isOverMaxLength(ByteBuf byteBuf) {
 		if (byteBuf.readableBytes() > getMaxLength()) {
 			while (!cumulation.release()) {
 			}
 			cumulation = null;
 			log.warn("报文超长舍弃");
 			return true;
-		}else{
+		} else {
 			if (cumulation == null) {
 				cumulation = byteBuf;
 			} else {
