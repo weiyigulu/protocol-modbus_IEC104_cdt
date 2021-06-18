@@ -2,6 +2,7 @@ package wei.yigulu.modbus.netty;
 
 import wei.yigulu.modbus.domain.synchronouswaitingroom.SynchronousWaitingRoom;
 import wei.yigulu.modbus.exceptiom.ModbusException;
+import wei.yigulu.netty.MasterInterface;
 
 /**
  * modbus  master的构建器
@@ -9,7 +10,7 @@ import wei.yigulu.modbus.exceptiom.ModbusException;
  * @author: xiuwei
  * @version:
  */
-public interface ModbusMasterBuilderInterface {
+public interface ModbusMasterBuilderInterface extends MasterInterface {
 
 
 	/**

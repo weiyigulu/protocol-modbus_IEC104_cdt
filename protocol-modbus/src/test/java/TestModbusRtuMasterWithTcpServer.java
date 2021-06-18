@@ -26,7 +26,6 @@ public class TestModbusRtuMasterWithTcpServer {
 				map.put(i, ModbusDataTypeEnum.CDAB);
 			}
 			List<Obj4RequestRegister> ll = ModbusRequestDataUtils.splitModbusRequest(map, 1, FunctionCode.READ_HOLDING_REGISTERS);
-
 			for (; ; ) {
 				try {
 					Map<Integer, IModbusDataType> map1 = ModbusRequestDataUtils.getRegisterData(ss, ll);
