@@ -18,6 +18,7 @@ import wei.yigulu.modbus.exceptiom.ModbusException;
 import wei.yigulu.modbus.netty.ModbusMasterBuilderInterface;
 import wei.yigulu.netty.AbstractMasterBuilder;
 import wei.yigulu.netty.AbstractTcpMasterBuilder;
+import wei.yigulu.netty.MasterInterface;
 import wei.yigulu.utils.PCON;
 
 import java.nio.ByteBuffer;
@@ -181,28 +182,28 @@ public class ModbusRequestDataUtils {
 	 * @return
 	 * @throws ModbusException
 	 */
-	public static <T extends AbstractModbusResponse> T requestData(AbstractMasterBuilder masterBuilder, AbstractModbusRequest modbusRequest, T response) throws ModbusException {
+	public static <T extends AbstractModbusResponse> T requestData(MasterInterface masterBuilder, AbstractModbusRequest modbusRequest, T response) throws ModbusException {
 		if (!(masterBuilder instanceof ModbusMasterBuilderInterface)) {
-			throw new RuntimeException("请传人实现了<ModbusMasterBuilderInterface>的Master");
+			throw new ModbusException("请传人实现了<ModbusMasterBuilderInterface>的Master");
 		}
-		if (masterBuilder.getFuture() != null && masterBuilder.getFuture().channel().isActive()) {
-			List<Byte> byteList = new ArrayList<>();
-			modbusRequest.encode(byteList);
-			byte[] bb = Bytes.toArray(byteList);
+		List<Byte> byteList = new ArrayList<>();
+		modbusRequest.encode(byteList);
+		byte[] bb = Bytes.toArray(byteList);
+		try {
 			masterBuilder.sendFrameToOpposite(bb);
-			ByteBuffer buffer;
-			if (modbusRequest instanceof TcpModbusRequest) {
-				buffer = ((ModbusMasterBuilderInterface) masterBuilder).getOrCreateSynchronousWaitingRoom().getData(((TcpModbusRequest) modbusRequest).getTcpExtraCode().getTransactionIdentifier().getSeq());
-			} else {
-				buffer = ((ModbusMasterBuilderInterface) masterBuilder).getOrCreateSynchronousWaitingRoom().getData(0);
-			}
-			if (buffer == null) {
-				throw new ModbusException("Slave端响应超时");
-			}
-			response.decode(buffer);
-		} else {
-			throw new ModbusException("当前并Master未链接到Salve端");
+		} catch (RuntimeException e) {
+			throw new ModbusException(e.getMessage());
 		}
+		ByteBuffer buffer;
+		if (modbusRequest instanceof TcpModbusRequest) {
+			buffer = ((ModbusMasterBuilderInterface) masterBuilder).getOrCreateSynchronousWaitingRoom().getData(((TcpModbusRequest) modbusRequest).getTcpExtraCode().getTransactionIdentifier().getSeq());
+		} else {
+			buffer = ((ModbusMasterBuilderInterface) masterBuilder).getOrCreateSynchronousWaitingRoom().getData(0);
+		}
+		if (buffer == null) {
+			throw new ModbusException("Slave端响应超时");
+		}
+		response.decode(buffer);
 		return response;
 	}
 
@@ -219,7 +220,7 @@ public class ModbusRequestDataUtils {
 	 * @return
 	 * @throws ModbusException
 	 */
-	public static Map<Integer, IModbusDataType> getData(AbstractMasterBuilder masterBuilder, Map<Integer, ModbusDataTypeEnum> locator, Integer slaveId, FunctionCode functionCode) throws ModbusException {
+	public static Map<Integer, IModbusDataType> getData(MasterInterface masterBuilder, Map<Integer, ModbusDataTypeEnum> locator, Integer slaveId, FunctionCode functionCode) throws ModbusException {
 		List<Obj4RequestRegister> list = splitModbusRequest(locator, slaveId, functionCode);
 		return getRegisterData(masterBuilder, list);
 	}
@@ -237,7 +238,7 @@ public class ModbusRequestDataUtils {
 	 * @return
 	 * @throws ModbusException
 	 */
-	public static Map<Integer, Boolean> getData(AbstractMasterBuilder masterBuilder, List<Integer> locator, Integer slaveId, FunctionCode functionCode) throws ModbusException {
+	public static Map<Integer, Boolean> getData(MasterInterface masterBuilder, List<Integer> locator, Integer slaveId, FunctionCode functionCode) throws ModbusException {
 		List<Obj4RequestCoil> list = splitModbusRequest(locator, slaveId, functionCode);
 		return getCoilData(masterBuilder, list);
 	}
@@ -251,7 +252,7 @@ public class ModbusRequestDataUtils {
 	 * @param locators
 	 * @return
 	 */
-	public static Map<Integer, IModbusDataType> getRegisterData(AbstractMasterBuilder masterBuilder, List<Obj4RequestRegister> locators) throws ModbusException {
+	public static Map<Integer, IModbusDataType> getRegisterData(MasterInterface masterBuilder, List<Obj4RequestRegister> locators) throws ModbusException {
 		Map<Integer, IModbusDataType> map = new HashMap<>();
 		Map<Integer, IModbusDataType> map1 = null;
 		for (Obj4RequestRegister m : locators) {
@@ -261,7 +262,7 @@ public class ModbusRequestDataUtils {
 					map.putAll(map1);
 				}
 			} catch (ModbusException e) {
-				if ("当前并Master未链接到Salve端".equals(e.getMsg())) {
+				if ("无客户端连接".equals(e.getMsg())) {
 					throw e;
 				}
 			} catch (Exception e) {
@@ -272,7 +273,7 @@ public class ModbusRequestDataUtils {
 	}
 
 
-	public static Map<Integer, IModbusDataType> getRegisterData(AbstractMasterBuilder masterBuilder, Obj4RequestRegister locator) throws ModbusException {
+	public static Map<Integer, IModbusDataType> getRegisterData(MasterInterface masterBuilder, Obj4RequestRegister locator) throws ModbusException {
 		Map<Integer, IModbusDataType> map = null;
 		AbstractModbusResponse response;
 		try {
@@ -292,10 +293,9 @@ public class ModbusRequestDataUtils {
 				}
 			}
 		} catch (ModbusException e) {
-			if ("当前并Master未链接到Salve端".equals(e.getMsg())) {
+			if ("无客户端连接".equals(e.getMsg())) {
 				throw e;
 			}
-			masterBuilder.getLog().error(e.getMsg());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -311,7 +311,7 @@ public class ModbusRequestDataUtils {
 	 * @param locators
 	 * @return
 	 */
-	public static Map<Integer, Boolean> getCoilData(AbstractMasterBuilder masterBuilder, List<Obj4RequestCoil> locators) throws ModbusException {
+	public static Map<Integer, Boolean> getCoilData(MasterInterface masterBuilder, List<Obj4RequestCoil> locators) throws ModbusException {
 		Map<Integer, Boolean> map = new HashMap<>();
 		Map<Integer, Boolean> map1 = null;
 		AbstractModbusResponse requestData;
@@ -343,10 +343,9 @@ public class ModbusRequestDataUtils {
 					map.putAll(map1);
 				}
 			} catch (ModbusException e) {
-				if ("当前并Master未链接到Salve端".equals(e.getMsg())) {
+				if ("无客户端连接".equals(e.getMsg())) {
 					throw e;
 				}
-				masterBuilder.getLog().error(e.getMsg());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
