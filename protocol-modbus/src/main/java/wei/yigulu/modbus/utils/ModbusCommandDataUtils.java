@@ -16,6 +16,7 @@ import wei.yigulu.modbus.netty.ModbusMasterBuilderInterface;
 import wei.yigulu.modbus.netty.ModbusRtuMasterBuilder;
 import wei.yigulu.netty.AbstractMasterBuilder;
 import wei.yigulu.netty.AbstractTcpMasterBuilder;
+import wei.yigulu.netty.MasterInterface;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class ModbusCommandDataUtils {
 	 * @param address       起始地址
 	 * @param values        命令值
 	 */
-	public static boolean commandRegister(AbstractMasterBuilder masterBuilder, Integer slaveId, Integer address, List<RegisterValue> values) throws ModbusException {
+	public static boolean commandRegister(MasterInterface masterBuilder, Integer slaveId, Integer address, List<RegisterValue> values) throws ModbusException {
 		if (!(masterBuilder instanceof ModbusMasterBuilderInterface)) {
 			throw new RuntimeException("请传人实现了<ModbusMasterBuilderInterface>的Master");
 		}
@@ -95,7 +96,7 @@ public class ModbusCommandDataUtils {
 	 * @param address       起始地址
 	 * @param value         命令值
 	 */
-	public static boolean commandRegister(AbstractMasterBuilder masterBuilder, Integer slaveId, Integer address, RegisterValue value) throws ModbusException {
+	public static boolean commandRegister(MasterInterface masterBuilder, Integer slaveId, Integer address, RegisterValue value) throws ModbusException {
 		List<RegisterValue> list = new ArrayList<>();
 		list.add(value);
 		return commandRegister(masterBuilder, slaveId, address, list);
