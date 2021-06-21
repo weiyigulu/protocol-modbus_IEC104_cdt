@@ -18,39 +18,36 @@ import java.util.List;
  * @author: xiuwei
  * @create: 2021-04-26 16:14
  */
+@Getter
+@Setter
+@Accessors(chain = true)
 public abstract class AbstractModbusConfirm implements ModbusPacketInterface {
 
 
 	/**
 	 * 客户端地址 一字节
 	 */
-	@Setter
-	@Accessors(chain = true)
 	protected Integer slaveId = 01;
 
 	/**
 	 * 功能码  一字节  5，6，15，16
 	 */
-	@Getter
 	protected FunctionCode functionCode;
 
 	/**
 	 * 下达数据的起始地址位  两字节
 	 */
-	@Getter
 	protected Integer startAddress;
 
 	/**
 	 * 输出数据的数量（15，16）  两字节
 	 */
-	@Getter
 	protected Integer quantity;
 
 	/**
 	 * 输出数据 （5，6）  两字节
 	 */
-	@Getter
-	protected byte[] b2;
+	protected byte[] b2= new byte[2];
 
 
 	public Integer getLength() {
@@ -63,7 +60,12 @@ public abstract class AbstractModbusConfirm implements ModbusPacketInterface {
 		bytes.add((byte) (slaveId & 0xff));
 		bytes.add((byte) (functionCode.getCode() & 0xff));
 		new P_AB(BigDecimal.valueOf(startAddress)).encode(bytes);
-		new P_AB(BigDecimal.valueOf(quantity)).encode(bytes);
+		if (functionCode == FunctionCode.WRITE_COIL || functionCode == FunctionCode.WRITE_REGISTER) {
+			bytes.add(b2[0]);
+			bytes.add(b2[1]);
+		}else {
+			new P_AB(BigDecimal.valueOf(quantity)).encode(bytes);
+		}
 		return this;
 	}
 
@@ -92,7 +94,6 @@ public abstract class AbstractModbusConfirm implements ModbusPacketInterface {
 						throw new ModbusException("写入过程异常");
 				}
 			} else {
-
 				switch (i) {
 					case 1:
 						throw new ModbusException("功能码异常");

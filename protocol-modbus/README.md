@@ -48,6 +48,31 @@ create() 方法会阻塞线程，如果不希望阻塞线程可以使用createBy
 		}
 ```
 
+#### 发送遥控遥调命令
+
+``` java
+ModbusRtuMasterBuilder master = new ModbusRtuMasterBuilder("COM1");
+		master.createByUnBlock();
+		TcpSynchronousWaitingRoom.waitTime = 5000L;
+		Thread.sleep(3000L);
+		Random random = new Random();
+		BigDecimal val;
+		BigDecimal val1;
+		for (; ; ) {
+			val = BigDecimal.valueOf(random.nextInt(100));
+			System.out.println("数据个数：" + val);
+			List<RegisterValue> list = new ArrayList<>();
+			for (int i = 0; i <= val.intValue(); i++) {
+				val1 = BigDecimal.valueOf(random.nextInt(11));
+				System.out.println("数据值：" + val1);
+				list.add(new P_AB().setValue(val1));
+			}
+            //ModbusCommandDataUtils.commandRegister(master, 1, 0, list) 发送命令返回结果
+			System.out.println(ModbusCommandDataUtils.commandRegister(master, 1, 0, list));
+			Thread.sleep(60000L);
+		}
+```
+
 
 
 ### SLAVER的创建 

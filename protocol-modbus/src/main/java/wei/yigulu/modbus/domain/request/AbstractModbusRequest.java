@@ -10,6 +10,8 @@ import wei.yigulu.modbus.exceptiom.ModbusException;
 
 import java.math.BigDecimal;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -21,6 +23,9 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class AbstractModbusRequest implements ModbusPacketInterface {
+
+
+	public static final HashSet<Byte> FUNCTION_CODES = new HashSet(Arrays.asList((new Byte[]{0x01, (byte) 0x81, 0x02, (byte) 0x82, 0x03, (byte) 0x83, 0x04, (byte) 0x84})));
 
 
 	/**

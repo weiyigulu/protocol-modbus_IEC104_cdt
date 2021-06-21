@@ -4,6 +4,7 @@ package wei.yigulu.modbus.netty;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import wei.yigulu.modbus.domain.ModbusSlaveDataContainer;
+import wei.yigulu.modbus.domain.command.AbstractModbusCommand;
 import wei.yigulu.netty.AbstractRtuModeBuilder;
 import wei.yigulu.netty.ProtocolChannelInitializer;
 import wei.yigulu.purejavacomm.PureJavaCommChannel;
@@ -19,7 +20,7 @@ import wei.yigulu.purejavacomm.PureJavaCommChannel;
 
 
 @Accessors(chain = true)
-public class ModbusRtuSlaverBuilder extends AbstractRtuModeBuilder {
+public class ModbusRtuSlaverBuilder extends AbstractRtuModeBuilder implements ModbusSlaverInterface {
 
 	@Getter
 	private ModbusSlaveDataContainer modbusSlaveDataContainer = new ModbusSlaveDataContainer().setLog(getLog());
@@ -42,5 +43,10 @@ public class ModbusRtuSlaverBuilder extends AbstractRtuModeBuilder {
 			};
 		}
 		return this.channelInitializer;
+	}
+
+	@Override
+	public boolean receiveCommand(AbstractModbusCommand command) {
+		return true;
 	}
 }

@@ -43,7 +43,7 @@ public class RtuModbusCommand extends AbstractModbusCommand {
 	 */
 	@Override
 	public RtuModbusCommand decode(ByteBuffer byteBuf) throws ModbusException {
-		//super.decode(byteBuf);
+		super.decode(byteBuf);
 		return this;
 	}
 }

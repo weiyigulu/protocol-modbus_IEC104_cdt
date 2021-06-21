@@ -35,9 +35,27 @@ public class ModbusRtuSlaverDelimiterHandler extends AbstractDelimiterHandler {
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
-		//log.warn("接收到原始的报文 ："+ DataConvertor.ByteBuf2String((ByteBuf) msg));
+		log.warn("接收到原始的报文 ："+ DataConvertor.ByteBuf2String((ByteBuf) msg));
 		isOverMaxLength((ByteBuf) msg);
-		byte[] bs = new byte[6];
+		if (cumulation.readableBytes() < 8) {
+			timeMark = DateTime.now();
+			return;
+		}
+		byte function = cumulation.getByte(1);
+		byte[] bs;
+		if (function == 5 || function == 6) {
+			bs = new byte[6];
+		} else if (function == 15 || function == 16) {
+			int i = cumulation.getByte(6);
+			if (i >= 0 && i < 250) {
+				bs = new byte[7 + i];
+			} else {
+				clearCumulation();
+				return;
+			}
+		} else {
+			bs = new byte[6];
+		}
 		//原crc值
 		int crcO;
 		//理论crc值
@@ -49,7 +67,7 @@ public class ModbusRtuSlaverDelimiterHandler extends AbstractDelimiterHandler {
 			crcS = CrcUtils.generateCRC16(bs).intValue();
 			if (crcO == crcS) {
 				cumulation.resetReaderIndex();
-				ctx.fireChannelRead(cumulation.readBytes(8));
+				ctx.fireChannelRead(cumulation.readBytes(bs.length+2));
 			} else {
 				log.warn("数据帧crc校验错误，舍弃：" + DataConvertor.Byte2String(bs) + "原CRC:" + DataConvertor.Byte2String(P_BA.decode(crcO)) + "理论CRC:" + DataConvertor.Byte2String(P_BA.decode(crcS)));
 			}

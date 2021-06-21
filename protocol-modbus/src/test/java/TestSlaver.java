@@ -17,7 +17,7 @@ public class TestSlaver {
 		boolean f;
 		for (; ; ) {
 			for (int i = 0; i < 10; i++) {
-				slaverBuilder.getModbusSlaveDataContainer().setRegister(1, i, new BADC(BigDecimal.valueOf(random.nextFloat())));
+				//slaverBuilder.getModbusSlaveDataContainer().setRegister(1, i, new BADC(BigDecimal.valueOf(random.nextFloat())));
 				/*f = random.nextBoolean();
 				System.out.println(i + ":" + f);
 				slaverBuilder.getModbusSlaveDataContainer().setCoil(1, i, f);*/

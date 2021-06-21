@@ -15,7 +15,10 @@ import wei.yigulu.modbus.exceptiom.ModbusException;
 
 import javax.annotation.Nonnull;
 import java.math.BigDecimal;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -27,6 +30,9 @@ import java.util.List;
 public abstract class AbstractModbusCommand implements ModbusPacketInterface {
 
 
+	public static  final HashSet<Byte> FUNCTION_CODES=new HashSet(Arrays.asList(new Byte[]{0x05, (byte) 0x85, 0x06, (byte) 0x86, 0x0F, (byte) 0x8F, 0x10, (byte) 0x90, 0x17, (byte) 0x97}));
+
+
 	public static final int R_MAX_NUM = 120;
 
 	public static final int C_MAX_NUM = 1968;
@@ -35,6 +41,7 @@ public abstract class AbstractModbusCommand implements ModbusPacketInterface {
 	 * 客户端地址 一字节
 	 */
 	@Setter
+	@Getter
 	@Accessors(chain = true)
 	protected Integer slaveId = 01;
 
@@ -47,6 +54,7 @@ public abstract class AbstractModbusCommand implements ModbusPacketInterface {
 	/**
 	 * 下达数据的起始地址位  两字节
 	 */
+	@Getter
 	protected Integer startAddress;
 
 	/**
@@ -152,6 +160,24 @@ public abstract class AbstractModbusCommand implements ModbusPacketInterface {
 		bytes.addAll(Bytes.asList(dataBytes));
 		return this;
 	}
+
+	@Override
+	public AbstractModbusCommand decode(ByteBuffer byteBuf) throws ModbusException {
+		this.slaveId=(int)byteBuf.get();
+		this.functionCode=FunctionCode.valueOf(byteBuf.get());
+		this.startAddress=(int)byteBuf.getShort();
+		if(this.functionCode==FunctionCode.WRITE_COILS ||this.functionCode==FunctionCode.WRITE_REGISTERS){
+			this.quantity=(int)byteBuf.getShort();
+			this.numOfByte=(int)byteBuf.get();
+			this.dataBytes=new byte[this.numOfByte];
+			byteBuf.get(dataBytes);
+		}else{
+			this.dataBytes=new byte[2];
+			byteBuf.get(dataBytes);
+		}
+		return this;
+	}
+
 
 
 }

@@ -5,6 +5,7 @@ import io.netty.channel.Channel;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import wei.yigulu.modbus.domain.ModbusSlaveDataContainer;
+import wei.yigulu.modbus.domain.command.AbstractModbusCommand;
 import wei.yigulu.netty.AbstractTcpSlaverBuilder;
 import wei.yigulu.netty.ProtocolChannelInitializer;
 
@@ -18,7 +19,7 @@ import wei.yigulu.netty.ProtocolChannelInitializer;
  */
 
 @Accessors(chain = true)
-public class ModbusTcpSlaverBuilder extends AbstractTcpSlaverBuilder {
+public class ModbusTcpSlaverBuilder extends AbstractTcpSlaverBuilder implements ModbusSlaverInterface {
 
 
 	@Getter
@@ -40,4 +41,8 @@ public class ModbusTcpSlaverBuilder extends AbstractTcpSlaverBuilder {
 		};
 	}
 
+	@Override
+	public boolean receiveCommand(AbstractModbusCommand command) {
+		return true;
+	}
 }

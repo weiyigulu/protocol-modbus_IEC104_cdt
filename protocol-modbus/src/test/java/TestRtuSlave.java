@@ -24,7 +24,7 @@ public class TestRtuSlave {
 			for (int i = 0; i < 10; i++) {
 				d = (0.5 - random.nextDouble()) * 100;
 				System.out.println(d);
-				slaver.getModbusSlaveDataContainer().setRegister(1, i * 2, new P_ABCD(BigDecimal.valueOf(d)));
+				//slaver.getModbusSlaveDataContainer().setRegister(1, i * 2, new P_ABCD(BigDecimal.valueOf(d)));
 			}
 			Thread.sleep(1000000L);
 		}

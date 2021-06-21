@@ -8,6 +8,10 @@ import io.netty.channel.EventLoop;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import wei.yigulu.modbus.domain.command.AbstractModbusCommand;
+import wei.yigulu.modbus.domain.command.RtuModbusCommand;
+import wei.yigulu.modbus.domain.confirm.RtuModbusConfirm;
+import wei.yigulu.modbus.domain.request.AbstractModbusRequest;
 import wei.yigulu.modbus.domain.request.RtuModbusRequest;
 import wei.yigulu.modbus.domain.response.RtuModbusResponse;
 import wei.yigulu.modbus.exceptiom.ModbusException;
@@ -73,14 +77,27 @@ public class ModbusRtuSlaverHandler extends SimpleChannelInboundHandler<ByteBuf>
 	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
 		modbusSlaver.getLog().debug("接收到串口{}发来数据帧: <= " + DataConvertor.ByteBuf2String(msg), this.modbusSlaver.getCommPortId());
 		if (msg.readableBytes() > MINLEN) {
-			RtuModbusRequest request = new RtuModbusRequest().decode(msg.nioBuffer());
-			RtuModbusResponse response = new RtuModbusResponse();
-			try {
-				byte[] bbs = ModbusResponseDataUtils.buildResponse(this.modbusSlaver.getModbusSlaveDataContainer(), request, response);
+			byte[] bbs = new byte[0];
+			if (AbstractModbusRequest.FUNCTION_CODES.contains(msg.getByte(1))) {
+				RtuModbusRequest request = new RtuModbusRequest().decode(msg.nioBuffer());
+				RtuModbusResponse response = new RtuModbusResponse();
+				try {
+					bbs = ModbusResponseDataUtils.buildResponse(this.modbusSlaver.getModbusSlaveDataContainer(), request, response);
+				} catch (ModbusException e) {
+					log.error(e.getMsg());
+				}
+			} else if (AbstractModbusCommand.FUNCTION_CODES.contains(msg.getByte(1))) {
+				RtuModbusCommand command = new RtuModbusCommand().decode(msg.nioBuffer());
+				RtuModbusConfirm confirm = new RtuModbusConfirm();
+				try {
+					bbs = modbusSlaver.receiveCommandAndAnswer(command, confirm);
+				} catch (ModbusException e) {
+					log.error(e.getMsg());
+				}
+			}
+			if (bbs.length > 0) {
 				ctx.writeAndFlush(Unpooled.copiedBuffer(bbs));
 				modbusSlaver.getLog().debug("se =>" + DataConvertor.Byte2String(bbs));
-			} catch (ModbusException e) {
-				log.error(e.getMsg());
 			}
 		}
 	}

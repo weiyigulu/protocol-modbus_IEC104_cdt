@@ -53,12 +53,9 @@ public class TcpModbusCommand extends AbstractModbusCommand {
 
 	@Override
 	public TcpModbusCommand decode(ByteBuffer byteBuf) throws ModbusException {
-		if (byteBuf.remaining() != 12) {
-			throw new ModbusException("该帧非数据请求帧");
-		}
 		this.tcpExtraCode.decode(byteBuf);
 		this.setLength(new P_AB().decode(byteBuf).getValue().intValue());
-		//super.decode(byteBuf);
+		super.decode(byteBuf);
 		return this;
 	}
 
